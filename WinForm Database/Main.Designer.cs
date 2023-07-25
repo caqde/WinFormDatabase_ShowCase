@@ -30,11 +30,11 @@
         {
             components = new System.ComponentModel.Container();
             txtName = new TextBox();
+            MainDataSource = new BindingSource(components);
             lblName = new Label();
             btnPrevious = new Button();
-            MainDataSource = new BindingSource(components);
             btnNext = new Button();
-            button3 = new Button();
+            btnSave = new Button();
             statusStrip1 = new StatusStrip();
             tbStatuslbl = new ToolStripStatusLabel();
             ((System.ComponentModel.ISupportInitialize)MainDataSource).BeginInit();
@@ -48,6 +48,10 @@
             txtName.Name = "txtName";
             txtName.Size = new Size(100, 23);
             txtName.TabIndex = 0;
+            // 
+            // MainDataSource
+            // 
+            MainDataSource.DataSource = typeof(ShowCaseViewModel.MainViewModel);
             // 
             // lblName
             // 
@@ -68,10 +72,6 @@
             btnPrevious.Text = "Previous";
             btnPrevious.UseVisualStyleBackColor = true;
             // 
-            // MainDataSource
-            // 
-            MainDataSource.DataSource = typeof(ShowCaseViewModel.MainViewModel);
-            // 
             // btnNext
             // 
             btnNext.DataBindings.Add(new Binding("Command", MainDataSource, "NextCommand", true));
@@ -82,15 +82,15 @@
             btnNext.Text = "Next";
             btnNext.UseVisualStyleBackColor = true;
             // 
-            // button3
+            // btnSave
             // 
-            button3.DataBindings.Add(new Binding("Command", MainDataSource, "SaveCommand", true));
-            button3.Location = new Point(274, 95);
-            button3.Name = "button3";
-            button3.Size = new Size(75, 23);
-            button3.TabIndex = 4;
-            button3.Text = "Save";
-            button3.UseVisualStyleBackColor = true;
+            btnSave.DataBindings.Add(new Binding("Command", MainDataSource, "SaveCommand", true));
+            btnSave.Location = new Point(274, 95);
+            btnSave.Name = "btnSave";
+            btnSave.Size = new Size(75, 23);
+            btnSave.TabIndex = 4;
+            btnSave.Text = "Save";
+            btnSave.UseVisualStyleBackColor = true;
             // 
             // statusStrip1
             // 
@@ -113,7 +113,7 @@
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
             Controls.Add(statusStrip1);
-            Controls.Add(button3);
+            Controls.Add(btnSave);
             Controls.Add(btnNext);
             Controls.Add(btnPrevious);
             Controls.Add(lblName);
@@ -134,7 +134,7 @@
         private Button btnPrevious;
         private BindingSource MainDataSource;
         private Button btnNext;
-        private Button button3;
+        private Button btnSave;
         private StatusStrip statusStrip1;
         private ToolStripStatusLabel tbStatuslbl;
     }

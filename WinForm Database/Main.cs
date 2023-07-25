@@ -1,4 +1,5 @@
 using CommunityToolkit.Mvvm.Messaging;
+using ShowCaseViewModel;
 using ShowCaseViewModel.Messages;
 
 namespace WinForm_Database
@@ -8,6 +9,15 @@ namespace WinForm_Database
         public Main()
         {
             InitializeComponent();
+        }
+
+        protected override void OnLoad(EventArgs e)
+        {
+            base.OnLoad(e);
+            MainDataSource.DataSource = new MainViewModel();
+            WeakReferenceMessenger.Default.Register<PreviousMessage>(this);
+            WeakReferenceMessenger.Default.Register<SaveMessage>(this);
+            WeakReferenceMessenger.Default.Register<NextMessage>(this);
         }
 
         public void Receive(PreviousMessage message)
