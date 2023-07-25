@@ -5,6 +5,8 @@ VisualStudioVersion = 17.7.33920.267
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WinForm Database", "WinForm Database\WinForm Database.csproj", "{480B1D79-ED16-489F-B18E-9C49C9ACFD39}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EFCore_DBLibrary", "EFCore_DBLibrary\EFCore_DBLibrary.csproj", "{60E0817B-0D9B-429E-A809-7F5C0A08BF6F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{480B1D79-ED16-489F-B18E-9C49C9ACFD39}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{480B1D79-ED16-489F-B18E-9C49C9ACFD39}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{480B1D79-ED16-489F-B18E-9C49C9ACFD39}.Release|Any CPU.Build.0 = Release|Any CPU
+		{60E0817B-0D9B-429E-A809-7F5C0A08BF6F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{60E0817B-0D9B-429E-A809-7F5C0A08BF6F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{60E0817B-0D9B-429E-A809-7F5C0A08BF6F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{60E0817B-0D9B-429E-A809-7F5C0A08BF6F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
