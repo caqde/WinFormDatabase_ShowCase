@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using EFCore_DBModels;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
 namespace EFCore_DBLibrary
@@ -6,6 +7,8 @@ namespace EFCore_DBLibrary
     public class DBLibrary: DbContext
     {
         private static IConfigurationRoot? _configuration;
+
+        public DbSet<dbObject> dbObjects { get; set; }
 
         public DBLibrary()
         {

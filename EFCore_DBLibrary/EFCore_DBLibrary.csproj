@@ -14,4 +14,8 @@
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="7.0.4" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\EFCore_DBModels\EFCore_DBModels.csproj" />
+  </ItemGroup>
+
 </Project>
