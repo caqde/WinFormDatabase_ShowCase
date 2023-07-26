@@ -111,6 +111,7 @@
             // 
             // btnAdd
             // 
+            btnAdd.DataBindings.Add(new Binding("Command", MainDataSource, "AddCommand", true));
             btnAdd.Location = new Point(274, 153);
             btnAdd.Name = "btnAdd";
             btnAdd.Size = new Size(75, 23);
@@ -120,6 +121,7 @@
             // 
             // btnDelete
             // 
+            btnDelete.DataBindings.Add(new Binding("Command", MainDataSource, "DeleteCommand", true));
             btnDelete.Location = new Point(274, 124);
             btnDelete.Name = "btnDelete";
             btnDelete.Size = new Size(75, 23);

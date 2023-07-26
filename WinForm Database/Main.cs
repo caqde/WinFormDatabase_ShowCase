@@ -5,6 +5,7 @@ using ShowCaseViewModel.Messages;
 namespace WinForm_Database
 {
     public partial class Main : Form, IRecipient<PreviousMessage>, IRecipient<SaveMessage>, IRecipient<NextMessage>
+        , IRecipient<AddMessage>, IRecipient<DeleteMessage>
     {
         public Main()
         {
@@ -15,9 +16,7 @@ namespace WinForm_Database
         {
             base.OnLoad(e);
             MainDataSource.DataSource = new MainViewModel();
-            WeakReferenceMessenger.Default.Register<PreviousMessage>(this);
-            WeakReferenceMessenger.Default.Register<SaveMessage>(this);
-            WeakReferenceMessenger.Default.Register<NextMessage>(this);
+            WeakReferenceMessenger.Default.RegisterAll(this);
         }
 
         public void Receive(PreviousMessage message)
@@ -53,6 +52,30 @@ namespace WinForm_Database
             else
             {
                 tbStatuslbl.Text = "Next Item doesn't exist";
+            }
+        }
+
+        public void Receive(DeleteMessage message)
+        {
+            if(message.Value)
+            {
+                tbStatuslbl.Text = "Item Deleted";
+            }
+            else
+            {
+                tbStatuslbl.Text = "No Item to delete";
+            }
+        }
+
+        public void Receive(AddMessage message)
+        {
+            if(message.Value)
+            {
+                tbStatuslbl.Text = "New Item Added";
+            }
+            else
+            {
+                tbStatuslbl.Text = "Database Error Item not created";
             }
         }
     }
