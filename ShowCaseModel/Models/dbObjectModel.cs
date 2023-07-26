@@ -19,6 +19,11 @@ namespace ShowCaseModel.Models
         public dbObjectModel()
         {
             dBFactory = new DBFactory();
+            GetFirstEntry();
+        }
+
+        private void GetFirstEntry()
+        {
             using (var context = dBFactory.GetDbContext())
             {
                 currentdBObject = context.dbObjects.FirstOrDefault();
@@ -50,6 +55,7 @@ namespace ShowCaseModel.Models
             {
                 context.Remove(currentdBObject);
                 context.SaveChanges();
+                GetFirstEntry();
                 return true;
             }
         }
@@ -75,10 +81,11 @@ namespace ShowCaseModel.Models
         {
             using (var context = dBFactory.GetDbContext())
             {
-                var next = context.Set<dbObject>().Where(t => t.Id > currentID).Order().Take(1).Single();
+                var next = context.dbObjects.Where(t => t.Id > currentID).ToList().Order().Take(1).Single();
                 if (next is not null)
                 {
                     currentdBObject = next;
+                    currentID = next.Id;
                     return true;
                 }
                 else
@@ -93,10 +100,11 @@ namespace ShowCaseModel.Models
         {
             using (var context = dBFactory.GetDbContext())
             {
-                var next = context.Set<dbObject>().Where(t => t.Id < currentID).OrderDescending().Take(1).Single();
+                var next = context.dbObjects.Where(t => t.Id < currentID).ToList().OrderDescending().Take(1).Single();
                 if (next is not null)
                 {
                     currentdBObject = next;
+                    currentID = next.Id;
                     return true;
                 }
                 else
@@ -107,7 +115,7 @@ namespace ShowCaseModel.Models
             }
         }
 
-        public bool SaveEntry(string name)
+        public bool SaveEntry()
         {
             using (var context = dBFactory.GetDbContext())
             {

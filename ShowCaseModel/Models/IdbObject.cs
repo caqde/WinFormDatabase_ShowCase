@@ -13,7 +13,7 @@ namespace ShowCaseModel.Models
         void SetName(string name);
         bool NextEntry();
         bool PrevEntry();
-        bool SaveEntry(string name);
+        bool SaveEntry();
         bool AddEntry();
         bool DeleteEntry();
     }

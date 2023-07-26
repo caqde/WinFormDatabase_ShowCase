@@ -26,34 +26,80 @@ namespace ShowCaseViewModel
         [ObservableProperty]
         private string? dbName;
 
+        partial void OnDbNameChanged(string? oldValue, string? newValue)
+        {
+            if (oldValue != newValue)
+            {
+                itemChanged = true;
+            }
+        }
+
         [RelayCommand]
         private void Next()
         {
-            WeakReferenceMessenger.Default.Send(new NextMessage(itemChanged));
+            dbObjectModel data = DatabaseInstance.getDBObject();
+            bool response = data.NextEntry();
+            if (response)
+            {
+                dbId = data.GetiD();
+                DbName = data.GetName();
+            }
+            
+            WeakReferenceMessenger.Default.Send(new NextMessage(response));
+            itemChanged = false;
         }
 
         [RelayCommand]
         private void Previous()
         {
-            WeakReferenceMessenger.Default.Send(new PreviousMessage(itemChanged));
+            dbObjectModel data = DatabaseInstance.getDBObject();
+            bool response = data.PrevEntry();
+            if (response)
+            {
+                dbId = data.GetiD();
+                DbName = data.GetName();
+            }
+            WeakReferenceMessenger.Default.Send(new PreviousMessage(response));
+            itemChanged = false;
         }
 
         [RelayCommand]
         private void Save()
         {
-            WeakReferenceMessenger.Default.Send(new SaveMessage(true));
+            dbObjectModel data = DatabaseInstance.getDBObject();
+            if (itemChanged)
+            {
+                data.SetName(dbName);
+                WeakReferenceMessenger.Default.Send(new SaveMessage(data.SaveEntry()));
+            }
+            itemChanged = false;
         }
 
         [RelayCommand]
         private void Delete()
         {
-            WeakReferenceMessenger.Default.Send(new DeleteMessage(true));
+            dbObjectModel data = DatabaseInstance.getDBObject();
+            bool response = data.DeleteEntry();
+            if (response)
+            {
+                dbId = data.GetiD();
+                DbName = data.GetName();
+            }
+            WeakReferenceMessenger.Default.Send(new DeleteMessage(response));
         }
 
         [RelayCommand]
         private void Add()
         {
-            WeakReferenceMessenger.Default.Send(new AddMessage(true));
+            dbObjectModel data = DatabaseInstance.getDBObject();
+            bool response = data.AddEntry();
+            if (response)
+            {
+                dbId = data.GetiD();
+                DbName = data.GetName();
+            }
+            WeakReferenceMessenger.Default.Send(new AddMessage(response));
+            itemChanged = true;
         }
     }
 }

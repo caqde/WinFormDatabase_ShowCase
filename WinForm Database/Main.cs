@@ -64,7 +64,7 @@ namespace WinForm_Database
 
         public void Receive(DeleteMessage message)
         {
-            if(message.Value)
+            if (message.Value)
             {
                 tbStatuslbl.Text = "Item Deleted";
             }
@@ -76,7 +76,7 @@ namespace WinForm_Database
 
         public void Receive(AddMessage message)
         {
-            if(message.Value)
+            if (message.Value)
             {
                 tbStatuslbl.Text = "New Item Added";
             }
