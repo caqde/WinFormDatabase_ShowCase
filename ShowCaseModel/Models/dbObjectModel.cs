@@ -81,7 +81,21 @@ namespace ShowCaseModel.Models
         {
             using (var context = dBFactory.GetDbContext())
             {
-                var next = context.dbObjects.Where(t => t.Id > currentID).ToList().Order().Take(1).Single();
+                var nextList = context.dbObjects.Where(t => t.Id > currentID).ToList();
+                dbObject next;
+                if (nextList.Count > 1)
+                {
+                    next = nextList.OrderBy( x => x.Id).Take(1).Single();
+                }
+                else if (nextList.Count == 1) 
+                {
+                    next = nextList.Single();
+                }
+                else
+                {
+                    next = null;
+                }
+
                 if (next is not null)
                 {
                     currentdBObject = next;
@@ -100,7 +114,21 @@ namespace ShowCaseModel.Models
         {
             using (var context = dBFactory.GetDbContext())
             {
-                var next = context.dbObjects.Where(t => t.Id < currentID).ToList().OrderDescending().Take(1).Single();
+                var nextList = context.dbObjects.Where(t => t.Id < currentID).ToList();
+                dbObject next;
+                if (nextList.Count > 1)
+                {
+                    next = nextList.OrderByDescending(x => x.Id).Take(1).Single();
+                }
+                else if (nextList.Count == 1) 
+                {
+                    next = nextList.Single();
+                }
+                else
+                {
+                    next = null;
+                }
+
                 if (next is not null)
                 {
                     currentdBObject = next;
