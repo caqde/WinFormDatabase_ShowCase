@@ -14,5 +14,7 @@ namespace ShowCaseModel.Models
         bool NextEntry();
         bool PrevEntry();
         bool SaveEntry(string name);
+        bool AddEntry();
+        bool DeleteEntry();
     }
 }

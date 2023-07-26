@@ -13,6 +13,8 @@ namespace ShowCaseViewModel
         {
             DatabaseInstance = new ShowCaseInstance();
             dbObjectModel data = DatabaseInstance.getDBObject();
+            dbId = data.GetiD();
+            dbName = data.GetName();
         }
 
         private ShowCaseInstance DatabaseInstance;

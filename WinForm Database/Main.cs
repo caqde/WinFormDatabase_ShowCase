@@ -1,6 +1,7 @@
 using CommunityToolkit.Mvvm.Messaging;
 using ShowCaseViewModel;
 using ShowCaseViewModel.Messages;
+using System.ComponentModel;
 
 namespace WinForm_Database
 {
@@ -17,6 +18,12 @@ namespace WinForm_Database
             base.OnLoad(e);
             MainDataSource.DataSource = new MainViewModel();
             WeakReferenceMessenger.Default.RegisterAll(this);
+        }
+
+        protected override void OnFormClosing(FormClosingEventArgs e)
+        {
+            base.OnFormClosing(e);
+            WeakReferenceMessenger.Default.UnregisterAll(this);
         }
 
         public void Receive(PreviousMessage message)

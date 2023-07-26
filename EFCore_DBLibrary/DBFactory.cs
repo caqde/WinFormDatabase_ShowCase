@@ -23,13 +23,13 @@ namespace EFCore_DBLibrary
 
         public ShowCaseDbContext GetDbContext()
         {
-            if (_options == null)
+            if (_options is not null)
             {
-                return new ShowCaseDbContext();
+                return new ShowCaseDbContext(_options);
             }
             else
             {
-                return new ShowCaseDbContext(_options);
+                return new ShowCaseDbContext();
             }
         }
     }
