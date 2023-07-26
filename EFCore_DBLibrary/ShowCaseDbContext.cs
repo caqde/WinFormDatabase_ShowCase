@@ -4,18 +4,18 @@ using Microsoft.Extensions.Configuration;
 
 namespace EFCore_DBLibrary
 {
-    public class DBLibrary: DbContext
+    public class ShowCaseDbContext : DbContext
     {
         private static IConfigurationRoot? _configuration;
 
         public DbSet<dbObject> dbObjects { get; set; }
 
-        public DBLibrary()
+        public ShowCaseDbContext()
         {
 
         }
 
-        public DBLibrary(DbContextOptions options): base(options)
+        public ShowCaseDbContext(DbContextOptions options): base(options)
         {
 
         }
@@ -29,13 +29,15 @@ namespace EFCore_DBLibrary
                     .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
                 _configuration = builder.Build();
                 var connectionString = _configuration.GetConnectionString("ShowCaseDB");
-                optionsBuilder.UseNpgsql(connectionString, options => options.EnableRetryOnFailure());
+                optionsBuilder.UseNpgsql(connectionString, options => 
+                { 
+                    options.EnableRetryOnFailure();
+                });
             }
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            
         }
     }
 }

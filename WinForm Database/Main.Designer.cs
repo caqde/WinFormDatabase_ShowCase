@@ -37,6 +37,8 @@
             btnSave = new Button();
             statusStrip1 = new StatusStrip();
             tbStatuslbl = new ToolStripStatusLabel();
+            btnAdd = new Button();
+            btnDelete = new Button();
             ((System.ComponentModel.ISupportInitialize)MainDataSource).BeginInit();
             statusStrip1.SuspendLayout();
             SuspendLayout();
@@ -107,11 +109,31 @@
             tbStatuslbl.Size = new Size(39, 17);
             tbStatuslbl.Text = "Status";
             // 
+            // btnAdd
+            // 
+            btnAdd.Location = new Point(274, 153);
+            btnAdd.Name = "btnAdd";
+            btnAdd.Size = new Size(75, 23);
+            btnAdd.TabIndex = 6;
+            btnAdd.Text = "Add New ";
+            btnAdd.UseVisualStyleBackColor = true;
+            // 
+            // btnDelete
+            // 
+            btnDelete.Location = new Point(274, 124);
+            btnDelete.Name = "btnDelete";
+            btnDelete.Size = new Size(75, 23);
+            btnDelete.TabIndex = 7;
+            btnDelete.Text = "Delete";
+            btnDelete.UseVisualStyleBackColor = true;
+            // 
             // Main
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
+            Controls.Add(btnDelete);
+            Controls.Add(btnAdd);
             Controls.Add(statusStrip1);
             Controls.Add(btnSave);
             Controls.Add(btnNext);
@@ -137,5 +159,7 @@
         private Button btnSave;
         private StatusStrip statusStrip1;
         private ToolStripStatusLabel tbStatuslbl;
+        private Button btnAdd;
+        private Button btnDelete;
     }
 }
