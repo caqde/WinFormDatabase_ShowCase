@@ -22,6 +22,9 @@ namespace ShowCaseViewModel
         private bool itemChanged;
 
         [ObservableProperty]
+        private List<String> dbNewItems;
+
+        [ObservableProperty]
         private int dbId;
         [ObservableProperty]
         private string? dbName;
@@ -100,6 +103,14 @@ namespace ShowCaseViewModel
             }
             WeakReferenceMessenger.Default.Send(new AddMessage(response));
             itemChanged = true;
+        }
+
+        [RelayCommand]
+        private void MultiSave()
+        {
+            dbObjectModel data = DatabaseInstance.getDBObject();
+            bool response = data.SaveEntries();
+            WeakReferenceMessenger.Default.Send(new MultiSaveMessage(response));
         }
     }
 }

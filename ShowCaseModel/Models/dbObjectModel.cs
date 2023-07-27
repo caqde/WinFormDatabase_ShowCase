@@ -15,6 +15,7 @@ namespace ShowCaseModel.Models
         private DBFactory dBFactory;
         private int currentID;
         private dbObject? currentdBObject;
+        private List<dbObject> newDbObjects;
 
         public dbObjectModel()
         {
@@ -166,6 +167,93 @@ namespace ShowCaseModel.Models
             else
             {
                 return;
+            }
+        }
+
+        public Dictionary<int, string> GetEntries(int startId, int endId)
+        {
+            using (var context = dBFactory.GetDbContext())
+            {
+                var objects = context.dbObjects.Where(x => x.Id >= startId && x.Id <= endId).ToList();
+                var entries = new Dictionary<int, string>();
+                foreach (dbObject obj in objects)
+                {
+                    entries.Add(obj.Id, obj.Name);
+                }
+                return entries;
+            }
+        }
+
+        public Dictionary<int, string> AddEntries(int amount)
+        {
+            newDbObjects = new List<dbObject>();
+            for (int i = 0; i < amount; i++)
+            {
+                newDbObjects.Add(new dbObject());
+            }
+            var dict = new Dictionary<int, string>();
+            foreach(dbObject obj in newDbObjects)
+            {
+                dict.Add(obj.Id, obj.Name);
+            }
+            return dict;
+        }
+
+        public Dictionary<int, string> GetAllEntries()
+        {
+            using (var context = dBFactory.GetDbContext())
+            {
+                var objects = context.dbObjects.ToList();
+                var entries = new Dictionary<int, string>();
+                foreach( dbObject obj in objects)
+                {
+                    entries.Add(obj.Id, obj.Name);
+                }
+                return entries;
+            }
+        }
+
+        public bool SaveEntries()
+        {
+            using (var dbContext = dBFactory.GetDbContext())
+            {
+                if (newDbObjects != null)
+                {
+                    dbContext.Add(newDbObjects);
+                }
+                dbContext.SaveChanges();
+                return true;
+            }
+        
+        }
+
+        public bool SetEntries(Dictionary<int, string> entries)
+        {
+            using (var context = dBFactory.GetDbContext())
+            {
+                if (newDbObjects is not  null)
+                {
+                    foreach (var obj in newDbObjects)
+                    {
+                        if (entries.ContainsKey(obj.Id))
+                        {
+                            obj.Name = entries[obj.Id];
+                        }
+                    }
+                    return true;
+                }
+                else
+                {
+                    foreach (var entry in entries)
+                    {
+                        var item = context.dbObjects.Single(x => x.Id == entry.Key);
+                        if (item != null)
+                        {
+                            item.Name = entry.Value;
+                        }
+                    }
+                    return true;
+                }
             }
         }
     }
