@@ -15,6 +15,7 @@ namespace ShowCaseViewModel
             dbObjectModel data = DatabaseInstance.getDBObject();
             dbId = data.GetiD();
             dbName = data.GetName();
+            DbNewItems = new List<string>();
         }
 
         private ShowCaseInstance DatabaseInstance;
@@ -44,7 +45,7 @@ namespace ShowCaseViewModel
             bool response = data.NextEntry();
             if (response)
             {
-                dbId = data.GetiD();
+                DbId = data.GetiD();
                 DbName = data.GetName();
             }
             
@@ -59,7 +60,7 @@ namespace ShowCaseViewModel
             bool response = data.PrevEntry();
             if (response)
             {
-                dbId = data.GetiD();
+                DbId = data.GetiD();
                 DbName = data.GetName();
             }
             WeakReferenceMessenger.Default.Send(new PreviousMessage(response));
@@ -70,9 +71,9 @@ namespace ShowCaseViewModel
         private void Save()
         {
             dbObjectModel data = DatabaseInstance.getDBObject();
-            if (itemChanged)
+            if (itemChanged && DbName is not null)
             {
-                data.SetName(dbName);
+                data.SetName(DbName);
                 WeakReferenceMessenger.Default.Send(new SaveMessage(data.SaveEntry()));
             }
             itemChanged = false;
@@ -85,7 +86,7 @@ namespace ShowCaseViewModel
             bool response = data.DeleteEntry();
             if (response)
             {
-                dbId = data.GetiD();
+                DbId = data.GetiD();
                 DbName = data.GetName();
             }
             WeakReferenceMessenger.Default.Send(new DeleteMessage(response));
@@ -98,7 +99,7 @@ namespace ShowCaseViewModel
             bool response = data.AddEntry();
             if (response)
             {
-                dbId = data.GetiD();
+                DbId = data.GetiD();
                 DbName = data.GetName();
             }
             WeakReferenceMessenger.Default.Send(new AddMessage(response));
