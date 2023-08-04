@@ -39,6 +39,7 @@
             tbStatuslbl = new ToolStripStatusLabel();
             btnAdd = new Button();
             btnDelete = new Button();
+            btnAddMany = new Button();
             ((System.ComponentModel.ISupportInitialize)MainDataSource).BeginInit();
             statusStrip1.SuspendLayout();
             SuspendLayout();
@@ -48,7 +49,7 @@
             txtName.DataBindings.Add(new Binding("Text", MainDataSource, "DbName", true));
             txtName.Location = new Point(168, 55);
             txtName.Name = "txtName";
-            txtName.Size = new Size(100, 23);
+            txtName.Size = new Size(181, 23);
             txtName.TabIndex = 0;
             // 
             // MainDataSource
@@ -58,11 +59,11 @@
             // lblName
             // 
             lblName.AutoSize = true;
-            lblName.Location = new Point(110, 55);
+            lblName.Location = new Point(110, 58);
             lblName.Name = "lblName";
-            lblName.Size = new Size(39, 15);
+            lblName.Size = new Size(45, 15);
             lblName.TabIndex = 1;
-            lblName.Text = "Name";
+            lblName.Text = "Name :";
             // 
             // btnPrevious
             // 
@@ -129,11 +130,21 @@
             btnDelete.Text = "Delete";
             btnDelete.UseVisualStyleBackColor = true;
             // 
+            // btnAddMany
+            // 
+            btnAddMany.Location = new Point(110, 153);
+            btnAddMany.Name = "btnAddMany";
+            btnAddMany.Size = new Size(158, 23);
+            btnAddMany.TabIndex = 8;
+            btnAddMany.Text = "Add Many New";
+            btnAddMany.UseVisualStyleBackColor = true;
+            // 
             // Main
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
+            Controls.Add(btnAddMany);
             Controls.Add(btnDelete);
             Controls.Add(btnAdd);
             Controls.Add(statusStrip1);
@@ -163,5 +174,6 @@
         private ToolStripStatusLabel tbStatuslbl;
         private Button btnAdd;
         private Button btnDelete;
+        private Button btnAddMany;
     }
 }

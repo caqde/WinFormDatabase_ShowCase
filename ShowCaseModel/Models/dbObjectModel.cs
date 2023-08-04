@@ -15,7 +15,7 @@ namespace ShowCaseModel.Models
         private DBFactory dBFactory;
         private int currentID;
         private dbObject? currentdBObject;
-        private List<dbObject> newDbObjects;
+        private List<dbObject>? newDbObjects;
 
         public dbObjectModel()
         {
@@ -54,7 +54,10 @@ namespace ShowCaseModel.Models
         {
             using (var context = dBFactory.GetDbContext())
             {
-                context.Remove(currentdBObject);
+                if (currentdBObject != null)
+                {
+                    context.dbObjects.Remove(currentdBObject);
+                }
                 context.SaveChanges();
                 GetFirstEntry();
                 return true;
@@ -83,7 +86,7 @@ namespace ShowCaseModel.Models
             using (var context = dBFactory.GetDbContext())
             {
                 var nextList = context.dbObjects.Where(t => t.Id > currentID).ToList();
-                dbObject next;
+                dbObject? next;
                 if (nextList.Count > 1)
                 {
                     next = nextList.OrderBy( x => x.Id).Take(1).Single();
@@ -116,7 +119,7 @@ namespace ShowCaseModel.Models
             using (var context = dBFactory.GetDbContext())
             {
                 var nextList = context.dbObjects.Where(t => t.Id < currentID).ToList();
-                dbObject next;
+                dbObject? next;
                 if (nextList.Count > 1)
                 {
                     next = nextList.OrderByDescending(x => x.Id).Take(1).Single();

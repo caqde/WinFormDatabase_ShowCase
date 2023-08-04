@@ -1,4 +1,5 @@
 using CommunityToolkit.Mvvm.Messaging;
+using IPrompt;
 using ShowCaseViewModel;
 using ShowCaseViewModel.Messages;
 using System.ComponentModel;
@@ -6,7 +7,7 @@ using System.ComponentModel;
 namespace WinForm_Database
 {
     public partial class Main : Form, IRecipient<PreviousMessage>, IRecipient<SaveMessage>, IRecipient<NextMessage>
-        , IRecipient<AddMessage>, IRecipient<DeleteMessage>
+        , IRecipient<AddMessage>, IRecipient<DeleteMessage>, IRecipient<AddMultiMessage>
     {
         public Main()
         {
@@ -84,6 +85,22 @@ namespace WinForm_Database
             {
                 tbStatuslbl.Text = "Database Error Item not created";
             }
+        }
+
+        public void Receive(AddMultiMessage message)
+        {
+            string input = IInputBox.Show("How many items do you want to add", "Add Multiple?", System.Windows.MessageBoxImage.Question , "0");
+            int value = 0;
+            bool isNumeric = Int32.TryParse(input, out value);
+            if (isNumeric)
+            {
+
+            }
+            else
+            {
+                MessageBox.Show("Value entered is not a Number", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
         }
     }
 }

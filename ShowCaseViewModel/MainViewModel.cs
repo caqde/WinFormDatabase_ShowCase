@@ -107,6 +107,13 @@ namespace ShowCaseViewModel
         }
 
         [RelayCommand]
+        private void AddMulti()
+        {
+            bool response = true;
+            WeakReferenceMessenger.Default.Send(new AddMultiMessage(response));
+        }
+
+        [RelayCommand]
         private void MultiSave()
         {
             dbObjectModel data = DatabaseInstance.getDBObject();
