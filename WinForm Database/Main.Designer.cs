@@ -132,6 +132,7 @@
             // 
             // btnAddMany
             // 
+            btnAddMany.DataBindings.Add(new Binding("Command", MainDataSource, "AddMultiCommand", true));
             btnAddMany.Location = new Point(110, 153);
             btnAddMany.Name = "btnAddMany";
             btnAddMany.Size = new Size(158, 23);

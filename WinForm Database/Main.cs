@@ -7,7 +7,7 @@ using System.ComponentModel;
 namespace WinForm_Database
 {
     public partial class Main : Form, IRecipient<PreviousMessage>, IRecipient<SaveMessage>, IRecipient<NextMessage>
-        , IRecipient<AddMessage>, IRecipient<DeleteMessage>, IRecipient<AddMultiMessage>
+        , IRecipient<AddMessage>, IRecipient<DeleteMessage>, IRecipient<AddMultiMessage>, IRecipient<EditMultiMessage>
     {
         public Main()
         {
@@ -89,18 +89,24 @@ namespace WinForm_Database
 
         public void Receive(AddMultiMessage message)
         {
-            string input = IInputBox.Show("How many items do you want to add", "Add Multiple?", System.Windows.MessageBoxImage.Question , "0");
+            string input = IInputBox.Show("How many items do you want to add", "Add Multiple?", System.Windows.MessageBoxImage.Question, "0");
             int value = 0;
             bool isNumeric = Int32.TryParse(input, out value);
-            if (isNumeric)
+            if (isNumeric && value > 0)
             {
-
+                WeakReferenceMessenger.Default.Send(new CreateMultiMessage(value));
             }
             else
             {
-                MessageBox.Show("Value entered is not a Number", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Value entered is not a Number or is a value less than 1", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
+        }
+
+        public void Receive(EditMultiMessage message)
+        {
+            MainAddMultipleDialog dlg = new MainAddMultipleDialog();
+            dlg.ShowDialog();
         }
     }
 }

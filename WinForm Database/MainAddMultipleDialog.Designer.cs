@@ -29,31 +29,17 @@
         private void InitializeComponent()
         {
             components = new System.ComponentModel.Container();
-            dataGridView1 = new DataGridView();
-            dbNewItemsBindingSource = new BindingSource(components);
             button1 = new Button();
             button2 = new Button();
             button3 = new Button();
-            lengthDataGridViewTextBoxColumn = new DataGridViewTextBoxColumn();
+            mainViewModelBindingSource = new BindingSource(components);
+            dataGridView1 = new DataGridView();
+            dbNewItemsBindingSource = new BindingSource(components);
+            nameDataGridViewTextBoxColumn = new DataGridViewTextBoxColumn();
+            ((System.ComponentModel.ISupportInitialize)mainViewModelBindingSource).BeginInit();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)dbNewItemsBindingSource).BeginInit();
             SuspendLayout();
-            // 
-            // dataGridView1
-            // 
-            dataGridView1.AutoGenerateColumns = false;
-            dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridView1.Columns.AddRange(new DataGridViewColumn[] { lengthDataGridViewTextBoxColumn });
-            dataGridView1.DataSource = dbNewItemsBindingSource;
-            dataGridView1.Location = new Point(12, 12);
-            dataGridView1.Name = "dataGridView1";
-            dataGridView1.RowTemplate.Height = 25;
-            dataGridView1.Size = new Size(776, 349);
-            dataGridView1.TabIndex = 0;
-            // 
-            // dbNewItemsBindingSource
-            // 
-            dbNewItemsBindingSource.DataMember = "DbNewItems";
             // 
             // button1
             // 
@@ -82,35 +68,58 @@
             button3.Text = "Cancel";
             button3.UseVisualStyleBackColor = true;
             // 
-            // lengthDataGridViewTextBoxColumn
+            // mainViewModelBindingSource
             // 
-            lengthDataGridViewTextBoxColumn.DataPropertyName = "Length";
-            lengthDataGridViewTextBoxColumn.HeaderText = "Name";
-            lengthDataGridViewTextBoxColumn.Name = "lengthDataGridViewTextBoxColumn";
-            lengthDataGridViewTextBoxColumn.ReadOnly = true;
+            mainViewModelBindingSource.DataSource = typeof(ShowCaseViewModel.MainViewModel);
+            // 
+            // dataGridView1
+            // 
+            dataGridView1.AutoGenerateColumns = false;
+            dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dataGridView1.Columns.AddRange(new DataGridViewColumn[] { nameDataGridViewTextBoxColumn });
+            dataGridView1.DataSource = dbNewItemsBindingSource;
+            dataGridView1.Location = new Point(12, 12);
+            dataGridView1.Name = "dataGridView1";
+            dataGridView1.RowTemplate.Height = 25;
+            dataGridView1.Size = new Size(776, 349);
+            dataGridView1.TabIndex = 4;
+            // 
+            // dbNewItemsBindingSource
+            // 
+            dbNewItemsBindingSource.DataMember = "DbNewItems";
+            dbNewItemsBindingSource.DataSource = mainViewModelBindingSource;
+            // 
+            // nameDataGridViewTextBoxColumn
+            // 
+            nameDataGridViewTextBoxColumn.DataPropertyName = "Name";
+            nameDataGridViewTextBoxColumn.HeaderText = "Name";
+            nameDataGridViewTextBoxColumn.Name = "nameDataGridViewTextBoxColumn";
+            nameDataGridViewTextBoxColumn.Width = 300;
             // 
             // MainAddMultipleDialog
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
+            Controls.Add(dataGridView1);
             Controls.Add(button3);
             Controls.Add(button2);
             Controls.Add(button1);
-            Controls.Add(dataGridView1);
             Name = "MainAddMultipleDialog";
             Text = "Add Multiple Items";
+            ((System.ComponentModel.ISupportInitialize)mainViewModelBindingSource).EndInit();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).EndInit();
             ((System.ComponentModel.ISupportInitialize)dbNewItemsBindingSource).EndInit();
             ResumeLayout(false);
         }
 
         #endregion
-        private DataGridView dataGridView1;
-        private BindingSource dbNewItemsBindingSource;
         private Button button1;
         private Button button2;
         private Button button3;
-        private DataGridViewTextBoxColumn lengthDataGridViewTextBoxColumn;
+        private BindingSource mainViewModelBindingSource;
+        private DataGridView dataGridView1;
+        private BindingSource dbNewItemsBindingSource;
+        private DataGridViewTextBoxColumn nameDataGridViewTextBoxColumn;
     }
 }

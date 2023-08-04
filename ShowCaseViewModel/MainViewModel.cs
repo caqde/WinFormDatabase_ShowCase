@@ -3,7 +3,9 @@ using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using ShowCaseModel;
 using ShowCaseModel.Models;
+using ShowCaseViewModel.GridViewTypes;
 using ShowCaseViewModel.Messages;
+using System.ComponentModel;
 
 namespace ShowCaseViewModel
 {
@@ -15,7 +17,7 @@ namespace ShowCaseViewModel
             dbObjectModel data = DatabaseInstance.getDBObject();
             dbId = data.GetiD();
             dbName = data.GetName();
-            DbNewItems = new List<string>();
+            DbNewItems = new List<Simple>();
         }
 
         private ShowCaseInstance DatabaseInstance;
@@ -23,7 +25,7 @@ namespace ShowCaseViewModel
         private bool itemChanged;
 
         [ObservableProperty]
-        private List<String> dbNewItems;
+        private List<Simple> dbNewItems;
 
         [ObservableProperty]
         private int dbId;
@@ -111,14 +113,6 @@ namespace ShowCaseViewModel
         {
             bool response = true;
             WeakReferenceMessenger.Default.Send(new AddMultiMessage(response));
-        }
-
-        [RelayCommand]
-        private void MultiSave()
-        {
-            dbObjectModel data = DatabaseInstance.getDBObject();
-            bool response = data.SaveEntries();
-            WeakReferenceMessenger.Default.Send(new MultiSaveMessage(response));
         }
     }
 }
