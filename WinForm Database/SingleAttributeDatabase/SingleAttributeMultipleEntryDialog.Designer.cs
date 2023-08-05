@@ -1,6 +1,6 @@
 ﻿namespace WinForm_Database
 {
-    partial class MainAddMultipleDialog
+    partial class SingleAttributeMultipleEntryDialog
     {
         /// <summary>
         /// Required designer variable.

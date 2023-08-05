@@ -14,9 +14,9 @@ using System.Windows.Forms;
 
 namespace WinForm_Database
 {
-    public partial class MainAddMultipleDialog : Form, IRecipient<MultiSaveMessage>, IRecipient<CloseDialogMessage>
+    public partial class SingleAttributeMultipleEntryDialog : Form, IRecipient<MultiSaveMessage>, IRecipient<CloseDialogMessage>
     {
-        public MainAddMultipleDialog()
+        public SingleAttributeMultipleEntryDialog()
         {
             InitializeComponent();
             mainAddMultipleViewModelBindingSource.DataSource = new MainAddMultipleViewModel();
@@ -25,6 +25,9 @@ namespace WinForm_Database
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
+
+            //Why this needs to be restated I do not know. But if this is not done the application will display the Datasource
+            //but crash when a user tries to edit the data.
             newItemsBindingSource.DataSource = mainAddMultipleViewModelBindingSource.DataSource;
             newItemsBindingSource.DataMember = "NewItems";
         }

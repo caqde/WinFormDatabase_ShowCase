@@ -1,6 +1,6 @@
 ﻿namespace WinForm_Database
 {
-    partial class Main
+    partial class SingleAttributeDatabase
     {
         /// <summary>
         ///  Required designer variable.

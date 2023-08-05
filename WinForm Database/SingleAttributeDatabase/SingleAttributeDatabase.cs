@@ -6,10 +6,10 @@ using System.ComponentModel;
 
 namespace WinForm_Database
 {
-    public partial class Main : Form, IRecipient<PreviousMessage>, IRecipient<SaveMessage>, IRecipient<NextMessage>
+    public partial class SingleAttributeDatabase : Form, IRecipient<PreviousMessage>, IRecipient<SaveMessage>, IRecipient<NextMessage>
         , IRecipient<AddMessage>, IRecipient<DeleteMessage>, IRecipient<AddMultiMessage>
     {
-        public Main()
+        public SingleAttributeDatabase()
         {
             InitializeComponent();
         }
@@ -94,7 +94,7 @@ namespace WinForm_Database
             bool isNumeric = Int32.TryParse(input, out value);
             if (isNumeric && value > 0)
             {
-                MainAddMultipleDialog dlg = new MainAddMultipleDialog();
+                SingleAttributeMultipleEntryDialog dlg = new SingleAttributeMultipleEntryDialog();
                 WeakReferenceMessenger.Default.Send(new CreateMultiMessage(value));
                 dlg.ShowDialog();
             }
