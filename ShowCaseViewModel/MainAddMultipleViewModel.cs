@@ -10,17 +10,18 @@ using System.Text;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.Input;
 using ShowCaseModel.Models;
+using ShowCaseViewModel.Messages.MainAddMutlipleDialog;
 
 namespace ShowCaseViewModel
 {
-    public partial class MainAddMultipleViewModel : ObservableObject, IRecipient<CreateMultiMessage>
+    public partial class MainAddMultipleViewModel : ObservableObject, IRecipient<CreateMultiMessage>, IRecipient<SaveCloseMessage>
     {
         public MainAddMultipleViewModel() 
         {
             DatabaseInstance = new ShowCaseInstance();
             NewItems = new List<NameType>();
             newEntries = new Dictionary<int, string>();
-            WeakReferenceMessenger.Default.Register<CreateMultiMessage>(this);
+            WeakReferenceMessenger.Default.RegisterAll(this);
         }
 
         private ShowCaseInstance DatabaseInstance;
@@ -32,9 +33,27 @@ namespace ShowCaseViewModel
         [RelayCommand]
         private void MultiSave()
         {
+            WeakReferenceMessenger.Default.Send(new MultiSaveMessage(Save()));
+        }
+
+        [RelayCommand]
+        private void MultiSaveClose()
+        {
+            WeakReferenceMessenger.Default.Send(new CloseDialogMessage(Save()));
+        }
+
+        [RelayCommand]
+        private void Cancel()
+        {
+            WeakReferenceMessenger.Default.Send(new CloseDialogMessage(false));
+        }
+
+
+        private bool Save()
+        {
             dbObjectModel data = DatabaseInstance.getDBObject();
             int x = 0;
-            if (NewItems is not null && NewItems.Count > 0) 
+            if (NewItems is not null && NewItems.Count > 0)
             {
                 newEntries = new Dictionary<int, string>();
                 foreach (var item in NewItems)
@@ -43,8 +62,9 @@ namespace ShowCaseViewModel
                 }
             }
             bool response = data.AddEntries(newEntries);
-            WeakReferenceMessenger.Default.Send(new MultiSaveMessage(response));
+            return response;
         }
+
 
         public void Receive(CreateMultiMessage message)
         {
@@ -52,10 +72,14 @@ namespace ShowCaseViewModel
             NewItems = new List<NameType>();
             for (int i = 0; i < value; i++)
             {
-                NewItems.Add(new NameType());
+                NewItems.Add(new NameType("Name " + i.ToString()));
             }
-            dbObjectModel data = DatabaseInstance.getDBObject();
             WeakReferenceMessenger.Default.Send(new EditMultiMessage(true));
+        }
+
+        public void Receive(SaveCloseMessage message)
+        {
+            MultiSaveClose();
         }
     }
 }

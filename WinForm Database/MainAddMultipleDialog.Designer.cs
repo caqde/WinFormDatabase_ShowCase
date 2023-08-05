@@ -29,38 +29,45 @@
         private void InitializeComponent()
         {
             components = new System.ComponentModel.Container();
-            button1 = new Button();
-            button2 = new Button();
+            SaveButton = new Button();
+            mainAddMultipleViewModelBindingSource = new BindingSource(components);
+            SaveCloseButton = new Button();
             button3 = new Button();
-            mainViewModelBindingSource = new BindingSource(components);
             dataGridView1 = new DataGridView();
-            dbNewItemsBindingSource = new BindingSource(components);
             nameDataGridViewTextBoxColumn = new DataGridViewTextBoxColumn();
-            ((System.ComponentModel.ISupportInitialize)mainViewModelBindingSource).BeginInit();
+            newItemsBindingSource = new BindingSource(components);
+            ((System.ComponentModel.ISupportInitialize)mainAddMultipleViewModelBindingSource).BeginInit();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)dbNewItemsBindingSource).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)newItemsBindingSource).BeginInit();
             SuspendLayout();
             // 
-            // button1
+            // SaveButton
             // 
-            button1.Location = new Point(508, 367);
-            button1.Name = "button1";
-            button1.Size = new Size(75, 23);
-            button1.TabIndex = 1;
-            button1.Text = "Save";
-            button1.UseVisualStyleBackColor = true;
+            SaveButton.DataBindings.Add(new Binding("Command", mainAddMultipleViewModelBindingSource, "MultiSaveCommand", true));
+            SaveButton.Location = new Point(508, 367);
+            SaveButton.Name = "SaveButton";
+            SaveButton.Size = new Size(75, 23);
+            SaveButton.TabIndex = 1;
+            SaveButton.Text = "Save";
+            SaveButton.UseVisualStyleBackColor = true;
             // 
-            // button2
+            // mainAddMultipleViewModelBindingSource
             // 
-            button2.Location = new Point(589, 367);
-            button2.Name = "button2";
-            button2.Size = new Size(105, 23);
-            button2.TabIndex = 2;
-            button2.Text = "Save and Close";
-            button2.UseVisualStyleBackColor = true;
+            mainAddMultipleViewModelBindingSource.DataSource = typeof(ShowCaseViewModel.MainAddMultipleViewModel);
+            // 
+            // SaveCloseButton
+            // 
+            SaveCloseButton.DataBindings.Add(new Binding("Command", mainAddMultipleViewModelBindingSource, "MultiSaveCloseCommand", true));
+            SaveCloseButton.Location = new Point(589, 367);
+            SaveCloseButton.Name = "SaveCloseButton";
+            SaveCloseButton.Size = new Size(105, 23);
+            SaveCloseButton.TabIndex = 2;
+            SaveCloseButton.Text = "Save and Close";
+            SaveCloseButton.UseVisualStyleBackColor = true;
             // 
             // button3
             // 
+            button3.DataBindings.Add(new Binding("Command", mainAddMultipleViewModelBindingSource, "CancelCommand", true));
             button3.Location = new Point(700, 367);
             button3.Name = "button3";
             button3.Size = new Size(75, 23);
@@ -68,32 +75,30 @@
             button3.Text = "Cancel";
             button3.UseVisualStyleBackColor = true;
             // 
-            // mainViewModelBindingSource
-            // 
-            mainViewModelBindingSource.DataSource = typeof(ShowCaseViewModel.MainAddMultipleViewModel);
-            // 
             // dataGridView1
             // 
+            dataGridView1.AllowDrop = true;
             dataGridView1.AutoGenerateColumns = false;
             dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dataGridView1.Columns.AddRange(new DataGridViewColumn[] { nameDataGridViewTextBoxColumn });
-            dataGridView1.DataSource = dbNewItemsBindingSource;
+            dataGridView1.DataBindings.Add(new Binding("DataContext", newItemsBindingSource, "Name", true));
+            dataGridView1.DataSource = newItemsBindingSource;
             dataGridView1.Location = new Point(12, 12);
             dataGridView1.Name = "dataGridView1";
             dataGridView1.RowTemplate.Height = 25;
             dataGridView1.Size = new Size(776, 349);
             dataGridView1.TabIndex = 4;
             // 
-            // dbNewItemsBindingSource
-            // 
-            dbNewItemsBindingSource.DataMember = "NewItems";
-            dbNewItemsBindingSource.DataSource = mainViewModelBindingSource;
-            // 
             // nameDataGridViewTextBoxColumn
             // 
             nameDataGridViewTextBoxColumn.DataPropertyName = "Name";
             nameDataGridViewTextBoxColumn.HeaderText = "Name";
             nameDataGridViewTextBoxColumn.Name = "nameDataGridViewTextBoxColumn";
+            // 
+            // newItemsBindingSource
+            // 
+            newItemsBindingSource.DataMember = "NewItems";
+            newItemsBindingSource.DataSource = mainAddMultipleViewModelBindingSource;
             // 
             // MainAddMultipleDialog
             // 
@@ -102,23 +107,23 @@
             ClientSize = new Size(800, 450);
             Controls.Add(dataGridView1);
             Controls.Add(button3);
-            Controls.Add(button2);
-            Controls.Add(button1);
+            Controls.Add(SaveCloseButton);
+            Controls.Add(SaveButton);
             Name = "MainAddMultipleDialog";
             Text = "Add Multiple Items";
-            ((System.ComponentModel.ISupportInitialize)mainViewModelBindingSource).EndInit();
+            ((System.ComponentModel.ISupportInitialize)mainAddMultipleViewModelBindingSource).EndInit();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).EndInit();
-            ((System.ComponentModel.ISupportInitialize)dbNewItemsBindingSource).EndInit();
+            ((System.ComponentModel.ISupportInitialize)newItemsBindingSource).EndInit();
             ResumeLayout(false);
         }
 
         #endregion
-        private Button button1;
-        private Button button2;
+        private Button SaveButton;
+        private Button SaveCloseButton;
         private Button button3;
-        private BindingSource mainViewModelBindingSource;
         private DataGridView dataGridView1;
-        private BindingSource dbNewItemsBindingSource;
         private DataGridViewTextBoxColumn nameDataGridViewTextBoxColumn;
+        private BindingSource newItemsBindingSource;
+        private BindingSource mainAddMultipleViewModelBindingSource;
     }
 }

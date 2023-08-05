@@ -191,7 +191,7 @@ namespace ShowCaseModel.Models
             var context = dBFactory.GetDbContext();
             foreach (var entry in entries)
             {
-                var dbObjectEntry = new dbObject { Id = entry.Key, Name = entry.Value };
+                var dbObjectEntry = new dbObject { Name = entry.Value };
                 context.dbObjects.Add(dbObjectEntry);
             }
             context.SaveChanges(true);
