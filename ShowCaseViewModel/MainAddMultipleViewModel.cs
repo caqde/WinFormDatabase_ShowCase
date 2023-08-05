@@ -18,7 +18,8 @@ namespace ShowCaseViewModel
         public MainAddMultipleViewModel() 
         {
             DatabaseInstance = new ShowCaseInstance();
-            NewItems = new List<Simple>();
+            NewItems = new List<NameType>();
+            newEntries = new Dictionary<int, string>();
             WeakReferenceMessenger.Default.Register<CreateMultiMessage>(this);
         }
 
@@ -26,36 +27,34 @@ namespace ShowCaseViewModel
         private Dictionary<int, string> newEntries;
 
         [ObservableProperty]
-        private List<Simple> newItems;
+        private List<NameType> newItems;
 
         [RelayCommand]
         private void MultiSave()
         {
             dbObjectModel data = DatabaseInstance.getDBObject();
             int x = 0;
-            if (newEntries is not null && newEntries.Count > 0 && newItems is not null && newItems.Count > 0) 
+            if (NewItems is not null && NewItems.Count > 0) 
             {
-                List<int> keys = new List<int>(newEntries.Keys);
-                foreach (var item in keys)
+                newEntries = new Dictionary<int, string>();
+                foreach (var item in NewItems)
                 {
-                    newEntries[item] = newItems[x].Name;
-                    x++;
+                    newEntries.Add(x++, item.Name);
                 }
             }
-            bool response = data.SaveEntries();
+            bool response = data.AddEntries(newEntries);
             WeakReferenceMessenger.Default.Send(new MultiSaveMessage(response));
         }
 
         public void Receive(CreateMultiMessage message)
         {
             int value = message.Value;
-            NewItems = new List<Simple>();
+            NewItems = new List<NameType>();
             for (int i = 0; i < value; i++)
             {
-                NewItems.Add(new Simple());
+                NewItems.Add(new NameType());
             }
             dbObjectModel data = DatabaseInstance.getDBObject();
-            newEntries = data.AddEntries(value);
             WeakReferenceMessenger.Default.Send(new EditMultiMessage(true));
         }
     }

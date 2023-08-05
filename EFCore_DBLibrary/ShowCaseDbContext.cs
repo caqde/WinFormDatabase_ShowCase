@@ -38,6 +38,8 @@ namespace EFCore_DBLibrary
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<dbObject>()
+                .HasKey(e => e.Id);
         }
     }
 }

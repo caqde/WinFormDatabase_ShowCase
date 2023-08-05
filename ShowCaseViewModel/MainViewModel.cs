@@ -17,7 +17,7 @@ namespace ShowCaseViewModel
             dbObjectModel data = DatabaseInstance.getDBObject();
             dbId = data.GetiD();
             dbName = data.GetName();
-            DbNewItems = new List<Simple>();
+            DbNewItems = new List<NameType>();
         }
 
         private ShowCaseInstance DatabaseInstance;
@@ -25,7 +25,7 @@ namespace ShowCaseViewModel
         private bool itemChanged;
 
         [ObservableProperty]
-        private List<Simple> dbNewItems;
+        private List<NameType> dbNewItems;
 
         [ObservableProperty]
         private int dbId;

@@ -70,7 +70,7 @@
             // 
             // mainViewModelBindingSource
             // 
-            mainViewModelBindingSource.DataSource = typeof(ShowCaseViewModel.MainViewModel);
+            mainViewModelBindingSource.DataSource = typeof(ShowCaseViewModel.MainAddMultipleViewModel);
             // 
             // dataGridView1
             // 
@@ -86,7 +86,7 @@
             // 
             // dbNewItemsBindingSource
             // 
-            dbNewItemsBindingSource.DataMember = "DbNewItems";
+            dbNewItemsBindingSource.DataMember = "NewItems";
             dbNewItemsBindingSource.DataSource = mainViewModelBindingSource;
             // 
             // nameDataGridViewTextBoxColumn
@@ -94,7 +94,6 @@
             nameDataGridViewTextBoxColumn.DataPropertyName = "Name";
             nameDataGridViewTextBoxColumn.HeaderText = "Name";
             nameDataGridViewTextBoxColumn.Name = "nameDataGridViewTextBoxColumn";
-            nameDataGridViewTextBoxColumn.Width = 300;
             // 
             // MainAddMultipleDialog
             // 

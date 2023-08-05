@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ShowCaseViewModel;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -13,8 +14,9 @@ namespace WinForm_Database
     public partial class MainAddMultipleDialog : Form
     {
         public MainAddMultipleDialog()
-        {
+        {  
             InitializeComponent();
+            mainViewModelBindingSource.DataSource = new MainAddMultipleViewModel();
         }
     }
 }

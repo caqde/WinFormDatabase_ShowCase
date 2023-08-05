@@ -6,13 +6,13 @@ using System.Threading.Tasks;
 
 namespace ShowCaseViewModel.GridViewTypes
 {
-    public class Simple
+    public class NameType
     {
-        public Simple() 
+        public NameType() 
         {
             Name = "NULL";
         }
-        public Simple(string name) 
+        public NameType(string name) 
         {
             Name = name;
         }

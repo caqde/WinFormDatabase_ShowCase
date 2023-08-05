@@ -15,7 +15,6 @@ namespace ShowCaseModel.Models
         private DBFactory dBFactory;
         private int currentID;
         private dbObject? currentdBObject;
-        private List<dbObject>? newDbObjects;
 
         public dbObjectModel()
         {
@@ -187,19 +186,16 @@ namespace ShowCaseModel.Models
             }
         }
 
-        public Dictionary<int, string> AddEntries(int amount)
+        public bool AddEntries(Dictionary<int, string> entries)
         {
-            newDbObjects = new List<dbObject>();
-            for (int i = 0; i < amount; i++)
+            var context = dBFactory.GetDbContext();
+            foreach (var entry in entries)
             {
-                newDbObjects.Add(new dbObject());
+                var dbObjectEntry = new dbObject { Id = entry.Key, Name = entry.Value };
+                context.dbObjects.Add(dbObjectEntry);
             }
-            var dict = new Dictionary<int, string>();
-            foreach(dbObject obj in newDbObjects)
-            {
-                dict.Add(obj.Id, obj.Name);
-            }
-            return dict;
+            context.SaveChanges(true);
+            return true;
         }
 
         public Dictionary<int, string> GetAllEntries()
@@ -220,10 +216,6 @@ namespace ShowCaseModel.Models
         {
             using (var dbContext = dBFactory.GetDbContext())
             {
-                if (newDbObjects != null)
-                {
-                    dbContext.Add(newDbObjects);
-                }
                 dbContext.SaveChanges();
                 return true;
             }
@@ -234,29 +226,15 @@ namespace ShowCaseModel.Models
         {
             using (var context = dBFactory.GetDbContext())
             {
-                if (newDbObjects is not  null)
+                foreach (var entry in entries)
                 {
-                    foreach (var obj in newDbObjects)
+                    var item = context.dbObjects.Single(x => x.Id == entry.Key);
+                    if (item != null)
                     {
-                        if (entries.ContainsKey(obj.Id))
-                        {
-                            obj.Name = entries[obj.Id];
-                        }
+                        item.Name = entry.Value;
                     }
-                    return true;
                 }
-                else
-                {
-                    foreach (var entry in entries)
-                    {
-                        var item = context.dbObjects.Single(x => x.Id == entry.Key);
-                        if (item != null)
-                        {
-                            item.Name = entry.Value;
-                        }
-                    }
-                    return true;
-                }
+                return true;
             }
         }
     }
