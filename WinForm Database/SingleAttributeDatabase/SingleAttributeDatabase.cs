@@ -17,7 +17,7 @@ namespace WinForm_Database
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
-            MainDataSource.DataSource = new MainViewModel();
+            MainDataSource.DataSource = new SingleAttributeDatabaseViewModel();
             WeakReferenceMessenger.Default.RegisterAll(this);
         }
 

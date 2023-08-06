@@ -14,9 +14,9 @@ using ShowCaseViewModel.Messages.MainAddMutlipleDialog;
 
 namespace ShowCaseViewModel
 {
-    public partial class MainAddMultipleViewModel : ObservableObject, IRecipient<CreateMultiMessage>, IRecipient<SaveCloseMessage>
+    public partial class SingleAttributeDatabaseMultipleViewModel : ObservableObject, IRecipient<CreateMultiMessage>, IRecipient<SaveCloseMessage>
     {
-        public MainAddMultipleViewModel() 
+        public SingleAttributeDatabaseMultipleViewModel() 
         {
             DatabaseInstance = new ShowCaseInstance();
             NewItems = new List<NameType>();

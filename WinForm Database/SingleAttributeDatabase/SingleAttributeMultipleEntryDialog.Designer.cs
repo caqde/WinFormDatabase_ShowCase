@@ -53,7 +53,7 @@
             // 
             // mainAddMultipleViewModelBindingSource
             // 
-            mainAddMultipleViewModelBindingSource.DataSource = typeof(ShowCaseViewModel.MainAddMultipleViewModel);
+            mainAddMultipleViewModelBindingSource.DataSource = typeof(ShowCaseViewModel.SingleAttributeDatabaseMultipleViewModel);
             // 
             // SaveCloseButton
             // 

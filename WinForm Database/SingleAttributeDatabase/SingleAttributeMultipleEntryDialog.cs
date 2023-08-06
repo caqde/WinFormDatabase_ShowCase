@@ -19,7 +19,7 @@ namespace WinForm_Database
         public SingleAttributeMultipleEntryDialog()
         {
             InitializeComponent();
-            mainAddMultipleViewModelBindingSource.DataSource = new MainAddMultipleViewModel();
+            mainAddMultipleViewModelBindingSource.DataSource = new SingleAttributeDatabaseMultipleViewModel();
         }
 
         protected override void OnLoad(EventArgs e)

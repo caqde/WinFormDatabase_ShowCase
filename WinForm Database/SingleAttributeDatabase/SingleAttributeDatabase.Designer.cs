@@ -54,7 +54,7 @@
             // 
             // MainDataSource
             // 
-            MainDataSource.DataSource = typeof(ShowCaseViewModel.MainViewModel);
+            MainDataSource.DataSource = typeof(ShowCaseViewModel.SingleAttributeDatabaseViewModel);
             // 
             // lblName
             // 
