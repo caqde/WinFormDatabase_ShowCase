@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.Messaging;
 using ShowCaseViewModel;
+using ShowCaseViewModel.GridViewTypes;
 using ShowCaseViewModel.Messages;
 using ShowCaseViewModel.Messages.MainAddMutlipleDialog;
 using System;
@@ -32,7 +33,6 @@ namespace WinForm_Database
             //but crash when a user tries to edit the data.
             newItemsBindingSource.DataSource = mainAddMultipleViewModelBindingSource.DataSource;
             newItemsBindingSource.DataMember = "NewItems";
-
             WeakReferenceMessenger.Default.RegisterAll(this);
         }
 
@@ -72,6 +72,7 @@ namespace WinForm_Database
             dataSaved = true;
             dataGridView1.AllowUserToAddRows = false;
             dataGridView1.AllowUserToDeleteRows = false;
+            
             return;
         }
     }

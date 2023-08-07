@@ -11,6 +11,8 @@ using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.Input;
 using ShowCaseModel.Models;
 using ShowCaseViewModel.Messages.MainAddMutlipleDialog;
+using System.ComponentModel;
+using System.Collections.ObjectModel;
 
 namespace ShowCaseViewModel
 {
@@ -19,7 +21,7 @@ namespace ShowCaseViewModel
         public SingleAttributeDatabaseMultipleViewModel() 
         {
             DatabaseInstance = new ShowCaseInstance();
-            NewItems = new List<NameType>();
+            NewItems = new BindingList<NameType>();
             newEntries = new Dictionary<int, string>();
             WeakReferenceMessenger.Default.RegisterAll(this);
         }
@@ -30,14 +32,10 @@ namespace ShowCaseViewModel
         private Dictionary<int, string> newEntries;
 
         [ObservableProperty]
-        private List<NameType> newItems;
+        private BindingList<NameType> newItems;
 
-        partial void OnNewItemsChanged(List<NameType> value)
-        {
-            saveClicked = false;
-        }
-
-        partial void OnNewItemsChanged(List<NameType>? oldValue, List<NameType> newValue)
+        //Changes to Win Form's DataGridView do not trigger this? Why? BindingList does not trigger this
+        partial void OnNewItemsChanged(BindingList<NameType> value)
         {
             saveClicked = false;
         }
@@ -101,12 +99,20 @@ namespace ShowCaseViewModel
         public void Receive(CreateMultiMessage message)
         {
             int value = message.Value;
-            NewItems = new List<NameType>();
+            NewItems = new BindingList<NameType>();
+            NewItems.RaiseListChangedEvents = true;
+            NewItems.ListChanged += NewItems_ListChanged;
             for (int i = 0; i < value; i++)
             {
                 NewItems.Add(new NameType("Name " + i.ToString()));
             }
             WeakReferenceMessenger.Default.Send(new EditMultiMessage(true));
+        }
+
+        private void NewItems_ListChanged(object? sender, ListChangedEventArgs e)
+        {
+            BindingList<NameType> newEntries = (BindingList<NameType>)sender;
+            OnNewItemsChanged(newEntries);
         }
 
         public void Receive(SaveCloseMessage message)

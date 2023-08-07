@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,17 +7,19 @@ using System.Threading.Tasks;
 
 namespace ShowCaseViewModel.GridViewTypes
 {
-    public class NameType
+    public partial class NameType: ObservableObject
     {
         public NameType() 
         {
-            Name = "NULL";
+            name = "NULL";
         }
-        public NameType(string name) 
+        public NameType(string _name) 
         {
-            Name = name;
+            name = _name;
         }
 
-        public string Name { get; set; }
+        [ObservableProperty]
+        private string name;
+
     }
 }
