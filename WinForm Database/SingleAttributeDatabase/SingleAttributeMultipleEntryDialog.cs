@@ -32,6 +32,7 @@ namespace WinForm_Database
             //but crash when a user tries to edit the data.
             newItemsBindingSource.DataSource = mainAddMultipleViewModelBindingSource.DataSource;
             newItemsBindingSource.DataMember = "NewItems";
+
             WeakReferenceMessenger.Default.RegisterAll(this);
         }
 

@@ -25,16 +25,28 @@ namespace ShowCaseViewModel
         }
 
         private bool saveClicked = false;
+        private bool firstSave = false;
         private ShowCaseInstance DatabaseInstance;
         private Dictionary<int, string> newEntries;
 
         [ObservableProperty]
         private List<NameType> newItems;
 
+        partial void OnNewItemsChanged(List<NameType> value)
+        {
+            saveClicked = false;
+        }
+
+        partial void OnNewItemsChanged(List<NameType>? oldValue, List<NameType> newValue)
+        {
+            saveClicked = false;
+        }
+
         [RelayCommand]
         private void MultiSave()
         {
             WeakReferenceMessenger.Default.Send(new MultiSaveMessage(Save()));
+            
         }
 
         [RelayCommand]
@@ -65,13 +77,22 @@ namespace ShowCaseViewModel
             bool response;
             if (saveClicked)
             {
-
                 response = true;
             }
             else
             {
-                response = data.AddEntries(ref newEntries);
-                saveClicked = true;
+                if (firstSave)
+                {
+                    response = data.SetEntries(newEntries);
+                    response = data.SaveEntries();
+                    saveClicked = true;
+                }
+                else
+                {
+                    response = data.AddEntries(ref newEntries);
+                    firstSave = true;
+                    saveClicked = true;
+                } 
             }
             return response;
         }

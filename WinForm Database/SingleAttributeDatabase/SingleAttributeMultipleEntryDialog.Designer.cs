@@ -100,7 +100,7 @@
             newItemsBindingSource.DataMember = "NewItems";
             newItemsBindingSource.DataSource = mainAddMultipleViewModelBindingSource;
             // 
-            // MainAddMultipleDialog
+            // SingleAttributeMultipleEntryDialog
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
@@ -109,7 +109,7 @@
             Controls.Add(button3);
             Controls.Add(SaveCloseButton);
             Controls.Add(SaveButton);
-            Name = "MainAddMultipleDialog";
+            Name = "SingleAttributeMultipleEntryDialog";
             Text = "Add Multiple Items";
             ((System.ComponentModel.ISupportInitialize)mainAddMultipleViewModelBindingSource).EndInit();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).EndInit();
