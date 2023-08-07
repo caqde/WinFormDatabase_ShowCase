@@ -35,14 +35,26 @@ namespace WinForm_Database
             if (FormPanelNeedsClearing(typeof(SingleAttributeDatabase)))
             {
                 ClearFormPanel();
-                SingleAttributeDatabase singleDatabaseForm = new SingleAttributeDatabase();
-                singleDatabaseForm.TopLevel = false;
-                singleDatabaseForm.AutoScroll = true;
-                singleDatabaseForm.FormBorderStyle = FormBorderStyle.None;
-                currentPanelForm = singleDatabaseForm;
-                this.formPanel.Controls.Add(singleDatabaseForm);
-                singleDatabaseForm.Show();
+                AddFormPanel();
             }      
+            else
+            {
+                if (currentPanelForm is null)
+                {
+                    AddFormPanel();
+                }
+            }
+        }
+
+        private void AddFormPanel()
+        {
+            SingleAttributeDatabase singleDatabaseForm = new SingleAttributeDatabase();
+            singleDatabaseForm.TopLevel = false;
+            singleDatabaseForm.AutoScroll = true;
+            singleDatabaseForm.FormBorderStyle = FormBorderStyle.None;
+            currentPanelForm = singleDatabaseForm;
+            this.formPanel.Controls.Add(singleDatabaseForm);
+            singleDatabaseForm.Show();
         }
 
         private bool FormPanelNeedsClearing(Type newformType)
@@ -60,7 +72,7 @@ namespace WinForm_Database
             }
             else
             {
-                return true;
+                return false;
             }   
         }
 

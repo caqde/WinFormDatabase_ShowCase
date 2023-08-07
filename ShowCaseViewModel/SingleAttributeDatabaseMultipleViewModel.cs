@@ -24,6 +24,7 @@ namespace ShowCaseViewModel
             WeakReferenceMessenger.Default.RegisterAll(this);
         }
 
+        private bool saveClicked = false;
         private ShowCaseInstance DatabaseInstance;
         private Dictionary<int, string> newEntries;
 
@@ -61,7 +62,17 @@ namespace ShowCaseViewModel
                     newEntries.Add(x++, item.Name);
                 }
             }
-            bool response = data.AddEntries(newEntries);
+            bool response;
+            if (saveClicked)
+            {
+
+                response = true;
+            }
+            else
+            {
+                response = data.AddEntries(ref newEntries);
+                saveClicked = true;
+            }
             return response;
         }
 

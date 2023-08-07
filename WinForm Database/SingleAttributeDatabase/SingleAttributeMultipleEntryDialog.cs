@@ -16,6 +16,8 @@ namespace WinForm_Database
 {
     public partial class SingleAttributeMultipleEntryDialog : Form, IRecipient<MultiSaveMessage>, IRecipient<CloseDialogMessage>
     {
+        bool dataSaved = false;
+
         public SingleAttributeMultipleEntryDialog()
         {
             InitializeComponent();
@@ -30,6 +32,7 @@ namespace WinForm_Database
             //but crash when a user tries to edit the data.
             newItemsBindingSource.DataSource = mainAddMultipleViewModelBindingSource.DataSource;
             newItemsBindingSource.DataMember = "NewItems";
+            WeakReferenceMessenger.Default.RegisterAll(this);
         }
 
         public void Receive(CloseDialogMessage message)
@@ -40,24 +43,34 @@ namespace WinForm_Database
             }
             else
             {
-                var result = MessageBox.Show("Data is not saved! Save before exit?", "Save Data?", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning);
-                if (result == DialogResult.Yes)
-                {
-                    WeakReferenceMessenger.Default.Send(new SaveCloseMessage(true));
-                }
-                else if (result == DialogResult.No)
+                if (dataSaved)
                 {
                     this.Close();
                 }
                 else
                 {
-                    return;
+                    var result = MessageBox.Show("Data is not saved! Save before exit?", "Save Data?", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning);
+                    if (result == DialogResult.Yes)
+                    {
+                        WeakReferenceMessenger.Default.Send(new SaveCloseMessage(true));
+                    }
+                    else if (result == DialogResult.No)
+                    {
+                        this.Close();
+                    }
+                    else
+                    {
+                        return;
+                    }
                 }
             }
         }
 
         public void Receive(MultiSaveMessage message)
         {
+            dataSaved = true;
+            dataGridView1.AllowUserToAddRows = false;
+            dataGridView1.AllowUserToDeleteRows = false;
             return;
         }
     }

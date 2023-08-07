@@ -17,7 +17,7 @@ namespace ShowCaseModel.Models
         bool AddEntry();
         bool DeleteEntry();
         Dictionary<int,String> GetEntries(int startId, int endId);
-        bool AddEntries(Dictionary<int, String> entries);
+        bool AddEntries(ref Dictionary<int, String> entries);
         Dictionary<int, String> GetAllEntries();
         bool SaveEntries();
         bool SetEntries(Dictionary<int, String> entries);

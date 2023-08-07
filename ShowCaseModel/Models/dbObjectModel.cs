@@ -3,6 +3,7 @@ using EFCore_DBModels;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Security;
 using System.Text;
@@ -186,15 +187,22 @@ namespace ShowCaseModel.Models
             }
         }
 
-        public bool AddEntries(Dictionary<int, string> entries)
+        public bool AddEntries(ref Dictionary<int, string> entries)
         {
             var context = dBFactory.GetDbContext();
+            List<dbObject> objects = new List<dbObject>();
             foreach (var entry in entries)
             {
                 var dbObjectEntry = new dbObject { Name = entry.Value };
                 context.dbObjects.Add(dbObjectEntry);
+                objects.Add(dbObjectEntry);
             }
             context.SaveChanges(true);
+            entries.Clear();
+            foreach (var entry in objects)
+            {
+                entries.Add(entry.Id, entry.Name);
+            }
             return true;
         }
 
