@@ -11,7 +11,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EFCore_DBModels", "EFCore_D
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ShowCaseViewModel", "ShowCaseViewModel\ShowCaseViewModel.csproj", "{59ED6E3C-9A1B-4E56-83EE-AE431F613895}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShowCaseModel", "ShowCaseModel\ShowCaseModel.csproj", "{5D23A7B8-6C16-46BB-BF3D-772AEDC13258}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ShowCaseModel", "ShowCaseModel\ShowCaseModel.csproj", "{5D23A7B8-6C16-46BB-BF3D-772AEDC13258}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShowCaseModelUnitTests", "ShowCaseModelUnitTests\ShowCaseModelUnitTests.csproj", "{48164488-0761-4B13-8A07-173CF9790FC1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{5D23A7B8-6C16-46BB-BF3D-772AEDC13258}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5D23A7B8-6C16-46BB-BF3D-772AEDC13258}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5D23A7B8-6C16-46BB-BF3D-772AEDC13258}.Release|Any CPU.Build.0 = Release|Any CPU
+		{48164488-0761-4B13-8A07-173CF9790FC1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{48164488-0761-4B13-8A07-173CF9790FC1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{48164488-0761-4B13-8A07-173CF9790FC1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{48164488-0761-4B13-8A07-173CF9790FC1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -23,6 +23,12 @@ namespace ShowCaseModel.Models
             GetFirstEntry();
         }
 
+        public dbObjectModel(DbContextOptions<ShowCaseDbContext> options)
+        {
+            dBFactory = new DBFactory(options);
+            GetFirstEntry();
+        }
+
         private void GetFirstEntry()
         {
             using (var context = dBFactory.GetDbContext())
