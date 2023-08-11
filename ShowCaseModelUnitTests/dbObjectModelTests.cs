@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.Extensions.Configuration;
 using ShowCaseModel.Models;
 using System.Runtime;
+using Xunit.Abstractions;
 
 namespace ShowCaseModelUnitTests
 {
@@ -15,39 +16,43 @@ namespace ShowCaseModelUnitTests
         private static MapperConfiguration _config;
         private IMapper mapper;
         private static IServiceProvider serviceProvider;
+        private static ChangeTracking changeTracker;
+        private readonly ITestOutputHelper output;
 
-        DbContextOptionsBuilder<ShowCaseDbContext> builder;
-        dbObjectModel testUnit;
+        private dbObjectModel testUnit;
 
-        public dbObjectModelTests()
+        public dbObjectModelTests(ITestOutputHelper output)
         {
+            this.output = output;
             SetupOptions();
             RunMigrations();
+            ResetDatabase();
         }
 
         private void SetupOptions()
         {
-            builder = new DbContextOptionsBuilder<ShowCaseDbContext>();
-            var configbuilder = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
-            var configuration = configbuilder.Build();
-            var connectionString = configuration.GetConnectionString("TestShowCaseDB");
-            builder.UseNpgsql(connectionString, options => options.EnableRetryOnFailure()); 
-
-            testUnit = new dbObjectModel(builder.Options);
+            testUnit = new dbObjectModel(DatabaseTracker.GetOptionBuilder().Options);
         }
 
         private async void RunMigrations()
         {
-            var context = new ShowCaseDbContext(builder.Options);
+            var context = new ShowCaseDbContext(DatabaseTracker.GetOptionBuilder().Options);
+            
             var migrator = context.Database.GetService<IMigrator>();
             await migrator.MigrateAsync();
+        }
+
+        private void ResetDatabase()
+        {
+            var context = new ShowCaseDbContext(DatabaseTracker.GetOptionBuilder().Options);
+            context.Database.EnsureDeleted();
+            context.Database.EnsureCreated();
         }
 
         [Fact]
         public void GetIDEmptyDatabase()
         {
+            DatabaseTracker.New(output, true);
             int testInt = testUnit.GetiD();
             Assert.Equal(0, testInt);
         }
