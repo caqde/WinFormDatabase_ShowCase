@@ -1,6 +1,7 @@
 DO $$
 
-DECLARE MyCursor CURSOR FOR select TABLE_Name from INFORMATION_SCHEMA.TABLES where TABLE_NAME not in ('__MigrationHistory', '__EFMigrationsHistory')
+DECLARE 
+    MyCursor CURSOR FOR select TABLE_Name from INFORMATION_SCHEMA.TABLES where TABLE_SCHEMA not in ('__MigrationHistory', '__EFMigrationsHistory', 'pg_catalog', 'information_schema') and table_type = 'BASE TABLE';
      tableName text;
 BEGIN
 
@@ -24,7 +25,7 @@ BEGIN
     --INTO tableName;
 
     WHILE FOUND LOOP
-      EXECUTE ('DELETE FROM ' + quote_ident(tableName));
+      EXECUTE ('DELETE FROM ' || quote_ident(tableName));
       EXECUTE ('TRUNCATE TABLE ' || quote_ident(tableName) || ' RESTART IDENTITY');
 
       FETCH NEXT FROM MyCursor 
