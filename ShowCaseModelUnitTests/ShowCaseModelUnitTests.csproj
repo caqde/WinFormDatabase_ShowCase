@@ -10,11 +10,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="XUnitSettings\xunit.runner.json" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Include="XUnitSettings\xunit.runner.json">
+    <Content Include="xunit.runner.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

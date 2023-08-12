@@ -27,7 +27,6 @@ namespace ShowCaseModelUnitTests
             this.output = output;
             SetupOptions();
             RunMigrations();
-            ResetDatabase();
         }
 
         private void SetupOptions()
@@ -35,19 +34,15 @@ namespace ShowCaseModelUnitTests
             testUnit = new dbObjectModel(DatabaseTracker.GetOptionBuilder().Options);
         }
 
-        private async void RunMigrations()
-        {
-            var context = new ShowCaseDbContext(DatabaseTracker.GetOptionBuilder().Options);
-            
-            var migrator = context.Database.GetService<IMigrator>();
-            await migrator.MigrateAsync();
-            await context.Database.CloseConnectionAsync();
-        }
-
-        private void ResetDatabase()
+        private void RunMigrations()
         {
             var context = new ShowCaseDbContext(DatabaseTracker.GetOptionBuilder().Options);
             context.Database.EnsureDeleted();
+            if (context.Database.GetPendingMigrations().Any())
+            {
+                var migrator = context.Database.GetService<IMigrator>();
+                migrator.Migrate();
+            }
             context.Database.EnsureCreated();
             context.Database.CloseConnection();
         }
