@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 //Code based on code from https://www.mikee.se/posts/fastest_way_to_reset_database_with_ef_core_20220103
 //SQL statements converted to PostgreSQL Syntax from T-SQL
 
-namespace ShowCaseModelUnitTests
+namespace ShowCaseModelUnitTests.TestTools
 {
     public class ChangeTracking : ISaveChangesInterceptor
     {

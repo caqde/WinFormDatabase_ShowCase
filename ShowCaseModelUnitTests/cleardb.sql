@@ -9,22 +9,22 @@ BEGIN
     FETCH NEXT FROM MyCursor 
     INTO tableName;
 
-    WHILE FOUND LOOP
-      EXECUTE ('ALTER TABLE ' + @tableName + ' NOCHECK CONSTRAINT ALL');
+    --WHILE FOUND LOOP
+    --  EXECUTE ('ALTER TABLE ' + @tableName + ' NOCHECK CONSTRAINT ALL');
 
-      FETCH NEXT FROM @MyCursor 
-      INTO tableName; 
-    END LOOP; 
+    --  FETCH NEXT FROM @MyCursor 
+    --  INTO tableName; 
+    --END LOOP; 
 
-    CLOSE MyCursor;
+    --CLOSE MyCursor;
 
     -- empty tables
-    OPEN MyCursor; 
-    FETCH NEXT FROM MyCursor 
-    INTO tableName;
+    -- OPEN MyCursor; 
+    -- FETCH NEXT FROM MyCursor 
+    --INTO tableName;
 
     WHILE FOUND LOOP
-      EXEC ('DELETE from ' + @tableName);
+      EXEC ('DELETE FROM ' + quote_ident(tableName));
 
       FETCH NEXT FROM MyCursor 
       INTO tableName; 
@@ -33,17 +33,17 @@ BEGIN
     CLOSE MyCursor ;
 
     -- Activate constraints
-    OPEN MyCursor; 
-    FETCH NEXT FROM @MyCursor 
-    INTO tableName;
+   -- OPEN MyCursor; 
+   -- FETCH NEXT FROM @MyCursor 
+   -- INTO tableName;
 
-    WHILE FOUND LOOP
-      EXEC ('ALTER TABLE ' + @tableName + ' CHECK CONSTRAINT ALL');
+   -- WHILE FOUND LOOP
+   --   EXEC ('ALTER TABLE ' + @tableName + ' CHECK CONSTRAINT ALL');
 
-      FETCH NEXT FROM MyCursor 
-      INTO tableName; 
-    END LOOP; 
+   --   FETCH NEXT FROM MyCursor 
+   --   INTO tableName; 
+    --END LOOP; 
 
-    CLOSE MyCursor ;
+    --CLOSE MyCursor ;
 END;
 $$;

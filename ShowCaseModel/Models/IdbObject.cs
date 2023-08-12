@@ -21,5 +21,6 @@ namespace ShowCaseModel.Models
         Dictionary<int, String> GetAllEntries();
         bool SaveEntries();
         bool SetEntries(Dictionary<int, String> entries);
+        bool AddEntry(string name);
     }
 }

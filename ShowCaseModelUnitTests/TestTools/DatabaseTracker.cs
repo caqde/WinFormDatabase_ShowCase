@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 using Xunit.Abstractions;
 using Xunit.Sdk;
 
-namespace ShowCaseModelUnitTests
+namespace ShowCaseModelUnitTests.TestTools
 {
     public static class DatabaseTracker
     {
@@ -23,7 +23,7 @@ namespace ShowCaseModelUnitTests
         {
             SetupOptions();
         }
-        
+
         public static void SetupOptions()
         {
             changeTracker = new ChangeTracking();
@@ -48,7 +48,9 @@ namespace ShowCaseModelUnitTests
             {
                 using var db = new ShowCaseDbContext(builder.Options);
                 var sql = File.ReadAllText("cleardb.sql");
+                output.WriteLine(sql);
                 db.Database.ExecuteSqlRaw(sql);
+                db.Database.CloseConnection();
             }
             else
             {
@@ -61,12 +63,13 @@ namespace ShowCaseModelUnitTests
                 }
                 else
                 {
-                    sql = sql.Replace("###TABLES###", $"'dbObject'");
+                    return;
                 }
-                
+
 
                 output.WriteLine(sql);
                 db.Database.ExecuteSqlRaw(sql);
+                db.Database.CloseConnection();
             }
 
             previousTestRequireFullReset = requireFullReset;

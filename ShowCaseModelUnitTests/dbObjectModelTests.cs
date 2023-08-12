@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore.Internal;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.Extensions.Configuration;
 using ShowCaseModel.Models;
+using ShowCaseModelUnitTests.TestTools;
 using System.Runtime;
 using Xunit.Abstractions;
 
@@ -47,14 +48,35 @@ namespace ShowCaseModelUnitTests
             var context = new ShowCaseDbContext(DatabaseTracker.GetOptionBuilder().Options);
             context.Database.EnsureDeleted();
             context.Database.EnsureCreated();
+            context.Database.CloseConnection();
         }
 
         [Fact]
         public void GetIDEmptyDatabase()
         {
-            DatabaseTracker.New(output, true);
+            DatabaseTracker.New(output, false);
             int testInt = testUnit.GetiD();
-            Assert.Equal(0, testInt);
+            Assert.Equal(1, testInt);
+        }
+
+        [Fact]
+        public void AddEntryDatabase()
+        {
+            DatabaseTracker.New(output, false);
+            testUnit.AddEntry("Name1");
+            testUnit.AddEntry("Name2");
+            string testString = testUnit.GetName();
+            int testInt = testUnit.GetiD();
+            Assert.Equal(2, testInt);
+            Assert.Equal("Name2", testString);
+        }
+
+        [Fact]
+        public void GetNullDatabaseEntry()
+        {
+            DatabaseTracker.New(output, false);
+            string testString = testUnit.GetName();
+            Assert.Equal(@"NULL", testString);
         }
     }
 }

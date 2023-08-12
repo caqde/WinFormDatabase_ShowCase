@@ -45,6 +45,18 @@ namespace ShowCaseModel.Models
             }
         }
 
+        public bool AddEntry(string name)
+        {
+            using (var context = dBFactory.GetDbContext())
+            {
+                currentdBObject = new dbObject { Name = name };
+                context.dbObjects.Add(currentdBObject);
+                context.SaveChanges();
+                currentID = currentdBObject.Id;
+                return true;
+            }
+        }
+
         public bool AddEntry()
         {
             using (var context = dBFactory.GetDbContext())
