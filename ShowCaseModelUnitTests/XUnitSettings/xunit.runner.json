@@ -1,0 +1,7 @@
+{
+  "$schema": "http://xunit.net/schema/current/xunit.runner.schema.json",
+  "boolean-kay": true,
+  "enum-or-string-key": "value1",
+  "integer-key": 42,
+  "parallelizeTestCollections": false
+}

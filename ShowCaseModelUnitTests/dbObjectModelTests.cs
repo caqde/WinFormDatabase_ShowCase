@@ -41,6 +41,7 @@ namespace ShowCaseModelUnitTests
             
             var migrator = context.Database.GetService<IMigrator>();
             await migrator.MigrateAsync();
+            await context.Database.CloseConnectionAsync();
         }
 
         private void ResetDatabase()
