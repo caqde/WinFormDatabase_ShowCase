@@ -29,19 +29,20 @@ namespace ShowCaseModel.Models
             GetFirstEntry();
         }
 
-        private void GetFirstEntry()
+        public void GetFirstEntry()
         {
             using (var context = dBFactory.GetDbContext())
             {
-                currentdBObject = context.dbObjects.FirstOrDefault();
+                currentdBObject = context.dbObjects.AsNoTracking().FirstOrDefault();
                 if (currentdBObject != null)
                 {
                     currentID = currentdBObject.Id;
                 }
                 else
                 {
-                    currentID = 0;
+                    currentID = 1;
                 }
+                context.Dispose();
             }
         }
 
@@ -53,6 +54,7 @@ namespace ShowCaseModel.Models
                 context.dbObjects.Add(currentdBObject);
                 context.SaveChanges();
                 currentID = currentdBObject.Id;
+                context.Dispose();
                 return true;
             }
         }
@@ -64,6 +66,7 @@ namespace ShowCaseModel.Models
                 currentdBObject = new dbObject { Name = "tempNew" };
                 context.Add(currentdBObject);
                 context.SaveChanges();
+                context.Dispose();
                 return true;
             }
         }
@@ -77,6 +80,7 @@ namespace ShowCaseModel.Models
                     context.dbObjects.Remove(currentdBObject);
                 }
                 context.SaveChanges();
+                context.Dispose();
                 GetFirstEntry();
                 return true;
             }
@@ -118,6 +122,8 @@ namespace ShowCaseModel.Models
                     next = null;
                 }
 
+                context.Dispose();
+
                 if (next is not null)
                 {
                     currentdBObject = next;
@@ -151,6 +157,8 @@ namespace ShowCaseModel.Models
                     next = null;
                 }
 
+                context.Dispose();
+
                 if (next is not null)
                 {
                     currentdBObject = next;
@@ -174,6 +182,7 @@ namespace ShowCaseModel.Models
                     context.Update(currentdBObject);
                 }
                 context.SaveChanges();
+                context.Dispose();
                 return true;
             }
         }
@@ -201,6 +210,7 @@ namespace ShowCaseModel.Models
                 {
                     entries.Add(obj.Id, obj.Name);
                 }
+                context.Dispose();
                 return entries;
             }
         }
@@ -221,6 +231,7 @@ namespace ShowCaseModel.Models
             {
                 entries.Add(entry.Id, entry.Name);
             }
+            context.Dispose();
             return true;
         }
 
@@ -234,6 +245,7 @@ namespace ShowCaseModel.Models
                 {
                     entries.Add(obj.Id, obj.Name);
                 }
+                context.Dispose();
                 return entries;
             }
         }
@@ -243,6 +255,7 @@ namespace ShowCaseModel.Models
             using (var dbContext = dBFactory.GetDbContext())
             {
                 dbContext.SaveChanges();
+                dbContext.Dispose();
                 return true;
             }
         
@@ -260,6 +273,7 @@ namespace ShowCaseModel.Models
                         item.Name = entry.Value;
                     }
                 }
+                context.Dispose();
                 return true;
             }
         }

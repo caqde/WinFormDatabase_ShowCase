@@ -34,7 +34,7 @@ namespace ShowCaseModelUnitTests.TestTools
             var configuration = configbuilder.Build();
             var connectionString = configuration.GetConnectionString("TestShowCaseDB");
             builder.UseNpgsql(connectionString, options => options.EnableRetryOnFailure())
-                    .AddInterceptors(changeTracker);
+                .AddInterceptors(changeTracker);
         }
 
         public static DbContextOptionsBuilder<ShowCaseDbContext> GetOptionBuilder()
@@ -42,15 +42,14 @@ namespace ShowCaseModelUnitTests.TestTools
             return builder;
         }
 
-        public static void New(ITestOutputHelper output, bool requireFullReset = false)
+        public static void New(bool requireFullReset = false)
         {
             if (previousTestRequireFullReset)
             {
                 using var db = new ShowCaseDbContext(builder.Options);
                 var sql = File.ReadAllText("cleardb.sql");
-                output.WriteLine(sql);
                 db.Database.ExecuteSqlRaw(sql);
-                db.Database.CloseConnection();
+                db.Dispose();
             }
             else
             {
@@ -63,15 +62,12 @@ namespace ShowCaseModelUnitTests.TestTools
                 }
                 else
                 {
+                    db.Dispose();
                     return;
                 }
-
-
-                output.WriteLine(sql);
                 db.Database.ExecuteSqlRaw(sql);
-                db.Database.CloseConnection();
+                db.Dispose();
             }
-
             previousTestRequireFullReset = requireFullReset;
             changeTracker = new ChangeTracking();
         }
