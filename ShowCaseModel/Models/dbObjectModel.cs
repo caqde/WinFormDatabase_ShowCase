@@ -48,14 +48,22 @@ namespace ShowCaseModel.Models
 
         public bool AddEntry(string name)
         {
-            using (var context = dBFactory.GetDbContext())
+            if (name != null)
             {
-                currentdBObject = new dbObject { Name = name };
-                context.dbObjects.Add(currentdBObject);
-                context.SaveChanges();
-                currentID = currentdBObject.Id;
-                context.Dispose();
-                return true;
+                using (var context = dBFactory.GetDbContext())
+                {
+                    currentdBObject = new dbObject { Name = name };
+                    context.dbObjects.Add(currentdBObject);
+                    context.SaveChanges();
+                    currentID = currentdBObject.Id;
+                    context.Dispose();
+                    return true;
+                }
+            }
+            else
+            {
+                GetFirstEntry();
+                return false;
             }
         }
 

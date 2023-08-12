@@ -56,5 +56,27 @@ namespace ShowCaseModelUnitTests
             string testString = database.DbObjectModel.GetName();
             Assert.Equal(@"NULL", testString);
         }
+
+        [Fact]
+        public void AddNullDatabaseEntry()
+        {
+            DatabaseTracker.New(false);
+            database.DbObjectModel.AddEntry(null);
+            string testString = database.DbObjectModel.GetName();
+            int testInt = database.DbObjectModel.GetiD();
+            Assert.Equal(1, testInt);
+            Assert.Equal("NULL", testString);
+        }
+
+        [Fact]
+        public void RemoveNullDatabaseEntry()
+        {
+            DatabaseTracker.New(false);
+            database.DbObjectModel.DeleteEntry();
+            string testString = database.DbObjectModel.GetName();
+            int testInt = database.DbObjectModel.GetiD();
+            Assert.Equal(1, testInt);
+            Assert.Equal("NULL", testString);
+        }
     }
 }
