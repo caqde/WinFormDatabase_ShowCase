@@ -187,21 +187,6 @@ namespace ShowCaseModel.Models
             }
         }
 
-        [Obsolete("Save Entry is not needed anymore as save will be called during any change to the database data")]
-        public bool SaveEntry()
-        {
-            using (var context = dBFactory.GetDbContext())
-            {
-                if (currentdBObject != null)
-                {
-                    context.Update(currentdBObject);
-                }
-                context.SaveChanges();
-                context.Dispose();
-                return true;
-            }
-        }
-
         public void SetName(string name)
         {
             if (currentdBObject is not null)

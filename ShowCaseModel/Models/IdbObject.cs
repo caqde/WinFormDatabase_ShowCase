@@ -13,7 +13,6 @@ namespace ShowCaseModel.Models
         void SetName(string name);
         bool NextEntry();
         bool PrevEntry();
-        bool SaveEntry();
         bool AddEntry();
         bool DeleteEntry();
         Dictionary<int,String> GetEntries(int startId, int endId);
