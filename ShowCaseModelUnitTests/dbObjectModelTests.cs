@@ -23,15 +23,23 @@ namespace ShowCaseModelUnitTests
 
         public dbObjectModelTests(DatabaseFixture fixture)
         {
-            this.database = fixture;    
+            this.database = fixture;
+            DatabaseTracker.New(false);
+            database.DbObjectModel.GetFirstEntry();
         }
 
+        private void AddIndividualEntries(int num)
+        {
+            for (int i = 0; i < num; i++)
+            {
+                database.DbObjectModel.AddEntry("Name" + i.ToString());
+            }
+        }
 
 
         [Fact]
         public void GetIDEmptyDatabase()
         {
-            DatabaseTracker.New(false);
             database.DbObjectModel.GetFirstEntry();
             int testInt = database.DbObjectModel.GetiD();
             Assert.Equal(1, testInt);
@@ -40,19 +48,16 @@ namespace ShowCaseModelUnitTests
         [Fact]
         public void AddEntryDatabase()
         {
-            DatabaseTracker.New(false);
-            database.DbObjectModel.AddEntry("Name1");
-            database.DbObjectModel.AddEntry("Name2");
+            AddIndividualEntries(2);
             string testString = database.DbObjectModel.GetName();
             int testInt = database.DbObjectModel.GetiD();
             Assert.Equal(2, testInt);
-            Assert.Equal("Name2", testString);
+            Assert.Equal("Name1", testString);
         }
 
         [Fact]
         public void GetNullDatabaseEntry()
         {
-            DatabaseTracker.New(false);
             string testString = database.DbObjectModel.GetName();
             Assert.Equal(@"NULL", testString);
         }
@@ -60,7 +65,6 @@ namespace ShowCaseModelUnitTests
         [Fact]
         public void AddNullDatabaseEntry()
         {
-            DatabaseTracker.New(false);
             database.DbObjectModel.AddEntry(null);
             string testString = database.DbObjectModel.GetName();
             int testInt = database.DbObjectModel.GetiD();
@@ -71,7 +75,6 @@ namespace ShowCaseModelUnitTests
         [Fact]
         public void RemoveNullDatabaseEntry()
         {
-            DatabaseTracker.New(false);
             database.DbObjectModel.DeleteEntry();
             string testString = database.DbObjectModel.GetName();
             int testInt = database.DbObjectModel.GetiD();
@@ -82,7 +85,6 @@ namespace ShowCaseModelUnitTests
         [Fact]
         public void RemoveDatabaseEntry()
         {
-            DatabaseTracker.New(false);
             database.DbObjectModel.AddEntry("Name1");
             string testString = database.DbObjectModel.GetName();
             int testInt = database.DbObjectModel.GetiD();
@@ -94,5 +96,24 @@ namespace ShowCaseModelUnitTests
             Assert.Equal(1, testInt);
             Assert.Equal("NULL", testString);
         }
+
+        [Fact]
+        public void GetNextEntry()
+        {
+            AddIndividualEntries(3);
+            database.DbObjectModel.GetFirstEntry();
+            string testString = database.DbObjectModel.GetName();
+            int testInt = database.DbObjectModel.GetiD();
+            Assert.Equal(1, testInt);
+            Assert.Equal("Name0", testString);
+            database.DbObjectModel.NextEntry();
+            testString = database.DbObjectModel.GetName();
+            testInt = database.DbObjectModel.GetiD();
+            Assert.Equal(2, testInt);
+            Assert.Equal("Name1", testString);
+        }
+
+
+
     }
 }
