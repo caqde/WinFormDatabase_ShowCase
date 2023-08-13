@@ -14,8 +14,6 @@ namespace ShowCaseModel.Models
     public class dbObjectModel : IdbObject
     {
         private DBFactory dBFactory;
-        [Obsolete("CurrentID should no longer be used in place of directly grabbing the ID of the current dbObject instead or sending a null ID value")]
-        private int currentID;
         private dbObject? currentdBObject;
 
         public dbObjectModel()
@@ -35,14 +33,6 @@ namespace ShowCaseModel.Models
             using (var context = dBFactory.GetDbContext())
             {
                 currentdBObject = context.dbObjects.AsNoTracking().FirstOrDefault();
-                if (currentdBObject != null)
-                {
-                    currentID = currentdBObject.Id;
-                }
-                else
-                {
-                    currentID = 1;
-                }
                 context.Dispose();
             }
         }
@@ -56,7 +46,6 @@ namespace ShowCaseModel.Models
                     currentdBObject = new dbObject { Name = name };
                     context.dbObjects.Add(currentdBObject);
                     context.SaveChanges();
-                    currentID = currentdBObject.Id;
                     context.Dispose();
                     return true;
                 }
@@ -98,7 +87,14 @@ namespace ShowCaseModel.Models
 
         public int GetiD()
         {
-            return currentID;
+            if (currentdBObject is not null)
+            {
+                return currentdBObject.Id;
+            }    
+            else
+            {
+                return 1;
+            }
         }
 
         public string GetName()
@@ -115,6 +111,11 @@ namespace ShowCaseModel.Models
 
         public bool NextEntry()
         {
+            int currentID = 0;
+            if (currentdBObject is not null)
+            {
+                currentID = currentdBObject.Id;
+            }
             using (var context = dBFactory.GetDbContext())
             {
                 var nextList = context.dbObjects.Where(t => t.Id > currentID).ToList();
@@ -137,7 +138,6 @@ namespace ShowCaseModel.Models
                 if (next is not null)
                 {
                     currentdBObject = next;
-                    currentID = next.Id;
                     return true;
                 }
                 else
@@ -150,6 +150,11 @@ namespace ShowCaseModel.Models
 
         public bool PrevEntry()
         {
+            int currentID = 2;
+            if (currentdBObject is not null)
+            {
+                currentID = (currentdBObject.Id);
+            }
             using (var context = dBFactory.GetDbContext())
             {
                 var nextList = context.dbObjects.Where(t => t.Id < currentID).ToList();
@@ -172,7 +177,6 @@ namespace ShowCaseModel.Models
                 if (next is not null)
                 {
                     currentdBObject = next;
-                    currentID = next.Id;
                     return true;
                 }
                 else

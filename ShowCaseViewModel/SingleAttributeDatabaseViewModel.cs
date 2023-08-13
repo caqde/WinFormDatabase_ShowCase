@@ -76,7 +76,7 @@ namespace ShowCaseViewModel
             if (itemChanged && DbName is not null)
             {
                 data.SetName(DbName);
-                WeakReferenceMessenger.Default.Send(new SaveMessage(data.SaveEntry()));
+                WeakReferenceMessenger.Default.Send(new SaveMessage(true));
             }
             itemChanged = false;
         }
