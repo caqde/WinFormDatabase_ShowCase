@@ -120,6 +120,21 @@ namespace ShowCaseModelUnitTests
         }
 
         [Fact]
+        public void GetNextNullEntry()
+        {
+            string testEntryName;
+            int testID;
+            AddIndividualEntries(3);
+            GetCurrentEntryValue(out testEntryName,out testID);
+            Assert.Equal(3, testID);
+            Assert.Equal("Name2", testEntryName);
+            database.DbObjectModel.NextEntry();
+            GetCurrentEntryValue(out testEntryName, out testID);
+            Assert.Equal(3, testID);
+            Assert.Equal("Name2", testEntryName);
+        }
+
+        [Fact]
         public void GetPreviousEntry()
         {
             string testEntryName;
@@ -134,6 +149,21 @@ namespace ShowCaseModelUnitTests
             Assert.Equal("Name2", testEntryName);
         }
 
+        [Fact]
+        public void GetPreviousNullEntry()
+        {
+            string testEntryName;
+            int testID;
+            AddIndividualEntries(2);
+            database.DbObjectModel.GetFirstEntry();
+            GetCurrentEntryValue(out testEntryName, out testID);
+            Assert.Equal(1, testID);
+            Assert.Equal("Name0", testEntryName);
+            database.DbObjectModel.PrevEntry();
+            GetCurrentEntryValue(out testEntryName, out testID);
+            Assert.Equal(1, testID);
+            Assert.Equal("Name0", testEntryName);
+        }
 
     }
 }
