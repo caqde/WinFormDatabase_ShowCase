@@ -165,5 +165,29 @@ namespace ShowCaseModelUnitTests
             Assert.Equal("Name0", testEntryName);
         }
 
+        [Fact]
+        public void SetEntryName()
+        {
+            string testEntryName;
+            int testID;
+            AddIndividualEntries(2);
+            GetCurrentEntryValue(out testEntryName, out testID);
+            Assert.Equal(2, testID);
+            Assert.Equal("Name1", testEntryName);
+            database.DbObjectModel.SetName("NewName1");
+            GetCurrentEntryValue(out testEntryName, out testID);
+            Assert.Equal("NewName1", testEntryName);
+            database.DbObjectModel.PrevEntry();
+            GetCurrentEntryValue(out testEntryName, out testID);
+            Assert.Equal("Name0", testEntryName);
+            Assert.Equal(1, testID);
+            database.DbObjectModel.SetName("NewName0");
+            GetCurrentEntryValue(out testEntryName, out testID);
+            Assert.Equal("NewName0", testEntryName);
+            database.DbObjectModel.NextEntry();
+            GetCurrentEntryValue(out testEntryName, out testID);
+            Assert.Equal("NewName1", testEntryName);
+        }
+
     }
 }

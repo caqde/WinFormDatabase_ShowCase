@@ -14,6 +14,7 @@ namespace ShowCaseModel.Models
     public class dbObjectModel : IdbObject
     {
         private DBFactory dBFactory;
+        [Obsolete("CurrentID should no longer be used in place of directly grabbing the ID of the current dbObject instead or sending a null ID value")]
         private int currentID;
         private dbObject? currentdBObject;
 
@@ -67,6 +68,7 @@ namespace ShowCaseModel.Models
             }
         }
 
+        [Obsolete("AddEntry() is deprecated, please use AddEntry(string name) instead")]
         public bool AddEntry()
         {
             using (var context = dBFactory.GetDbContext())
@@ -181,6 +183,7 @@ namespace ShowCaseModel.Models
             }
         }
 
+        [Obsolete("Save Entry is not needed anymore as save will be called during any change to the database data")]
         public bool SaveEntry()
         {
             using (var context = dBFactory.GetDbContext())
@@ -200,6 +203,12 @@ namespace ShowCaseModel.Models
             if (currentdBObject is not null)
             {
                 currentdBObject.Name = name;
+                using (var context = dBFactory.GetDbContext())
+                {
+                    context.Update(currentdBObject);
+                    context.SaveChanges();
+                    context.Dispose();
+                }
                 return;
             }
             else
