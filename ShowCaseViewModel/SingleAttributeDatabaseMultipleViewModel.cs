@@ -95,6 +95,13 @@ namespace ShowCaseViewModel
             return response;
         }
 
+        private void NewItems_ListChanged(object? sender, ListChangedEventArgs e)
+        {
+            if (sender is BindingList<NameType> newEntryItems)
+            {
+                OnNewItemsChanged(newEntryItems);
+            }
+        }
 
         public void Receive(CreateMultiMessage message)
         {
@@ -109,11 +116,7 @@ namespace ShowCaseViewModel
             WeakReferenceMessenger.Default.Send(new EditMultiMessage(true));
         }
 
-        private void NewItems_ListChanged(object? sender, ListChangedEventArgs e)
-        {
-            BindingList<NameType> newEntries = (BindingList<NameType>)sender;
-            OnNewItemsChanged(newEntries);
-        }
+
 
         public void Receive(SaveCloseMessage message)
         {

@@ -17,7 +17,10 @@ namespace ShowCaseModelUnitTests.TestTools
 
         public IReadOnlyCollection<string> GetAffectedTables() { return affectedTables.ToList().AsReadOnly(); }
 
-        public void SaveChangesFailed(DbContextErrorEventData eventData) { }
+        public void SaveChangesFailed(DbContextErrorEventData eventData)
+        {
+            // Method intentionally left empty.
+        }
         public Task SaveChangesFailedAsync(DbContextErrorEventData eventData, CancellationToken cancellationToken = default) { return Task.CompletedTask; }
         public int SavedChanges(SaveChangesCompletedEventData eventData, int result) { return result; }
         public async ValueTask<int> SavedChangesAsync(SaveChangesCompletedEventData eventData, int result, CancellationToken cancellationToken = default) { return result; }

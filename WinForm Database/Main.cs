@@ -78,8 +78,11 @@ namespace WinForm_Database
 
         private void ClearFormPanel()
         {
-            currentPanelForm.Close();
-            formPanel.Controls.Remove(currentPanelForm);
+            if (currentPanelForm != null)
+            {
+                currentPanelForm.Close();
+                formPanel.Controls.Remove(currentPanelForm);
+            }
         }
     }
 }

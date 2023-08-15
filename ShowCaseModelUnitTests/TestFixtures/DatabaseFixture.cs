@@ -46,6 +46,7 @@ namespace ShowCaseModelUnitTests.TestFixtures
         public void Dispose()
         {
             // Method intentionally left empty.
+            GC.SuppressFinalize(this);
         }
     }
 }
