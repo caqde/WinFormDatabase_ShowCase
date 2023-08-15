@@ -15,7 +15,7 @@ namespace WinForm_Database
 {
     public partial class Main : Form, IRecipient<LaunchSingleDatabaseViewMessage>
     {
-        private Form currentPanelForm;
+        private Form? currentPanelForm;
 
         public Main()
         {

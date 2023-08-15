@@ -14,7 +14,7 @@ namespace ShowCaseViewModel
         public SingleAttributeDatabaseViewModel()
         {
             DatabaseInstance = new ShowCaseInstance();
-            dbObjectModel data = DatabaseInstance.getDBObject();
+            DbObjectModel data = DatabaseInstance.getDBObject();
             dbId = data.GetID();
             dbName = data.GetName();
             DbNewItems = new List<NameType>();
@@ -43,7 +43,7 @@ namespace ShowCaseViewModel
         [RelayCommand]
         private void Next()
         {
-            dbObjectModel data = DatabaseInstance.getDBObject();
+            DbObjectModel data = DatabaseInstance.getDBObject();
             bool response = data.NextEntry();
             if (response)
             {
@@ -58,7 +58,7 @@ namespace ShowCaseViewModel
         [RelayCommand]
         private void Previous()
         {
-            dbObjectModel data = DatabaseInstance.getDBObject();
+            DbObjectModel data = DatabaseInstance.getDBObject();
             bool response = data.PrevEntry();
             if (response)
             {
@@ -72,7 +72,7 @@ namespace ShowCaseViewModel
         [RelayCommand]
         private void Save()
         {
-            dbObjectModel data = DatabaseInstance.getDBObject();
+            DbObjectModel data = DatabaseInstance.getDBObject();
             if (itemChanged && DbName is not null)
             {
                 data.SetName(DbName);
@@ -84,7 +84,7 @@ namespace ShowCaseViewModel
         [RelayCommand]
         private void Delete()
         {
-            dbObjectModel data = DatabaseInstance.getDBObject();
+            DbObjectModel data = DatabaseInstance.getDBObject();
             bool response = data.DeleteEntry();
             if (response)
             {
@@ -97,7 +97,7 @@ namespace ShowCaseViewModel
         [RelayCommand]
         private void Add()
         {
-            dbObjectModel data = DatabaseInstance.getDBObject();
+            DbObjectModel data = DatabaseInstance.getDBObject();
             bool response = data.AddEntry();
             if (response)
             {

@@ -11,18 +11,18 @@ using System.Threading.Tasks;
 
 namespace ShowCaseModel.Models
 {
-    public class dbObjectModel : IdbObject
+    public class DbObjectModel : IDbObject
     {
-        private DBFactory dBFactory;
+        private readonly DBFactory dBFactory;
         private dbObject? currentdBObject;
 
-        public dbObjectModel()
+        public DbObjectModel()
         {
             dBFactory = new DBFactory();
             GetFirstEntry();
         }
 
-        public dbObjectModel(DbContextOptions<ShowCaseDbContext> options)
+        public DbObjectModel(DbContextOptions<ShowCaseDbContext> options)
         {
             dBFactory = new DBFactory(options);
             GetFirstEntry();
@@ -33,11 +33,10 @@ namespace ShowCaseModel.Models
             using (var context = dBFactory.GetDbContext())
             {
                 currentdBObject = context.dbObjects.AsNoTracking().FirstOrDefault();
-                context.Dispose();
             }
         }
 
-        public bool AddEntry(string name)
+        public bool AddEntry(string? name)
         {
             if (name != null)
             {
@@ -46,7 +45,6 @@ namespace ShowCaseModel.Models
                     currentdBObject = new dbObject { Name = name };
                     context.dbObjects.Add(currentdBObject);
                     context.SaveChanges();
-                    context.Dispose();
                     return true;
                 }
             }
@@ -65,7 +63,6 @@ namespace ShowCaseModel.Models
                 currentdBObject = new dbObject { Name = "tempNew" };
                 context.Add(currentdBObject);
                 context.SaveChanges();
-                context.Dispose();
                 return true;
             }
         }
@@ -132,7 +129,6 @@ namespace ShowCaseModel.Models
                     next = null;
                 }
 
-                context.Dispose();
 
                 if (next is not null)
                 {
@@ -171,8 +167,6 @@ namespace ShowCaseModel.Models
                     next = null;
                 }
 
-                context.Dispose();
-
                 if (next is not null)
                 {
                     currentdBObject = next;
@@ -195,7 +189,6 @@ namespace ShowCaseModel.Models
                 {
                     context.Update(currentdBObject);
                     context.SaveChanges();
-                    context.Dispose();
                 }
                 return;
             }
@@ -215,7 +208,6 @@ namespace ShowCaseModel.Models
                 {
                     entries.Add(obj.Id, obj.Name);
                 }
-                context.Dispose();
                 return entries;
             }
         }
@@ -250,7 +242,6 @@ namespace ShowCaseModel.Models
                 {
                     entries.Add(obj.Id, obj.Name);
                 }
-                context.Dispose();
                 return entries;
             }
         }
@@ -261,7 +252,6 @@ namespace ShowCaseModel.Models
             using (var dbContext = dBFactory.GetDbContext())
             {
                 dbContext.SaveChanges();
-                dbContext.Dispose();
                 return true;
             }
         

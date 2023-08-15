@@ -62,7 +62,7 @@ namespace ShowCaseViewModel
 
         private bool Save()
         {
-            dbObjectModel data = DatabaseInstance.getDBObject();
+            DbObjectModel data = DatabaseInstance.getDBObject();
             int x = 0;
             if (NewItems is not null && NewItems.Count > 0)
             {

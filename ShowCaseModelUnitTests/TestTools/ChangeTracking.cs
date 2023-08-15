@@ -13,7 +13,7 @@ namespace ShowCaseModelUnitTests.TestTools
 {
     public class ChangeTracking : ISaveChangesInterceptor
     {
-        private HashSet<string> affectedTables = new HashSet<string>();
+        private readonly HashSet<string> affectedTables = new HashSet<string>();
 
         public IReadOnlyCollection<string> GetAffectedTables() { return affectedTables.ToList().AsReadOnly(); }
 

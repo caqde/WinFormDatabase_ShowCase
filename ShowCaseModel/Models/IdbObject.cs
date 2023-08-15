@@ -6,20 +6,18 @@ using System.Threading.Tasks;
 
 namespace ShowCaseModel.Models
 {
-    public interface IdbObject
+    public interface IDbObject
     {
         string GetName();
         int GetID();
         void SetName(string name);
         bool NextEntry();
         bool PrevEntry();
-        bool AddEntry();
         bool DeleteEntry();
         Dictionary<int,String> GetEntries(int startId, int endId);
         bool AddEntries(ref Dictionary<int, String> entries);
         Dictionary<int, String> GetAllEntries();
-        bool SaveEntries();
         bool SetEntries(Dictionary<int, String> entries);
-        bool AddEntry(string name);
+        bool AddEntry(string? name);
     }
 }

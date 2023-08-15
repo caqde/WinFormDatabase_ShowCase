@@ -15,12 +15,9 @@ namespace ShowCaseModelUnitTests.TestFixtures
 {
     public class DatabaseFixture : IDisposable
     {
-        private static MapperConfiguration configuration;
-        private IMapper mapper;
-        private static IServiceProvider serviceProvider;
-        private dbObjectModel dbObjectModel { get; set; }
+        private DbObjectModel dbObjectModel { get; set; }
 
-        public dbObjectModel DbObjectModel { get { return dbObjectModel; } }
+        public DbObjectModel DbObjectModel { get { return dbObjectModel; } }
 
         public DatabaseFixture()
         {
@@ -30,7 +27,7 @@ namespace ShowCaseModelUnitTests.TestFixtures
 
         private void SetupOptions()
         {
-            dbObjectModel = new dbObjectModel(DatabaseTracker.GetOptionBuilder().Options);
+            dbObjectModel = new DbObjectModel(DatabaseTracker.GetOptionBuilder().Options);
         }
 
         private void RunMigrations()
@@ -48,7 +45,7 @@ namespace ShowCaseModelUnitTests.TestFixtures
 
         public void Dispose()
         {
-            
+            // Method intentionally left empty.
         }
     }
 }

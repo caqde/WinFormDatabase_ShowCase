@@ -15,11 +15,7 @@ namespace ShowCaseModelUnitTests
 {
     public class dbObjectModelTests : IClassFixture<DatabaseFixture>
     {
-        private static MapperConfiguration _config;
-        private IMapper mapper;
-        private static IServiceProvider serviceProvider;
-
-        DatabaseFixture database;
+        readonly DatabaseFixture database;
 
         public dbObjectModelTests(DatabaseFixture fixture)
         {

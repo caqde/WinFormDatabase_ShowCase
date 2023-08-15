@@ -6,9 +6,9 @@ namespace ShowCaseModel
     {
         public static ShowCaseInstance Instance { get; } = new ShowCaseInstance();
 
-        private dbObjectModel DBObject = new dbObjectModel();
+        private DbObjectModel DBObject = new DbObjectModel();
 
-        public dbObjectModel getDBObject()
+        public DbObjectModel getDBObject()
         {
             return DBObject;
         }
