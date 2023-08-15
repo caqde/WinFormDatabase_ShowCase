@@ -15,7 +15,7 @@ namespace ShowCaseViewModel
         {
             DatabaseInstance = new ShowCaseInstance();
             dbObjectModel data = DatabaseInstance.getDBObject();
-            dbId = data.GetiD();
+            dbId = data.GetID();
             dbName = data.GetName();
             DbNewItems = new List<NameType>();
         }
@@ -47,7 +47,7 @@ namespace ShowCaseViewModel
             bool response = data.NextEntry();
             if (response)
             {
-                DbId = data.GetiD();
+                DbId = data.GetID();
                 DbName = data.GetName();
             }
             
@@ -62,7 +62,7 @@ namespace ShowCaseViewModel
             bool response = data.PrevEntry();
             if (response)
             {
-                DbId = data.GetiD();
+                DbId = data.GetID();
                 DbName = data.GetName();
             }
             WeakReferenceMessenger.Default.Send(new PreviousMessage(response));
@@ -88,7 +88,7 @@ namespace ShowCaseViewModel
             bool response = data.DeleteEntry();
             if (response)
             {
-                DbId = data.GetiD();
+                DbId = data.GetID();
                 DbName = data.GetName();
             }
             WeakReferenceMessenger.Default.Send(new DeleteMessage(response));
@@ -101,7 +101,7 @@ namespace ShowCaseViewModel
             bool response = data.AddEntry();
             if (response)
             {
-                DbId = data.GetiD();
+                DbId = data.GetID();
                 DbName = data.GetName();
             }
             WeakReferenceMessenger.Default.Send(new AddMessage(response));

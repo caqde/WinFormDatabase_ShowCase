@@ -39,7 +39,7 @@ namespace ShowCaseModelUnitTests
         private void GetCurrentEntryValue(out string testName, out int testId)
         {
             testName = database.DbObjectModel.GetName();
-            testId = database.DbObjectModel.GetiD();
+            testId = database.DbObjectModel.GetID();
         }
 
 
@@ -47,7 +47,7 @@ namespace ShowCaseModelUnitTests
         public void GetIDEmptyDatabase()
         {
             database.DbObjectModel.GetFirstEntry();
-            int testInt = database.DbObjectModel.GetiD();
+            int testInt = database.DbObjectModel.GetID();
             Assert.Equal(1, testInt);
         }
 
@@ -56,7 +56,7 @@ namespace ShowCaseModelUnitTests
         {
             AddIndividualEntries(2);
             string testString = database.DbObjectModel.GetName();
-            int testInt = database.DbObjectModel.GetiD();
+            int testInt = database.DbObjectModel.GetID();
             Assert.Equal(2, testInt);
             Assert.Equal("Name1", testString);
         }
@@ -73,7 +73,7 @@ namespace ShowCaseModelUnitTests
         {
             database.DbObjectModel.AddEntry(null);
             string testString = database.DbObjectModel.GetName();
-            int testInt = database.DbObjectModel.GetiD();
+            int testInt = database.DbObjectModel.GetID();
             Assert.Equal(1, testInt);
             Assert.Equal("NULL", testString);
         }
@@ -83,7 +83,7 @@ namespace ShowCaseModelUnitTests
         {
             database.DbObjectModel.DeleteEntry();
             string testString = database.DbObjectModel.GetName();
-            int testInt = database.DbObjectModel.GetiD();
+            int testInt = database.DbObjectModel.GetID();
             Assert.Equal(1, testInt);
             Assert.Equal("NULL", testString);
         }
@@ -189,5 +189,66 @@ namespace ShowCaseModelUnitTests
             Assert.Equal("NewName1", testEntryName);
         }
 
+        [Fact]
+        public void GetEntries()
+        {
+            AddIndividualEntries(5);
+            Dictionary<int, string> entries = database.DbObjectModel.GetEntries(1, 5);
+            int ID = 0;
+            foreach (var entry in entries)
+            {
+                Assert.Equal(entry.Value, "Name"+ID.ToString());
+                ID++;
+                Assert.Equal(entry.Key, ID);
+            }
+        }
+
+        [Fact]
+        public void GetEntriesWithInvalidNumbers()
+        {
+            AddIndividualEntries(5);
+            Dictionary<int, string> entries = database.DbObjectModel.GetEntries(3, 11);
+            int ID = 2;
+            foreach (var entry in entries)
+            {
+                Assert.Equal("Name" + ID.ToString(), entry.Value);
+                ID++;
+                Assert.Equal(ID, entry.Key);
+            }
+        }
+
+        [Fact]
+        public void GetAllEntries()
+        {
+            AddIndividualEntries(9);
+            Dictionary<int, string> entries = database.DbObjectModel.GetAllEntries();
+            int ID = 0;
+            foreach (var entry in entries)
+            {
+                Assert.Equal("Name" + ID.ToString(), entry.Value);
+                ID++;
+                Assert.Equal(ID, entry.Key);
+            }
+        }
+
+        [Fact]
+        public void SetEntries()
+        {
+            AddIndividualEntries(9);
+            Dictionary<int, string> entries = database.DbObjectModel.GetAllEntries();
+            int ID = 0;
+            foreach(var entry in entries)
+            {
+                entries[entry.Key] = "Changed" + ID.ToString();
+                ID++;
+            }
+            database.DbObjectModel.SetEntries(entries);
+            Dictionary<int, string> ChangedEntries = database.DbObjectModel.GetAllEntries();
+            foreach(var entry in ChangedEntries)
+            {
+                Assert.Equal(entries[entry.Key], entry.Value);
+            }
+
+        }
     }
 }

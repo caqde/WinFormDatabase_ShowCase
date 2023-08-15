@@ -9,7 +9,7 @@ namespace ShowCaseModel.Models
     public interface IdbObject
     {
         string GetName();
-        int GetiD();
+        int GetID();
         void SetName(string name);
         bool NextEntry();
         bool PrevEntry();

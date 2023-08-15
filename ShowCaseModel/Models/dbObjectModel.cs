@@ -79,13 +79,12 @@ namespace ShowCaseModel.Models
                     context.dbObjects.Remove(currentdBObject);
                 }
                 context.SaveChanges();
-                context.Dispose();
                 GetFirstEntry();
-                return true;
             }
+            return true;
         }
 
-        public int GetiD()
+        public int GetID()
         {
             if (currentdBObject is not null)
             {
@@ -256,6 +255,7 @@ namespace ShowCaseModel.Models
             }
         }
 
+        [Obsolete("SaveEntries() to be removed in the future as SetEntries() will be setup to save the changes when they are made.")]
         public bool SaveEntries()
         {
             using (var dbContext = dBFactory.GetDbContext())
@@ -279,7 +279,7 @@ namespace ShowCaseModel.Models
                         item.Name = entry.Value;
                     }
                 }
-                context.Dispose();
+                context.SaveChanges();
                 return true;
             }
         }
