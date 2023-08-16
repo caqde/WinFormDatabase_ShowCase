@@ -6,7 +6,9 @@ A C# Database application that is built on WinForms, EFCore connected to PostGre
 - Save, Add, Delete data to PostGreSQL Database
 - Open Form onto a Form Panel
 - Open Form Dialog
-- Multi Project design to separate concerns based on Model View View Model Design Pattern.
+- Multi Project design to separate concerns based on Model View View Model (MVVM) Design Pattern.
+- Fully Tested Database Interface (ShowCaseModel Project) Layer.
+
 
 ## NOTES
 This project is currently in development and additional features will be added.
@@ -15,3 +17,4 @@ This project is currently in development and additional features will be added.
 - Form Showcasing multiple Algorithms.
 - Form Showcasing complex Database queries, sorting, etc.
 - Form Showcasing coding and handling of basic data types.
+- Testing of the View Model Layer (ShowCaseViewModel Project).
