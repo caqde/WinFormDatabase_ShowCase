@@ -246,17 +246,6 @@ namespace ShowCaseModel.Models
             }
         }
 
-        [Obsolete("SaveEntries() to be removed in the future as SetEntries() will be setup to save the changes when they are made.")]
-        public bool SaveEntries()
-        {
-            using (var dbContext = dBFactory.GetDbContext())
-            {
-                dbContext.SaveChanges();
-                return true;
-            }
-        
-        }
-
         public bool SetEntries(Dictionary<int, string> entries)
         {
             using (var context = dBFactory.GetDbContext())

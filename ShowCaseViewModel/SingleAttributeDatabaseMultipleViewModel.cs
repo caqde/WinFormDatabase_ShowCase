@@ -82,7 +82,6 @@ namespace ShowCaseViewModel
                 if (firstSave)
                 {
                     response = data.SetEntries(newEntries);
-                    response = data.SaveEntries();
                     saveClicked = true;
                 }
                 else

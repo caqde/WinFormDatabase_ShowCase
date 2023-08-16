@@ -46,28 +46,29 @@ namespace ShowCaseModelUnitTests.TestTools
         {
             if (previousTestRequireFullReset)
             {
-                using var db = new ShowCaseDbContext(builder.Options);
-                var sql = File.ReadAllText("cleardb.sql");
-                db.Database.ExecuteSqlRaw(sql);
-                db.Dispose();
-            }
-            else
-            {
-                using var db = new ShowCaseDbContext(builder.Options);
-                var tableNames = changeTracker.GetAffectedTables();
-                if (tableNames != null && tableNames.Count >= 1)
-                {
-                    var sql = File.ReadAllText("cleardbpartial.sql");
-                    sql = sql.Replace("###TABLES###", string.Join(",", tableNames.Select(n => $"'{n}'")));
-                    db.Database.ExecuteSqlRaw(sql);
-                    db.Dispose();
-                }
-                else
+                using (var db = new ShowCaseDbContext(builder.Options))
                 {
                     var sql = File.ReadAllText("cleardb.sql");
                     db.Database.ExecuteSqlRaw(sql);
-                    db.Dispose();
-                    return;
+                }
+            }
+            else
+            {
+                using (var db = new ShowCaseDbContext(builder.Options))
+                {
+                    var tableNames = changeTracker.GetAffectedTables();
+                    if (tableNames != null && tableNames.Count >= 1)
+                    {
+                        var sql = File.ReadAllText("cleardbpartial.sql");
+                        sql = sql.Replace("###TABLES###", string.Join(",", tableNames.Select(n => $"'{n}'")));
+                        db.Database.ExecuteSqlRaw(sql);
+                    }
+                    else
+                    {
+                        var sql = File.ReadAllText("cleardb.sql");
+                        db.Database.ExecuteSqlRaw(sql);
+                        return;
+                    }
                 }
 
             }
