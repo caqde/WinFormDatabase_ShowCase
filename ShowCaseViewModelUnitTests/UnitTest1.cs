@@ -59,7 +59,23 @@ namespace ShowCaseViewModelUnitTests
             dbObject
                 .Setup(x => x.AddEntry(It.IsAny<string>()))
                 .Returns(true);
-                
+            dbObject
+                .Setup(x => x.DeleteEntry())
+                .Returns(true);
+            dbObject
+                .Setup(x => x.GetID())
+                .Returns(1);
+            dbObject
+                .Setup(x => x.GetName())
+                .Returns("A");
+            dbObject
+                .SetupSequence(x => x.NextEntry())
+                .Returns(true)
+                .Returns(false);
+            dbObject
+                .SetupSequence(x => x.PrevEntry())
+                .Returns(true)
+                .Returns(false);
         }
 
         [Fact]
