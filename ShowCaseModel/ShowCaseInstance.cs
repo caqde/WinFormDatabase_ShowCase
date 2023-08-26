@@ -2,15 +2,37 @@
 
 namespace ShowCaseModel
 {
-    public class ShowCaseInstance
+    public sealed class ShowCaseInstance
     {
-        public static ShowCaseInstance Instance { get; } = new ShowCaseInstance();
+        private static readonly Lazy<ShowCaseInstance> _Lazy = new(() => new ShowCaseInstance());
+        public static ShowCaseInstance Instance => _Lazy.Value;
 
-        private DbObjectModel DBObject = new DbObjectModel();
+        private IDbObject? DBObject;
 
-        public DbObjectModel getDBObject()
+        private ShowCaseInstance()
         {
-            return DBObject;
+            
+        }
+
+        public void SetupDBObject(IDbObject dbObject)
+        {
+            if (DBObject is null)
+            {
+                DBObject = dbObject;
+            }
+        }
+
+        public IDbObject getDBObject()
+        {
+            if (DBObject is not null)
+            {
+                return DBObject;
+            }
+            else
+            {
+                DBObject = new DbObjectModel();
+                return DBObject;
+            }
         }
     }
 }

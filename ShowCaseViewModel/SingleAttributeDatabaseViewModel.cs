@@ -13,8 +13,8 @@ namespace ShowCaseViewModel
     {
         public SingleAttributeDatabaseViewModel()
         {
-            DatabaseInstance = new ShowCaseInstance();
-            DbObjectModel data = DatabaseInstance.getDBObject();
+            DatabaseInstance = ShowCaseInstance.Instance;
+            IDbObject data = DatabaseInstance.getDBObject();
             dbId = data.GetID();
             dbName = data.GetName();
             DbNewItems = new List<NameType>();
@@ -43,7 +43,7 @@ namespace ShowCaseViewModel
         [RelayCommand]
         private void Next()
         {
-            DbObjectModel data = DatabaseInstance.getDBObject();
+            IDbObject data = DatabaseInstance.getDBObject();
             bool response = data.NextEntry();
             if (response)
             {
@@ -58,7 +58,7 @@ namespace ShowCaseViewModel
         [RelayCommand]
         private void Previous()
         {
-            DbObjectModel data = DatabaseInstance.getDBObject();
+            IDbObject data = DatabaseInstance.getDBObject();
             bool response = data.PrevEntry();
             if (response)
             {
@@ -72,7 +72,7 @@ namespace ShowCaseViewModel
         [RelayCommand]
         private void Save()
         {
-            DbObjectModel data = DatabaseInstance.getDBObject();
+            IDbObject data = DatabaseInstance.getDBObject();
             if (itemChanged && DbName is not null)
             {
                 data.SetName(DbName);
@@ -84,7 +84,7 @@ namespace ShowCaseViewModel
         [RelayCommand]
         private void Delete()
         {
-            DbObjectModel data = DatabaseInstance.getDBObject();
+            IDbObject data = DatabaseInstance.getDBObject();
             bool response = data.DeleteEntry();
             if (response)
             {
@@ -97,8 +97,8 @@ namespace ShowCaseViewModel
         [RelayCommand]
         private void Add()
         {
-            DbObjectModel data = DatabaseInstance.getDBObject();
-            bool response = data.AddEntry();
+            IDbObject data = DatabaseInstance.getDBObject();
+            bool response = true; //data.AddEntry();
             if (response)
             {
                 DbId = data.GetID();

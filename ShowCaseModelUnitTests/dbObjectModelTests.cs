@@ -1,15 +1,5 @@
-using AutoMapper;
-using EFCore_DBLibrary;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Internal;
-using Microsoft.EntityFrameworkCore.Migrations;
-using Microsoft.Extensions.Configuration;
-using ShowCaseModel.Models;
 using ShowCaseModelUnitTests.TestFixtures;
 using ShowCaseModelUnitTests.TestTools;
-using System.Runtime;
-using Xunit.Abstractions;
 
 namespace ShowCaseModelUnitTests
 {

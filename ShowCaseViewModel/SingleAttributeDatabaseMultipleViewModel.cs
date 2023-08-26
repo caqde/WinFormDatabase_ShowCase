@@ -20,7 +20,7 @@ namespace ShowCaseViewModel
     {
         public SingleAttributeDatabaseMultipleViewModel() 
         {
-            DatabaseInstance = new ShowCaseInstance();
+            DatabaseInstance = ShowCaseInstance.Instance;
             NewItems = new BindingList<NameType>();
             newEntries = new Dictionary<int, string>();
             WeakReferenceMessenger.Default.RegisterAll(this);
@@ -62,7 +62,7 @@ namespace ShowCaseViewModel
 
         private bool Save()
         {
-            DbObjectModel data = DatabaseInstance.getDBObject();
+            IDbObject data = DatabaseInstance.getDBObject();
             int x = 0;
             if (NewItems is not null && NewItems.Count > 0)
             {
