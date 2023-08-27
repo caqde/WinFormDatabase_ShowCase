@@ -116,16 +116,45 @@ namespace ShowCaseViewModelUnitTests
         [Fact]
         public void TestViewModelDeleteCommand() 
         {
-            SingleAttributeDatabaseViewModel viewModel1 = new SingleAttributeDatabaseViewModel();
-            Assert.True(viewModel1.DeleteCommand.CanExecute(null));
-            Assert.Equal("A", viewModel1.DbName);
-            Assert.Equal(1,viewModel1.DbId);
+            SingleAttributeDatabaseViewModel viewModel = new SingleAttributeDatabaseViewModel();
+            Assert.True(viewModel.DeleteCommand.CanExecute(null));
+            Assert.Equal("A", viewModel.DbName);
+            Assert.Equal(1,viewModel.DbId);
             bool testvalue = false;
             WeakReferenceMessenger.Default.Register<DeleteMessage>(this, (t, actual) => { testvalue = true; });
-            viewModel1.DeleteCommand.Execute(null);
-            Assert.Equal("NewName", viewModel1.DbName);
-            Assert.Equal(2, viewModel1.DbId);
+            viewModel.DeleteCommand.Execute(null);
+            Assert.Equal("NewName", viewModel.DbName);
+            Assert.Equal(2, viewModel.DbId);
             Assert.True(testvalue);
+            mockIDbObject.Verify(mock => mock.DeleteEntry(), Times.Once());
+        }
+
+        [Fact]
+        public void TestViewModelEditEntrySaveCommandPath()
+        {
+            SingleAttributeDatabaseViewModel viewModel = new SingleAttributeDatabaseViewModel();
+            Assert.True(viewModel.SaveCommand.CanExecute(null));
+            Assert.Equal("A", viewModel.DbName);
+            Assert.Equal(1, viewModel.DbId);
+            bool testValue = false;
+            WeakReferenceMessenger.Default.Register<SaveMessage>(this, (t, actual) => { testValue = true; });
+            viewModel.SaveCommand.Execute(null);
+            Assert.False(testValue);
+            viewModel.DbName = "B";
+            viewModel.SaveCommand.Execute(null);
+            Assert.True(testValue);
+            mockIDbObject.Verify(mock => mock.SetName("B"), Times.Once);
+        }
+
+        [Fact]
+        public void TestViewModelAddMultiCommand()
+        {
+            SingleAttributeDatabaseViewModel viewModel = new SingleAttributeDatabaseViewModel();
+            Assert.True(viewModel.AddMultiCommand.CanExecute(null));
+            bool testValue = false;
+            WeakReferenceMessenger.Default.Register<AddMultiMessage>(this, (t, actual) => { testValue = true; });
+            viewModel.AddMultiCommand.Execute(null);
+            Assert.True(testValue);
         }
     }
 }
