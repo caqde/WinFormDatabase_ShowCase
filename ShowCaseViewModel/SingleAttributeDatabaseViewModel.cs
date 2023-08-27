@@ -23,6 +23,7 @@ namespace ShowCaseViewModel
         private ShowCaseInstance DatabaseInstance;
 
         private bool itemChanged;
+        private bool newEntry;
 
         [ObservableProperty]
         private List<NameType> dbNewItems;
@@ -98,13 +99,10 @@ namespace ShowCaseViewModel
         private void Add()
         {
             IDbObject data = DatabaseInstance.getDBObject();
-            bool response = true; //data.AddEntry();
-            if (response)
-            {
-                DbId = data.GetID();
-                DbName = data.GetName();
-            }
-            WeakReferenceMessenger.Default.Send(new AddMessage(response));
+            DbId = 0;
+            DbName = "";
+            newEntry = true;
+            WeakReferenceMessenger.Default.Send(new AddMessage(true));
             itemChanged = true;
         }
 

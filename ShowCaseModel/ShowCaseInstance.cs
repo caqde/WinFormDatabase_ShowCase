@@ -16,10 +16,7 @@ namespace ShowCaseModel
 
         public void SetupDBObject(IDbObject dbObject)
         {
-            if (DBObject is null)
-            {
-                DBObject = dbObject;
-            }
+            DBObject = dbObject;
         }
 
         public IDbObject getDBObject()
