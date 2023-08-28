@@ -171,5 +171,37 @@ namespace ShowCaseViewModelUnitTests
             viewModel.AddMultiCommand.Execute(null);
             Assert.True(testValue);
         }
+
+        [Fact]
+        public void TestViewModelPreviousCommand()
+        {
+            SingleAttributeDatabaseViewModel viewModel = new SingleAttributeDatabaseViewModel();
+            Assert.True(viewModel.PreviousCommand.CanExecute(null));
+            Assert.Equal(1, viewModel.DbId);
+            Assert.Equal("A", viewModel.DbName);
+            bool testValue = false;
+            WeakReferenceMessenger.Default.Register<PreviousMessage>(this, (t, actual) => { testValue = true; });
+            viewModel.PreviousCommand.Execute(null);
+            Assert.True(testValue);
+            Assert.Equal(2, viewModel.DbId);
+            Assert.Equal("NewName", viewModel.DbName);
+            mockIDbObject.Verify(mock => mock.PrevEntry(), Times.Once);
+        }
+
+        [Fact]
+        public void TestViewModelNextCommand()
+        {
+            SingleAttributeDatabaseViewModel viewModel = new SingleAttributeDatabaseViewModel();
+            Assert.True(viewModel.NextCommand.CanExecute(null));
+            Assert.Equal(1, viewModel.DbId);
+            Assert.Equal("A", viewModel.DbName);
+            bool testValue = false;
+            WeakReferenceMessenger.Default.Register<NextMessage>(this, (t, actual) => { testValue = true; });
+            viewModel.NextCommand.Execute(null);
+            Assert.True(testValue);
+            Assert.Equal(2, viewModel.DbId);
+            Assert.Equal("NewName", viewModel.DbName);
+            mockIDbObject.Verify(mock => mock.NextEntry(), Times.Once);
+        }
     }
 }
