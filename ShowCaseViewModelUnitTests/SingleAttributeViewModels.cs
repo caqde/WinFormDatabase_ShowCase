@@ -147,6 +147,21 @@ namespace ShowCaseViewModelUnitTests
         }
 
         [Fact]
+        public void TestViewModelAddEntrySaveCommandPath()
+        {
+            SingleAttributeDatabaseViewModel viewModel = new SingleAttributeDatabaseViewModel();
+            viewModel.AddCommand.Execute(null);
+            bool testValue = false;
+            WeakReferenceMessenger.Default.Register<SaveMessage>(this, (t, actual)=> { testValue = true; });
+            viewModel.AddCommand.Execute(null);
+            viewModel.DbName = "B";
+            viewModel.SaveCommand.Execute(null);
+            Assert.True(testValue);
+            Assert.Equal("B", viewModel.DbName);
+            mockIDbObject.Verify(mock => mock.AddEntry("B"), Times.Once);
+        }
+
+        [Fact]
         public void TestViewModelAddMultiCommand()
         {
             SingleAttributeDatabaseViewModel viewModel = new SingleAttributeDatabaseViewModel();

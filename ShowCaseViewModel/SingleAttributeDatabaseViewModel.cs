@@ -54,6 +54,7 @@ namespace ShowCaseViewModel
             
             WeakReferenceMessenger.Default.Send(new NextMessage(response));
             itemChanged = false;
+            newEntry = false;
         }
 
         [RelayCommand]
@@ -68,6 +69,7 @@ namespace ShowCaseViewModel
             }
             WeakReferenceMessenger.Default.Send(new PreviousMessage(response));
             itemChanged = false;
+            newEntry = false;
         }
 
         [RelayCommand]
@@ -76,8 +78,17 @@ namespace ShowCaseViewModel
             IDbObject data = DatabaseInstance.getDBObject();
             if (itemChanged && DbName is not null)
             {
-                data.SetName(DbName);
-                WeakReferenceMessenger.Default.Send(new SaveMessage(true));
+                if (newEntry)
+                {
+                    data.AddEntry(DbName);
+                    WeakReferenceMessenger.Default.Send(new SaveMessage(true));
+                    newEntry = false;
+                }
+                else
+                {
+                    data.SetName(DbName);
+                    WeakReferenceMessenger.Default.Send(new SaveMessage(true));
+                }
             }
             itemChanged = false;
         }
@@ -103,7 +114,7 @@ namespace ShowCaseViewModel
             DbName = "";
             newEntry = true;
             WeakReferenceMessenger.Default.Send(new AddMessage(true));
-            itemChanged = true;
+            itemChanged = false;
         }
 
         [RelayCommand]
