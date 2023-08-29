@@ -16,6 +16,7 @@ namespace WinForm_Database
     public partial class Main : Form, IRecipient<LaunchSingleDatabaseViewMessage>
     {
         private Form? currentPanelForm;
+        private Dictionary<Type, Form> FormList = new Dictionary<Type, Form>();
 
         public Main()
         {
@@ -48,13 +49,24 @@ namespace WinForm_Database
 
         private void AddFormPanel()
         {
-            SingleAttributeDatabase singleDatabaseForm = new SingleAttributeDatabase();
-            singleDatabaseForm.TopLevel = false;
-            singleDatabaseForm.AutoScroll = true;
-            singleDatabaseForm.FormBorderStyle = FormBorderStyle.None;
-            currentPanelForm = singleDatabaseForm;
-            this.formPanel.Controls.Add(singleDatabaseForm);
-            singleDatabaseForm.Show();
+            if (FormList.ContainsKey (typeof(SingleAttributeDatabase)))
+            {
+                currentPanelForm = FormList[typeof(SingleAttributeDatabase)];
+                this.formPanel.Controls.Add(currentPanelForm);
+                currentPanelForm.Show();
+            }
+            else
+            {
+                SingleAttributeDatabase singleDatabaseForm = new SingleAttributeDatabase();
+                singleDatabaseForm.TopLevel = false;
+                singleDatabaseForm.AutoScroll = true;
+                singleDatabaseForm.FormBorderStyle = FormBorderStyle.None;
+                currentPanelForm = singleDatabaseForm;
+                FormList.Add(typeof(SingleAttributeDatabase), singleDatabaseForm);
+                this.formPanel.Controls.Add(singleDatabaseForm);
+                currentPanelForm.Show();
+            }
+
         }
 
         private bool FormPanelNeedsClearing(Type newformType)
@@ -80,7 +92,7 @@ namespace WinForm_Database
         {
             if (currentPanelForm != null)
             {
-                currentPanelForm.Close();
+                currentPanelForm.Hide();
                 formPanel.Controls.Remove(currentPanelForm);
             }
         }
