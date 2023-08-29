@@ -140,7 +140,7 @@
             btnAddMany.Text = "Add Many New";
             btnAddMany.UseVisualStyleBackColor = true;
             // 
-            // Main
+            // SingleAttributeDatabase
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
@@ -154,8 +154,9 @@
             Controls.Add(btnPrevious);
             Controls.Add(lblName);
             Controls.Add(txtName);
-            Name = "Main";
+            Name = "SingleAttributeDatabase";
             Text = "Main";
+            VisibleChanged += SingleAttributeDatabase_VisibleChanged;
             ((System.ComponentModel.ISupportInitialize)MainDataSource).EndInit();
             statusStrip1.ResumeLayout(false);
             statusStrip1.PerformLayout();

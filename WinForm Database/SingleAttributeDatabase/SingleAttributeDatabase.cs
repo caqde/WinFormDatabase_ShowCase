@@ -9,9 +9,11 @@ namespace WinForm_Database
     public partial class SingleAttributeDatabase : Form, IRecipient<PreviousMessage>, IRecipient<SaveMessage>, IRecipient<NextMessage>
         , IRecipient<AddMessage>, IRecipient<DeleteMessage>, IRecipient<AddMultiMessage>
     {
+        bool FirstRun = true;
         public SingleAttributeDatabase()
         {
             InitializeComponent();
+            
         }
 
         protected override void OnLoad(EventArgs e)
@@ -103,6 +105,27 @@ namespace WinForm_Database
                 MessageBox.Show("Value entered is not a Number or is a value less than 1", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
+        }
+
+        private void SingleAttributeDatabase_VisibleChanged(object sender, EventArgs e)
+        {
+            if (FirstRun)
+            {
+                FirstRun = false;
+            }
+            else
+            {
+                if (Visible)
+                {
+                    WeakReferenceMessenger.Default.RegisterAll(this);
+                    MainDataSource.DataSource = new SingleAttributeDatabaseViewModel();
+                }
+                else
+                {
+                    WeakReferenceMessenger.Default.UnregisterAll(this);
+                    MainDataSource.DataSource = null;
+                }
+            }
         }
     }
 }
