@@ -13,13 +13,13 @@ using System.Threading.Tasks;
 
 namespace ShowCaseModelUnitTests.TestFixtures
 {
-    public class DatabaseFixture : IDisposable
+    public class DatabaseFixtureDbObject : IDisposable
     {
         private DbObjectModel dbObjectModel { get; set; }
 
         public DbObjectModel DbObjectModel { get { return dbObjectModel; } }
 
-        public DatabaseFixture()
+        public DatabaseFixtureDbObject()
         {
             SetupOptions();
             RunMigrations();
