@@ -37,7 +37,7 @@ namespace EFCore_DBLibrary
                     .SetBasePath(Directory.GetCurrentDirectory())
                     .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
                 _configuration = builder.Build();
-                var connectionString = _configuration.GetConnectionString("TestShowCaseDB");
+                var connectionString = _configuration.GetConnectionString("ShowCaseDB");
                 optionsBuilder.UseNpgsql(connectionString, options => 
                 { 
                     options.EnableRetryOnFailure();
