@@ -1,5 +1,5 @@
 ﻿using EFCore_DBLibrary;
-using EFCore_DBModels;
+using EFCore_DBModels.SingleAttribute;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
