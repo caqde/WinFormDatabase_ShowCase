@@ -24,7 +24,7 @@ BEGIN
     --INTO tableName;;
     WHILE FOUND LOOP
       EXECUTE ('DELETE FROM ' || quote_ident(tableName) );
-      EXECUTE ('TRUNCATE TABLE ' || quote_ident(tableName) || ' RESTART IDENTITY');
+      EXECUTE ('TRUNCATE TABLE ' || quote_ident(tableName) || ' RESTART IDENTITY CASCADE');
 
       FETCH NEXT FROM MyCursor 
       INTO tableName; 
