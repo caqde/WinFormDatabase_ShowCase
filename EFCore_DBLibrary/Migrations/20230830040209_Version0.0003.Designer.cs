@@ -3,6 +3,7 @@ using System;
 using EFCore_DBLibrary;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace EFCore_DBLibrary.Migrations
 {
     [DbContext(typeof(ShowCaseDbContext))]
-    partial class ShowCaseDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230830040209_Version0.0003")]
+    partial class Version00003
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -112,7 +115,7 @@ namespace EFCore_DBLibrary.Migrations
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("boolean");
 
-                    b.Property<int>("PatronId")
+                    b.Property<int?>("PatronId")
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
@@ -239,15 +242,11 @@ namespace EFCore_DBLibrary.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("EFCore_DBModels.Library.Patron", "Patron")
+                    b.HasOne("EFCore_DBModels.Library.Patron", null)
                         .WithMany("BorrowedBooks")
-                        .HasForeignKey("PatronId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("PatronId");
 
                     b.Navigation("Book");
-
-                    b.Navigation("Patron");
                 });
 
             modelBuilder.Entity("EFCore_DBModels.Library.Author", b =>

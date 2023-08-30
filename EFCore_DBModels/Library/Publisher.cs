@@ -13,7 +13,7 @@ namespace EFCore_DBModels.Library
         public string Name { get; set; }
         [Required]
         public string Description { get; set; }
-        [Required]
+        
         public List<Book> Books { get; set; }
     }
 }

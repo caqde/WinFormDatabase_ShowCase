@@ -17,5 +17,11 @@ namespace ShowCaseModelUnitTests
             this.database = database;
             DatabaseTracker.New(false);
         }
+
+        [Fact]
+        public void AddAuthor()
+        {
+            
+        }
     }
 }
