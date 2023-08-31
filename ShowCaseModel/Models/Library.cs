@@ -33,7 +33,16 @@ namespace ShowCaseModel.Models
             libraryAuthor.Id = author.Id;
         }
 
-        public LibraryAuthor GetAuthor(int Id)
+        public void AddPublisher(LibraryPublisher libraryPublisher)
+        {
+            var database = dBFactory.GetDbContext();
+            Publisher publisher = new Publisher { Description = libraryPublisher.Description, Name = libraryPublisher.Name };
+            database.Publishers.Add(publisher);
+            database.SaveChanges();
+            libraryPublisher.Id = publisher.Id;
+        }
+
+        public LibraryAuthor? GetAuthor(int Id)
         {
             var database = dBFactory.GetDbContext();
             var author = database.Authors.FirstOrDefault(x => x.Id == Id);
@@ -44,6 +53,20 @@ namespace ShowCaseModel.Models
             else
             {
                 return new LibraryAuthor { Biography = author.Biography, Id = author.Id, Name = author.Name };
+            }
+        }
+
+        public LibraryPublisher? GetPublisher(int Id)
+        {
+            var database = dBFactory.GetDbContext();
+            var publisher = database.Publishers.FirstOrDefault(x => x.Id == Id);
+            if (publisher == null)
+            {
+                return null;
+            }
+            else
+            {
+                return new LibraryPublisher { Description = publisher.Description, Id = publisher.Id, Name = publisher.Name };
             }
         }
     }
