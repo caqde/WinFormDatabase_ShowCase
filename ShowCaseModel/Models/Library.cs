@@ -190,7 +190,7 @@ namespace ShowCaseModel.Models
         public List<LibraryBorrowedBook> GetBorrowedBooks(int patronId)
         {
             var db = dBFactory.GetDbContext();
-            var borrowedBooks = db.BorrowedBooks.Include(x => x.Book).Where(x => x.Patron.Id == patronId).ToList();
+            var borrowedBooks = db.BorrowedBooks.AsNoTracking().Include(x => x.Book).Where(x => x.Patron.Id == patronId).ToList();
             if (borrowedBooks is not null)
             {
                 if (borrowedBooks is not null)
@@ -215,7 +215,46 @@ namespace ShowCaseModel.Models
             {
                 return new List<LibraryBorrowedBook>();
             }
+        }
 
+        public List<LibraryBook> GetAuthorBooks(int authorId)
+        {
+            var db = dBFactory.GetDbContext();
+            var author = db.Authors.AsNoTracking().Include(x => x.Books).FirstOrDefault(x => x.Id == authorId);
+            if (author is not null && author.Books.Count > 0)
+            {
+                var BookList = new List<LibraryBook>();
+                foreach (var book in author.Books)
+                {
+                    LibraryBook libraryBook = new LibraryBook() { Description = book.Description, Id = book.Id, ISBN = book.ISBN, Title = book.Title };
+                    BookList.Add(libraryBook);
+                }
+                return BookList;
+            }
+            else
+            {
+                return new List<LibraryBook>();
+            }
+        }
+
+        public List<LibraryBook> GetPublisherBooks(int publisherId)
+        {
+            var db = dBFactory.GetDbContext();
+            var publisher = db.Publishers.AsNoTracking().Include(x => x.Books).FirstOrDefault(x => x.Id == publisherId);
+            if (publisher is not null && publisher.Books.Count > 0)
+            {
+                var bookList = new List<LibraryBook>();
+                foreach (Book book in publisher.Books)
+                {
+                    LibraryBook libraryBook = new LibraryBook() { Description = book.Description, Id = book.Id, ISBN = book.ISBN, Title = book.Title };
+                    bookList.Add(libraryBook);
+                }
+                return bookList;
+            }
+            else
+            {
+                return new List<LibraryBook>();
+            }
         }
     }
 }

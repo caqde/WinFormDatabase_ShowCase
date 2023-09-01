@@ -233,5 +233,47 @@ namespace ShowCaseModelUnitTests
             var TestPatron3 = database.Library.GetPatron(6);
             Assert.Null(TestPatron3);
         }
+
+        [Fact]
+        public void GetAuthorsBooks()
+        {
+            var publisher = AddPublisherToDatabase("Test", "TestDescription");
+            var author1 = AddAuthorToDatabase("Test", "TestBiography");
+            var author2 = AddAuthorToDatabase("Test", "TestBiography2");
+            var book1author1 = AddBookToDatabase("Test", "TestDescription", 1, author1, publisher);
+            var book2author1 = AddBookToDatabase("Test2", "TestDescription2", 2, author1, publisher);
+            var book1author2 = AddBookToDatabase("Test3", "TestDescription3", 3, author2, publisher);
+            var book2author2 = AddBookToDatabase("Test4", "TestDescription4", 4, author2, publisher);
+            var book3author2 = AddBookToDatabase("Test5", "TestDescription5", 5, author2, publisher);
+            var author1BookList = database.Library.GetAuthorBooks(author1.Id);
+            var author2BookList = database.Library.GetAuthorBooks(author2.Id);
+            Assert.NotNull(author1BookList);
+            Assert.NotNull(author2BookList);
+            Assert.NotEmpty(author1BookList);
+            Assert.NotEmpty(author2BookList);
+            Assert.Collection(author1BookList, i => Assert.Equal(book1author1.Title, i.Title), i => Assert.Equal(book2author1.Title, i.Title));
+            Assert.Collection(author2BookList, i => Assert.Equal(book1author2.Description, i.Description), i => Assert.Equal(book2author2.Description, i.Description), i => Assert.Equal(book3author2.Description, i.Description));
+        }
+
+        [Fact]
+        public void GetPublishersBooks()
+        {
+            var author = AddAuthorToDatabase("Test", "TestBiography");
+            var publisher1 = AddPublisherToDatabase("Test", "TestDescription");
+            var publisher2 = AddPublisherToDatabase("Test2", "TestDescription2");
+            var book1pub1 = AddBookToDatabase("Test", "TestDescription", 1, author, publisher1);
+            var book2pub1 = AddBookToDatabase("Test2", "TestDescription2", 2, author, publisher1);
+            var book1pub2 = AddBookToDatabase("Test3", "TestDescription3", 3, author, publisher2);
+            var book2pub2 = AddBookToDatabase("Test4", "TestDescription4", 4, author, publisher2);
+            var book3pub2 = AddBookToDatabase("Test5", "TestDescription5", 5, author, publisher2);
+            var pub1BookList = database.Library.GetPublisherBooks(publisher1.Id);
+            var pub2BookList = database.Library.GetPublisherBooks(publisher2.Id);
+            Assert.NotNull(pub1BookList);
+            Assert.NotNull(pub2BookList);
+            Assert.NotEmpty(pub1BookList);
+            Assert.NotEmpty(pub2BookList);
+            Assert.Collection(pub1BookList, item =>  Assert.Equal(book1pub1.Title, item.Title), item =>  Assert.Equal(book2pub1.Title,item.Title));
+            Assert.Collection(pub2BookList, item => Assert.Equal(book1pub2.Description, item.Description), item => Assert.Equal(book2pub2.Description, item.Description), item => Assert.Equal(book3pub2.Description, item.Description));
+        }
     }
 }
