@@ -33,6 +33,7 @@ namespace ShowCaseModel.DataTypes.Library
         public int Id { get; set; }
         public DateTime BorrowedDate { get; set; }
         public DateTime DueDate { get; set; }
+        public LibraryBook BorrowedBook { get; set; }
     }
 
     public class LibraryPatron

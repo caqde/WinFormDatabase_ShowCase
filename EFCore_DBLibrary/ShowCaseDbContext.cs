@@ -49,6 +49,11 @@ namespace EFCore_DBLibrary
         {
             modelBuilder.Entity<dbObject>()
                 .HasKey(e => e.Id);
+            modelBuilder.Entity<BorrowedBook>()
+                .HasOne(a => a.Patron)
+                .WithMany(a => a.BorrowedBooks)
+                .IsRequired()
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

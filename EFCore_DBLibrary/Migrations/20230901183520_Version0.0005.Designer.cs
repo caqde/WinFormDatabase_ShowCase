@@ -3,6 +3,7 @@ using System;
 using EFCore_DBLibrary;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace EFCore_DBLibrary.Migrations
 {
     [DbContext(typeof(ShowCaseDbContext))]
-    partial class ShowCaseDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230901183520_Version0.0005")]
+    partial class Version00005
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -52,10 +55,7 @@ namespace EFCore_DBLibrary.Migrations
             modelBuilder.Entity("EFCore_DBModels.Library.Book", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<int>("AuthorId")
                         .HasColumnType("integer");
@@ -97,9 +97,6 @@ namespace EFCore_DBLibrary.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("BookId")
-                        .HasColumnType("integer");
-
                     b.Property<DateTime>("BorrowedDate")
                         .HasColumnType("timestamp with time zone");
 
@@ -116,9 +113,6 @@ namespace EFCore_DBLibrary.Migrations
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("BookId")
-                        .IsUnique();
 
                     b.HasIndex("PatronId");
 
@@ -221,6 +215,12 @@ namespace EFCore_DBLibrary.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("EFCore_DBModels.Library.BorrowedBook", "BorrowedBook")
+                        .WithOne("Book")
+                        .HasForeignKey("EFCore_DBModels.Library.Book", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("EFCore_DBModels.Library.Publisher", "Publisher")
                         .WithMany("Books")
                         .HasForeignKey("PublisherId")
@@ -229,24 +229,18 @@ namespace EFCore_DBLibrary.Migrations
 
                     b.Navigation("Author");
 
+                    b.Navigation("BorrowedBook");
+
                     b.Navigation("Publisher");
                 });
 
             modelBuilder.Entity("EFCore_DBModels.Library.BorrowedBook", b =>
                 {
-                    b.HasOne("EFCore_DBModels.Library.Book", "Book")
-                        .WithOne("BorrowedBook")
-                        .HasForeignKey("EFCore_DBModels.Library.BorrowedBook", "BookId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("EFCore_DBModels.Library.Patron", "Patron")
                         .WithMany("BorrowedBooks")
                         .HasForeignKey("PatronId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Book");
 
                     b.Navigation("Patron");
                 });
@@ -256,9 +250,9 @@ namespace EFCore_DBLibrary.Migrations
                     b.Navigation("Books");
                 });
 
-            modelBuilder.Entity("EFCore_DBModels.Library.Book", b =>
+            modelBuilder.Entity("EFCore_DBModels.Library.BorrowedBook", b =>
                 {
-                    b.Navigation("BorrowedBook")
+                    b.Navigation("Book")
                         .IsRequired();
                 });
 

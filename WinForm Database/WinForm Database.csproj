@@ -10,6 +10,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <StartupObject>WinForm_Database.Program</StartupObject>
     <EnablePreviewFeatures>True</EnablePreviewFeatures>
+    <PlatformTarget>x64</PlatformTarget>
   </PropertyGroup>
 
   <ItemGroup>

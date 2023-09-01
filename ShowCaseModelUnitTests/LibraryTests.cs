@@ -128,6 +128,39 @@ namespace ShowCaseModelUnitTests
         }
 
         [Fact]
+        public void BorrowBook()
+        {
+            var patron = AddPatronToDatabase("Test", "TestAddress", 12345, "TestCity", "12345");
+            var author = AddAuthorToDatabase("Test", "TestBiography");
+            var publisher = AddPublisherToDatabase("Test", "TestDescription");
+            var book = AddBookToDatabase("Test", "TestDescription", 1, author, publisher);
+            database.Library.BorrowBook(patron.Id, book.Id, new TimeSpan(7,0,0,0,0));
+            List<LibraryBorrowedBook> borrowedBooks = database.Library.GetBorrowedBooks(patron.Id);
+            Assert.NotNull(borrowedBooks);
+            Assert.NotEmpty(borrowedBooks);
+            Assert.Single(borrowedBooks);
+        }
+        [Fact]
+        public void GetBorrowedBooks()
+        {
+            var patron = AddPatronToDatabase("Test", "TestAddress", 12345, "TestCity", "12345");
+            var author = AddAuthorToDatabase("Test", "TestBiography");
+            var publisher = AddPublisherToDatabase("Test", "TestDescription");
+            var book = AddBookToDatabase("Test", "TestDescription",1, author,publisher);
+            var book2 = AddBookToDatabase("Test2", "TestDescription", 2, author, publisher);
+            var book3 = AddBookToDatabase("Test3", "TestDescription", 3, author, publisher);
+            TimeSpan week = new TimeSpan(7,0,0,0, 0);
+            database.Library.BorrowBook(patron.Id, book.Id, week);
+            database.Library.BorrowBook(patron.Id, book2.Id, week);
+            database.Library.BorrowBook(patron.Id, book3.Id, week);
+            List<LibraryBorrowedBook> borrowedBooks = database.Library.GetBorrowedBooks(patron.Id);
+            Assert.NotNull(borrowedBooks);
+            Assert.NotEmpty(borrowedBooks);
+            Assert.Equal(3, borrowedBooks.Count);
+            Assert.Collection(borrowedBooks, item => Assert.Equal(book.Id, item.BorrowedBook.Id), item => Assert.Equal(book2.Id, item.BorrowedBook.Id), item => Assert.Equal(book3.Id, item.BorrowedBook.Id));
+        }
+
+        [Fact]
         public void GetBook()
         {
             var author = AddAuthorToDatabase("Test", "TestBiography");
@@ -147,6 +180,18 @@ namespace ShowCaseModelUnitTests
             Assert.Equal (book3.ISBN, testBook2.ISBN);
             var testBook3 = database.Library.GetBook(6);
             Assert.Null (testBook3);
+        }
+
+        [Fact]
+        public void DeleteBook()
+        {
+            var author = AddAuthorToDatabase("Test", "TestBiography");
+            var publisher = AddPublisherToDatabase("Test", "TestDescription");
+            var book1 = AddBookToDatabase("Test", "TestDescription", 1, author, publisher);
+            var book2 = AddBookToDatabase("Test2", "TestDescription2", 12, author, publisher);
+            database.Library.RemoveBook(book1.Id);
+            var testBook = database.Library.GetBook(book1.Id);
+            Assert.Null (testBook);
         }
 
         [Fact]

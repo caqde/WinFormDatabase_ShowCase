@@ -19,5 +19,7 @@ namespace EFCore_DBModels.Library
         public Author Author { get; set; }
         [Required]
         public Publisher Publisher { get; set; }
+        [Required]
+        public BorrowedBook BorrowedBook { get; set; }
     }
 }

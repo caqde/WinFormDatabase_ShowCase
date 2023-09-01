@@ -17,6 +17,7 @@ namespace EFCore_DBModels.Library
 
         [Required]
         public Book Book { get; set; }
+        public int BookId { get; set; }
 
         [Required]
         public Patron Patron { get; set; }
