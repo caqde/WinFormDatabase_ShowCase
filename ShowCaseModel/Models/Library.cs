@@ -38,11 +38,61 @@ namespace ShowCaseModel.Models
         public void AddAuthor(LibraryAuthor libraryAuthor)
         {
             var database = dBFactory.GetDbContext();
-            Author author = new Author { Biography = libraryAuthor.Biography, Name = libraryAuthor.Name };
+            Author author = AuthorDTOtoDatabase(libraryAuthor);
             SetCreationValues(author);
             database.Authors.Add(author);
             database.SaveChanges();
             libraryAuthor.Id = author.Id;
+        }
+
+        private static BorrowedBook CreateBorrowBook(Book book, Patron patron, DateTime duedate)
+        {
+            return new BorrowedBook() { Book = book, BookId = book.Id, BorrowedDate = DateTime.Now.ToUniversalTime(), DueDate = duedate.ToUniversalTime(), Patron = patron };
+        }
+
+        private static LibraryAuthor AuthorDatabaseToDTO(Author author)
+        {
+            return new LibraryAuthor { Biography = author.Biography, Id = author.Id, Name = author.Name };
+        }
+
+        private static LibraryBook BookDatabaseToDTO(Book book)
+        {
+            return new LibraryBook() { ISBN = book.ISBN, Description = book.Description, Title = book.Title, Id = book.Id };
+        }
+
+        private static LibraryBorrowedBook BorrowedBookDatabaseToDTO(BorrowedBook book)
+        {
+            return new LibraryBorrowedBook() { BorrowedDate = book.BorrowedDate, DueDate = book.DueDate, Id = book.Id };
+        }
+
+        private static LibraryPatron PatronDatabaseToDTO(Patron patron)
+        {
+            return new LibraryPatron() { PhoneNumber = patron.PhoneNumber, Id = patron.Id, City = patron.City, Name = patron.Name, PostalCode = patron.PostalCode, StreetAddress = patron.StreetAddress };
+        }
+
+        private static LibraryPublisher PublisherDatabaseToDTO(Publisher publisher)
+        {
+            return new LibraryPublisher { Description = publisher.Description, Id = publisher.Id, Name = publisher.Name };
+        }
+
+        private static Author AuthorDTOtoDatabase(LibraryAuthor libraryAuthor)
+        {
+            return new Author { Biography = libraryAuthor.Biography, Name = libraryAuthor.Name };
+        }
+
+        private static Book BookDTOtoDatabase(LibraryBook book, Author author, Publisher publisher)
+        {
+            return new Book() { Author = author, Publisher = publisher, Description = book.Description, ISBN = book.ISBN, Title = book.Title };
+        }
+
+        private static Patron PatronDTOtoDatabase(LibraryPatron libraryPatron)
+        {
+            return new Patron { Name = libraryPatron.Name, City = libraryPatron.City, PhoneNumber = libraryPatron.PhoneNumber, StreetAddress = libraryPatron.StreetAddress, PostalCode = libraryPatron.PostalCode };
+        }
+
+        private static Publisher PublisherDtoToDatabase(LibraryPublisher libraryPublisher)
+        {
+            return new Publisher { Description = libraryPublisher.Description, Name = libraryPublisher.Name };
         }
 
         public void AddBook(LibraryBook book, int AuthorID, int PublisherID)
@@ -50,14 +100,9 @@ namespace ShowCaseModel.Models
             var database = dBFactory.GetDbContext();
             var author = database.Authors.FirstOrDefault(x => x.Id == AuthorID);
             var publisher = database.Publishers.FirstOrDefault(x => x.Id == PublisherID);
-            if (publisher == null || author == null)
+            if (publisher is not null && author is not null)
             {
-                //throw exception or error?
-                return;
-            }
-            else
-            {
-                Book newBook = new Book() { Author = author, Publisher = publisher, Description = book.Description, ISBN = book.ISBN, Title = book.Title };
+                Book newBook = BookDTOtoDatabase(book, author, publisher);
                 SetCreationValues(newBook);
                 database.Books.Add(newBook);
                 database.SaveChanges();
@@ -68,17 +113,18 @@ namespace ShowCaseModel.Models
         public void AddPatron(LibraryPatron libraryPatron)
         {
             var database = dBFactory.GetDbContext();
-            Patron patron = new Patron { Name = libraryPatron.Name, City = libraryPatron.City, PhoneNumber = libraryPatron.PhoneNumber, StreetAddress = libraryPatron.StreetAddress, PostalCode = libraryPatron.PostalCode };
+            Patron patron = PatronDTOtoDatabase(libraryPatron);
             SetCreationValues(patron);
             database.Patrons.Add(patron);
             database.SaveChanges();
             libraryPatron.Id = patron.Id;
         }
 
+
         public void AddPublisher(LibraryPublisher libraryPublisher)
         {
             var database = dBFactory.GetDbContext();
-            Publisher publisher = new Publisher { Description = libraryPublisher.Description, Name = libraryPublisher.Name };
+            Publisher publisher = PublisherDtoToDatabase(libraryPublisher);
             SetCreationValues(publisher);
             database.Publishers.Add(publisher);
             database.SaveChanges();
@@ -101,7 +147,7 @@ namespace ShowCaseModel.Models
                 }
                 else
                 {
-                    return new Result<LibraryAuthor>(new LibraryAuthor { Biography = author.Biography, Id = author.Id, Name = author.Name });
+                    return new Result<LibraryAuthor>(AuthorDatabaseToDTO(author));
                 }
             }
         };
@@ -122,7 +168,7 @@ namespace ShowCaseModel.Models
                 }
                 else
                 {
-                    return new Result<LibraryPublisher>(new LibraryPublisher { Description = publisher.Description, Id = publisher.Id, Name = publisher.Name });
+                    return new Result<LibraryPublisher>(PublisherDatabaseToDTO(publisher));
                 }
             }
         };
@@ -137,11 +183,11 @@ namespace ShowCaseModel.Models
             }
             else
             {
-                if (book.IsDeleted) 
+                if (book.IsDeleted)
                 {
                     return null;
                 }
-                LibraryBook newBook = new LibraryBook() { ISBN = book.ISBN, Description = book.Description, Title = book.Title, Id = book.Id };
+                LibraryBook newBook = BookDatabaseToDTO(book);
                 return newBook;
             }
         }
@@ -156,7 +202,7 @@ namespace ShowCaseModel.Models
             }
             else
             {
-                LibraryPatron newPatron = new LibraryPatron() { PhoneNumber = patron.PhoneNumber, Id = patron.Id, City = patron.City, Name = patron.Name, PostalCode = patron.PostalCode, StreetAddress = patron.StreetAddress };
+                LibraryPatron newPatron = PatronDatabaseToDTO(patron);
                 return newPatron;
             }
         }
@@ -261,7 +307,7 @@ namespace ShowCaseModel.Models
                 {
                     DateTime duedate = DateTime.Now;
                     duedate.Add(returnTimeSpan);
-                    BorrowedBook borrowBook = new BorrowedBook() { Book = book, BookId = book.Id, BorrowedDate = DateTime.Now.ToUniversalTime(), DueDate = duedate.ToUniversalTime(), Patron = patron };
+                    BorrowedBook borrowBook = CreateBorrowBook(book, patron, duedate);
                     SetCreationValues(borrowBook);
                     db.BorrowedBooks.Add(borrowBook);
                     db.SaveChanges();
@@ -281,8 +327,8 @@ namespace ShowCaseModel.Models
                     List<LibraryBorrowedBook> borrowedLibraryBooks = new List<LibraryBorrowedBook>();
                     foreach (BorrowedBook book in borrowedBooks)
                     {
-                        LibraryBorrowedBook borrowedBook = new LibraryBorrowedBook() { BorrowedDate = book.BorrowedDate, DueDate = book.DueDate, Id = book.Id };
-                        LibraryBook newBook = new LibraryBook() { Id = book.Book.Id, Description = book.Book.Description, ISBN = book.Book.ISBN, Title = book.Book.Title };
+                        LibraryBorrowedBook borrowedBook = BorrowedBookDatabaseToDTO(book);
+                        LibraryBook newBook = BookDatabaseToDTO(book.Book);
                         borrowedBook.BorrowedBook = newBook;
                         borrowedLibraryBooks.Add(borrowedBook);
                     }
@@ -308,7 +354,7 @@ namespace ShowCaseModel.Models
                 var BookList = new List<LibraryBook>();
                 foreach (var book in author.Books)
                 {
-                    LibraryBook libraryBook = new LibraryBook() { Description = book.Description, Id = book.Id, ISBN = book.ISBN, Title = book.Title };
+                    LibraryBook libraryBook = BookDatabaseToDTO(book);
                     BookList.Add(libraryBook);
                 }
                 return BookList;
@@ -328,7 +374,7 @@ namespace ShowCaseModel.Models
                 var bookList = new List<LibraryBook>();
                 foreach (Book book in publisher.Books)
                 {
-                    LibraryBook libraryBook = new LibraryBook() { Description = book.Description, Id = book.Id, ISBN = book.ISBN, Title = book.Title };
+                    LibraryBook libraryBook = BookDatabaseToDTO(book);
                     bookList.Add(libraryBook);
                 }
                 return bookList;
