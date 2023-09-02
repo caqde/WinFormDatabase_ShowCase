@@ -3,11 +3,15 @@ using EFCore_DBModels.Library;
 using EFCore_DBModels.Types;
 using Microsoft.EntityFrameworkCore;
 using ShowCaseModel.DataTypes.Library;
+using LanguageExt;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.Design;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using LanguageExt.Common;
+using LanguageExt.Pipes;
 
 namespace ShowCaseModel.Models
 {
@@ -81,33 +85,47 @@ namespace ShowCaseModel.Models
             libraryPublisher.Id = publisher.Id;
         }
 
-        public LibraryAuthor? GetAuthor(int Id)
+        public Try<LibraryAuthor> GetAuthor(int Id) => () => 
         {
             var database = dBFactory.GetDbContext();
             var author = database.Authors.FirstOrDefault(x => x.Id == Id);
             if (author == null)
             {
-                return null;
+                return new Result<LibraryAuthor>(new Exception("Author not found"));
             }
             else
             {
-                return new LibraryAuthor { Biography = author.Biography, Id = author.Id, Name = author.Name };
+                if (author.IsDeleted)
+                {
+                    return new Result<LibraryAuthor>(new Exception("This Author has been deleted"));
+                }
+                else
+                {
+                    return new Result<LibraryAuthor>(new LibraryAuthor { Biography = author.Biography, Id = author.Id, Name = author.Name });
+                }
             }
-        }
+        };
 
-        public LibraryPublisher? GetPublisher(int Id)
+        public Try<LibraryPublisher> GetPublisher(int Id) => () => 
         {
             var database = dBFactory.GetDbContext();
             var publisher = database.Publishers.FirstOrDefault(x => x.Id == Id);
             if (publisher == null)
             {
-                return null;
+                return new Result<LibraryPublisher>(new Exception("Publisher not found"));
             }
             else
             {
-                return new LibraryPublisher { Description = publisher.Description, Id = publisher.Id, Name = publisher.Name };
+                if (publisher.IsDeleted)
+                {
+                    return new Result<LibraryPublisher>(new Exception("This Publisher has been deleted"));
+                }
+                else
+                {
+                    return new Result<LibraryPublisher>(new LibraryPublisher { Description = publisher.Description, Id = publisher.Id, Name = publisher.Name });
+                }
             }
-        }
+        };
 
         public LibraryBook GetBook(int Id)
         {
@@ -147,11 +165,7 @@ namespace ShowCaseModel.Models
         {
             var db = dBFactory.GetDbContext();
             var book = db.Books.FirstOrDefault(x => x.Id == Id);
-            if (book == null)
-            {
-                return;
-            }
-            else
+            if (book is not null)
             {
                 book.IsDeleted = true;
                 book.IsActive = false;
@@ -159,6 +173,74 @@ namespace ShowCaseModel.Models
                 return;
             }
         }
+
+        public Try<bool> RemoveAuthor(int Id) => () => 
+        {
+            var db = dBFactory.GetDbContext();
+            var author = db.Authors.Include(x => x.Books).FirstOrDefault(x => x.Id == Id);
+            if (author is not null)
+            {
+                if (author.Books.Count == 0)
+                {
+                    author.IsDeleted = true;
+                    author.IsActive = false;
+                    db.SaveChanges();
+                    return new Result<bool>(true);
+                }
+                else
+                {
+                    if (!author.Books.Any(x => x.IsDeleted == false))
+                    {
+                        author.IsDeleted = true;
+                        author.IsActive = false;
+                        db.SaveChanges();
+                        return new Result<bool>(true);
+                    }
+                    else
+                    {
+                        return new Result<bool>(new Exception("This Author can not be deleted until all the Author's books are deleted"));
+                    }
+                }
+            }
+            else
+            {
+                return new Result<bool>(new Exception("There is no Author with this Id Available"));
+            }
+        };
+
+        public Try<bool> RemovePublisher(int Id) => () => 
+        {
+            var db = dBFactory.GetDbContext();
+            var publisher = db.Publishers.Include(x => x.Books).FirstOrDefault(x => x.Id == Id);
+            if (publisher is not null)
+            {
+                if (publisher.Books.Count == 0)
+                {
+                    publisher.IsDeleted = true;
+                    publisher.IsActive = false;
+                    db.SaveChanges();
+                    return new Result<bool>(true);
+                }
+                else
+                {
+                    if(!publisher.Books.Any(x => x.IsDeleted == false))
+                    {
+                        publisher.IsDeleted = true;
+                        publisher.IsActive = false;
+                        db.SaveChanges();
+                        return new Result<bool>(true);
+                    }
+                    else
+                    {
+                        return new Result<bool>(new Exception("This Publisher can not be deleted until all the Publisher's books are deleted"));
+                    }
+                }
+            }
+            else
+            {
+                return new Result<bool>(new Exception("There is no Publisher with this Id Available"));
+            }
+        };
 
         public void BorrowBook(int PatronId, int BookId, TimeSpan returnTimeSpan)
         {
