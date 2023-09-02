@@ -173,24 +173,22 @@ namespace ShowCaseModel.Models
             }
         };
 
-        public LibraryBook GetBook(int Id)
-        {
-            var db = dBFactory.GetDbContext();  
+        public Try<LibraryBook> GetBook(int Id) => () => {
+            var db = dBFactory.GetDbContext();
             var book = db.Books.FirstOrDefault(x => x.Id == Id);
             if (book == null)
             {
-                return null;
+                return new Result<LibraryBook>(new Exception("Book not found"));
             }
             else
             {
                 if (book.IsDeleted)
                 {
-                    return null;
+                    return new Result<LibraryBook>(new Exception("This Book has been deleted"));
                 }
-                LibraryBook newBook = BookDatabaseToDTO(book);
-                return newBook;
+                return new Result<LibraryBook>(BookDatabaseToDTO(book));
             }
-        }
+        };
 
         public LibraryPatron GetPatron(int Id)
         {
@@ -207,18 +205,22 @@ namespace ShowCaseModel.Models
             }
         }
 
-        public void RemoveBook(int Id)
-        {
+        public Try<bool> RemoveBook(int Id) => () => {
             var db = dBFactory.GetDbContext();
             var book = db.Books.FirstOrDefault(x => x.Id == Id);
             if (book is not null)
             {
+                if (book.IsDeleted && !book.IsActive)
+                {
+                    return new Result<bool>(new Exception("Book already removed"));
+                }
                 book.IsDeleted = true;
                 book.IsActive = false;
                 db.SaveChanges();
-                return;
+                return new Result<bool>(true);
             }
-        }
+            return new Result<bool>(new Exception("Book doesn't exist"));
+        };
 
         public Try<bool> RemoveAuthor(int Id) => () => 
         {

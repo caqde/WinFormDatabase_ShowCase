@@ -122,7 +122,7 @@ namespace ShowCaseModelUnitTests
             Assert.NotNull(TestAuthor);
             LibraryBook book = new LibraryBook() { Description = "TestDescription", ISBN = 1, Title = "Test" };
             database.Library.AddBook(book, TestAuthor.Id, TestPublisher.Id);
-            var TestBook = database.Library.GetBook(book.Id);
+            var TestBook = match(from x in database.Library.GetBook(book.Id) select x, Succ: v => v, Fail: new LibraryBook());
             Assert.NotNull(TestBook);
             Assert.Equal(book.Description, TestBook.Description);
             Assert.Equal(book.Title, TestBook.Title);
@@ -170,17 +170,18 @@ namespace ShowCaseModelUnitTests
             var book1 = AddBookToDatabase("Test", "TestDescription", 1, author, publisher);
             var book2 = AddBookToDatabase("Test2", "TestDescription2", 12, author, publisher);
             var book3 = AddBookToDatabase("Test3", "TestDescription3", 1234, author, publisher);
-            var testBook1 = database.Library.GetBook(book1.Id);
+            var testBook1 = match(from x in database.Library.GetBook(book1.Id) select x, Succ: v => v, Fail: new LibraryBook());
             Assert.NotNull (testBook1);
             Assert.Equal (book1.Description, testBook1.Description);
             Assert.Equal (book1.Title, testBook1.Title);
             Assert.Equal (book1.ISBN, testBook1.ISBN);
-            var testBook2 = database.Library.GetBook (book3.Id);
+            var testBook2 = match(from x in database.Library.GetBook (book3.Id) select x, Succ: v => v, Fail: new LibraryBook());
             Assert.NotNull (testBook2);
             Assert.Equal (book3.Description, testBook2.Description);
             Assert.Equal (book3.Title, testBook2.Title);
             Assert.Equal (book3.ISBN, testBook2.ISBN);
-            var testBook3 = database.Library.GetBook(6);
+            LibraryBook testBook3 = new LibraryBook();
+            database.Library.GetBook(6).Match(Success => testBook3 = Success, Fail => testBook3 = null);
             Assert.Null (testBook3);
         }
 
@@ -191,8 +192,9 @@ namespace ShowCaseModelUnitTests
             var publisher = AddPublisherToDatabase("Test", "TestDescription");
             var book1 = AddBookToDatabase("Test", "TestDescription", 1, author, publisher);
             var book2 = AddBookToDatabase("Test2", "TestDescription2", 12, author, publisher);
-            database.Library.RemoveBook(book1.Id);
-            var testBook = database.Library.GetBook(book1.Id);
+            var result = match(from x in database.Library.RemoveBook(book1.Id) select x, Succ: v => v, Fail: false);
+            LibraryBook testBook = new LibraryBook();
+            database.Library.GetBook(book1.Id).Match(Success => testBook = Success, Fail => testBook = null);
             Assert.Null (testBook);
         }
 
