@@ -35,9 +35,9 @@ namespace ShowCaseModelUnitTests
             return publisher;
         }
 
-        private LibraryBook AddBookToDatabase(string name, string description, int ISBN, LibraryAuthor author, LibraryPublisher publisher)
+        private LibraryBook AddBookToDatabase(string title, string description, int ISBN, LibraryAuthor author, LibraryPublisher publisher)
         {
-            LibraryBook book = new LibraryBook() { Title = name, Description = description, ISBN = ISBN };
+            LibraryBook book = new LibraryBook() { Title = title, Description = description, ISBN = ISBN };
             database.Library.AddBook(book, author.Id, publisher.Id).Match(pass => Assert.True(pass), fail => Assert.Equal("", fail.Message));
             return book;
         }
@@ -49,6 +49,34 @@ namespace ShowCaseModelUnitTests
             return patron;
         }
 
+        private LibraryAuthor? GetAuthorFromDatabase(int Id)
+        {
+            LibraryAuthor? Author = null;
+            database.Library.GetAuthor(Id).Match(pass => Author = pass, fail => Author = null);
+            return Author;
+        }
+
+        private LibraryBook? GetBookFromDatabase(int Id)
+        {
+            LibraryBook? Book = null;
+            database.Library.GetBook(Id).Match(pass => Book = pass, fail => Book = null);
+            return Book;
+        }
+
+        private LibraryPatron? GetPatronFromDatabase(int Id)
+        {
+            LibraryPatron? Patron = null;
+            database.Library.GetPatron(Id).Match(pass =>  Patron = pass, fail => Patron = null);
+            return Patron;
+        }
+
+        private LibraryPublisher? GetPublisherFromDatabase(int Id)
+        {
+            LibraryPublisher? Publisher = null;
+            database.Library.GetPublisher(Id).Match(pass =>  Publisher = pass, fail => Publisher = null);
+            return Publisher;
+        }
+
         [Fact]
         public void AddAuthor()
         {
@@ -56,7 +84,7 @@ namespace ShowCaseModelUnitTests
             libraryAuthor.Name = "Test";
             libraryAuthor.Biography = "TestBiography";
             database.Library.AddAuthor(libraryAuthor).Match(pass => Assert.True(pass), fail => Assert.Equal("", fail.Message));
-            var check = match(from x in database.Library.GetAuthor(libraryAuthor.Id) select x, Succ: v => v, Fail: new LibraryAuthor());
+            var check = GetAuthorFromDatabase(libraryAuthor.Id);
             Assert.NotNull(check);
             Assert.Equal(libraryAuthor.Name, check.Name);
             Assert.Equal(libraryAuthor.Biography, check.Biography);
@@ -68,15 +96,15 @@ namespace ShowCaseModelUnitTests
             AddAuthorToDatabase("Test", "TestBiography");
             AddAuthorToDatabase("Test2", "TestBiography2");
             AddAuthorToDatabase("Test3", "TestBiography3");
-            var TestData = match(from x in database.Library.GetAuthor(3) select x, Succ: v => v, Fail: new LibraryAuthor() );
+            var TestData = GetAuthorFromDatabase(3);
             Assert.NotNull(TestData);
             Assert.Equal("Test3", TestData.Name);
             Assert.Equal("TestBiography3", TestData.Biography);
-            TestData = match(from x in database.Library.GetAuthor(1) select x, Succ: v => v, Fail: new LibraryAuthor());
+            TestData = GetAuthorFromDatabase(1);
             Assert.NotNull(TestData);
             Assert.Equal("Test", TestData.Name);
             Assert.Equal("TestBiography", TestData.Biography);
-            database.Library.GetAuthor(5).Match(success => TestData = success, failure => TestData = null);
+            TestData = GetAuthorFromDatabase(5);
             Assert.Null(TestData);
         }
 
@@ -87,7 +115,7 @@ namespace ShowCaseModelUnitTests
             libraryPublisher.Name = "Test";
             libraryPublisher.Description = "TestDescription";
             database.Library.AddPublisher(libraryPublisher).Match(pass => Assert.True(pass), fail => Assert.Equal("", fail.Message));
-            var check = match(from x in database.Library.GetPublisher(libraryPublisher.Id) select x, Succ: v => v, Fail: new LibraryPublisher() );
+            var check = GetPublisherFromDatabase(libraryPublisher.Id); 
             Assert.NotNull(check);
             Assert.Equal(libraryPublisher.Name, check.Name);
             Assert.Equal(libraryPublisher.Description, check.Description);
@@ -99,15 +127,15 @@ namespace ShowCaseModelUnitTests
             AddPublisherToDatabase("Test", "TestDescription");
             AddPublisherToDatabase("Test2", "TestDescription2");
             AddPublisherToDatabase("Test3", "TestDescription3");
-            var TestData = match (from x in database.Library.GetPublisher(3) select x, Succ: v => v, Fail: new LibraryPublisher());
+            var TestData = GetPublisherFromDatabase(3);
             Assert.NotNull(TestData);
             Assert.Equal("Test3", TestData.Name);
             Assert.Equal("TestDescription3", TestData.Description);
-            TestData = match (from x in database.Library.GetPublisher(1) select x, Succ: v => v, Fail: new LibraryPublisher());
+            TestData = GetPublisherFromDatabase(1);
             Assert.NotNull(TestData);
             Assert.Equal("Test", TestData.Name);
             Assert.Equal("TestDescription", TestData.Description);
-            database.Library.GetPublisher(6).Match(success => TestData = success, failure => TestData = null);
+            TestData = GetPublisherFromDatabase(6);
             Assert.Null(TestData);
         }
 
@@ -116,13 +144,12 @@ namespace ShowCaseModelUnitTests
         {
             AddAuthorToDatabase("Test", "TestBiography");
             AddPublisherToDatabase("Test", "TestDescription");
-            var TestPublisher = match(from x in database.Library.GetPublisher(1) select x, Succ: v => v, Fail: new LibraryPublisher());
-            var TestAuthor = match(from x in database.Library.GetAuthor(1) select x, Succ: v => v, Fail: new LibraryAuthor());
+            var TestPublisher = GetPublisherFromDatabase(1);
+            var TestAuthor = GetAuthorFromDatabase(1);
             Assert.NotNull(TestPublisher);
             Assert.NotNull(TestAuthor);
-            LibraryBook book = new LibraryBook() { Description = "TestDescription", ISBN = 1, Title = "Test" };
-            database.Library.AddBook(book, TestAuthor.Id, TestPublisher.Id).Match(pass => Assert.True(pass), fail => Assert.Equal("", fail.Message));
-            var TestBook = match(from x in database.Library.GetBook(book.Id) select x, Succ: v => v, Fail: new LibraryBook());
+            var book = AddBookToDatabase("Test", "TestDescription", 1, TestAuthor, TestPublisher);
+            var TestBook = GetBookFromDatabase(book.Id);
             Assert.NotNull(TestBook);
             Assert.Equal(book.Description, TestBook.Description);
             Assert.Equal(book.Title, TestBook.Title);
@@ -172,18 +199,17 @@ namespace ShowCaseModelUnitTests
             var book1 = AddBookToDatabase("Test", "TestDescription", 1, author, publisher);
             var book2 = AddBookToDatabase("Test2", "TestDescription2", 12, author, publisher);
             var book3 = AddBookToDatabase("Test3", "TestDescription3", 1234, author, publisher);
-            var testBook1 = match(from x in database.Library.GetBook(book1.Id) select x, Succ: v => v, Fail: new LibraryBook());
+            var testBook1 = GetBookFromDatabase(book1.Id);
             Assert.NotNull (testBook1);
             Assert.Equal (book1.Description, testBook1.Description);
             Assert.Equal (book1.Title, testBook1.Title);
             Assert.Equal (book1.ISBN, testBook1.ISBN);
-            var testBook2 = match(from x in database.Library.GetBook (book3.Id) select x, Succ: v => v, Fail: new LibraryBook());
+            var testBook2 = GetBookFromDatabase(book3.Id);
             Assert.NotNull (testBook2);
             Assert.Equal (book3.Description, testBook2.Description);
             Assert.Equal (book3.Title, testBook2.Title);
             Assert.Equal (book3.ISBN, testBook2.ISBN);
-            LibraryBook testBook3 = new LibraryBook();
-            database.Library.GetBook(6).Match(Success => testBook3 = Success, Fail => testBook3 = null);
+            var testBook3 = GetBookFromDatabase(6);
             Assert.Null (testBook3);
         }
 
@@ -195,22 +221,15 @@ namespace ShowCaseModelUnitTests
             var book1 = AddBookToDatabase("Test", "TestDescription", 1, author, publisher);
             var book2 = AddBookToDatabase("Test2", "TestDescription2", 12, author, publisher);
             var result = match(from x in database.Library.RemoveBook(book1.Id) select x, Succ: v => v, Fail: false);
-            LibraryBook testBook = new LibraryBook();
-            database.Library.GetBook(book1.Id).Match(Success => testBook = Success, Fail => testBook = null);
+            var testBook = GetBookFromDatabase(book1.Id);
             Assert.Null (testBook);
         }
 
         [Fact]
         public void AddPatron()
         {
-            LibraryPatron patron = new LibraryPatron();
-            patron.StreetAddress = "TestAddress";
-            patron.PhoneNumber = "12345";
-            patron.City = "TestCity";
-            patron.Name = "Test";
-            patron.PostalCode = 12345;
-            database.Library.AddPatron(patron).Match(pass => Assert.True(pass), fail => Assert.Equal("", fail.Message));
-            var testData = match(from x in database.Library.GetPatron(patron.Id) select x, Succ: x => x, Fail: new LibraryPatron());
+            var patron = AddPatronToDatabase("Test", "TestAddress", 12345, "TestCity", "12345");
+            var testData = GetPatronFromDatabase(patron.Id);
             Assert.NotNull (testData);
             Assert.Equal(patron.Id, testData.Id);
             Assert.Equal(patron.Name, testData.Name);
@@ -226,18 +245,17 @@ namespace ShowCaseModelUnitTests
             var patron1 = AddPatronToDatabase("Test", "TestAddress", 12345, "TestCity", "12345");
             var patron2 = AddPatronToDatabase("Test2", "TestAddress2", 23456, "TestCity2", "23456");
             var patron3 = AddPatronToDatabase("Test3", "TestAddress3", 34567, "TestCity3", "34567");
-            var TestPatron1 = match(from x in database.Library.GetPatron(patron1.Id) select x, Succ: x => x, Fail: new LibraryPatron());
+            var TestPatron1 = GetPatronFromDatabase (patron1.Id);
             Assert.NotNull(TestPatron1);
             Assert.Equal(patron1.Name, TestPatron1.Name);
             Assert.Equal(patron1.City, TestPatron1.City);
             Assert.Equal(patron1.PostalCode, TestPatron1.PostalCode);
-            var TestPatron2 = match(from x in database.Library.GetPatron(patron3.Id) select x, Succ: x => x, Fail: new LibraryPatron());
+            var TestPatron2 = GetPatronFromDatabase(patron3.Id);
             Assert.NotNull(TestPatron2);
             Assert.Equal(patron3.PhoneNumber, TestPatron2.PhoneNumber);
             Assert.Equal(patron3.Name, TestPatron2.Name);
             Assert.Equal(patron3.StreetAddress, TestPatron2.StreetAddress);
-            var TestPatron3 = new LibraryPatron();
-            database.Library.GetPatron(6).Match(pass => TestPatron3 = pass, fail => TestPatron3 = null);
+            var TestPatron3 = GetPatronFromDatabase(6);
             Assert.Null(TestPatron3);
         }
 
@@ -295,8 +313,7 @@ namespace ShowCaseModelUnitTests
                                                             ,failure => Assert.Equal("true", failure.Message));
             database.Library.RemoveAuthor(author2.Id).Match(success => Assert.False(success),
                                                             failure => Assert.IsType<System.Exception>(failure));
-            var TestAuthor2Get = new LibraryAuthor();
-            database.Library.GetAuthor(author1.Id).Match(success => TestAuthor2Get = success, failure => TestAuthor2Get = null );
+            var TestAuthor2Get = GetAuthorFromDatabase(author1.Id);
             Assert.Null(TestAuthor2Get);
         }
 
@@ -312,8 +329,7 @@ namespace ShowCaseModelUnitTests
                                                                 failure => Assert.Equal("true", failure.Message));
             database.Library.RemovePublisher(publisher2.Id).Match(success => Assert.False(success),
                                                                    failure => Assert.IsType<System.Exception>(failure) );
-            var TestPublisher2Get = new LibraryPublisher();
-            database.Library.GetPublisher(publisher1.Id).Match(success => TestPublisher2Get = success, failure => TestPublisher2Get = null);
+            var TestPublisher2Get = GetPublisherFromDatabase(publisher1.Id);
             Assert.Null(TestPublisher2Get);
         }
     }

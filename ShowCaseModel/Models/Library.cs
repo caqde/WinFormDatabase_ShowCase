@@ -400,22 +400,7 @@ namespace ShowCaseModel.Models
             {
                 if (borrowedBooks.Count > 0)
                 {
-                    List<LibraryBorrowedBook> borrowedLibraryBooks = new List<LibraryBorrowedBook>();
-                    foreach (BorrowedBook book in borrowedBooks)
-                    {
-                        if (book is not null)
-                        {
-                            LibraryBorrowedBook borrowedBook = BorrowedBookDatabaseToDTO(book);
-                            LibraryBook newBook = BookDatabaseToDTO(book.Book);
-                            borrowedBook.BorrowedBook = newBook;
-                            borrowedLibraryBooks.Add(borrowedBook);
-                        }
-                        else
-                        {
-                            return new Result<List<LibraryBorrowedBook>>(new Exception("Invalid Book in list, Contact Database Administrator"));
-                        }
-                    }
-                    return new Result<List<LibraryBorrowedBook>>(borrowedLibraryBooks);
+                    return GetBorrowedBookList(borrowedBooks);
                 }
                 else
                 {
@@ -427,6 +412,26 @@ namespace ShowCaseModel.Models
                 return new Result<List<LibraryBorrowedBook>>(new Exception("Invalid Patron"));
             }
         };
+
+        private static Result<List<LibraryBorrowedBook>> GetBorrowedBookList(List<BorrowedBook> borrowedBooks)
+        {
+            List<LibraryBorrowedBook> borrowedLibraryBooks = new List<LibraryBorrowedBook>();
+            foreach (BorrowedBook book in borrowedBooks)
+            {
+                if (book is not null)
+                {
+                    LibraryBorrowedBook borrowedBook = BorrowedBookDatabaseToDTO(book);
+                    LibraryBook newBook = BookDatabaseToDTO(book.Book);
+                    borrowedBook.BorrowedBook = newBook;
+                    borrowedLibraryBooks.Add(borrowedBook);
+                }
+                else
+                {
+                    return new Result<List<LibraryBorrowedBook>>(new Exception("Invalid Book in list, Contact Database Administrator"));
+                }
+            }
+            return new Result<List<LibraryBorrowedBook>>(borrowedLibraryBooks);
+        }
 
         public Try<List<LibraryBook>> GetAuthorBooks(int authorId) => () => 
         {
