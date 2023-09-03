@@ -281,12 +281,16 @@ namespace ShowCaseModel.Models
         public Try<bool> RemoveBook(int Id) => () => 
         {
             var db = dBFactory.GetDbContext();
-            var book = db.Books.FirstOrDefault(x => x.Id == Id);
+            var book = db.Books.Include(x => x.BorrowedBook).FirstOrDefault(x => x.Id == Id);
             if (book is not null)
             {
                 if (book.IsDeleted && !book.IsActive)
                 {
                     return new Result<bool>(new Exception("Book already removed"));
+                }
+                if (book.BorrowedBook is not null)
+                {
+                    return new Result<bool>(new Exception("Book is currently being borrowed"));
                 }
                 book.IsDeleted = true;
                 book.IsActive = false;
@@ -388,6 +392,22 @@ namespace ShowCaseModel.Models
             }
         };
 
+        public Try<bool> RemoveBorrowedBook(int BorrowedBookId) => () => 
+        {
+            var db = dBFactory.GetDbContext();
+            var borrowedBook = db.BorrowedBooks.FirstOrDefault(x => x.Id == BorrowedBookId);
+            if (borrowedBook is not null)
+            {
+                db.BorrowedBooks.Remove(borrowedBook);
+                db.SaveChanges();
+                return new Result<bool>(true);
+            }
+            else
+            {
+                return new Result<bool>(new Exception($"There is no Borrowed book with ID {BorrowedBookId}"));
+            }
+        };
+
         public Try<bool> BorrowBook(int PatronId, int BookId, TimeSpan returnTimeSpan) => () => 
         {
             var db = dBFactory.GetDbContext();
@@ -416,7 +436,7 @@ namespace ShowCaseModel.Models
             }
         };
 
-        public Try<List<LibraryBorrowedBook>> GetBorrowedBooks(int patronId) => () => 
+        public Try<List<LibraryBorrowedBook>> GetBorrowedBooksByPatron(int patronId) => () => 
         {
             var db = dBFactory.GetDbContext();
             var borrowedBooks = db.BorrowedBooks.AsNoTracking().Include(x => x.Book).Where(x => x.Patron.Id == patronId).ToList();
@@ -424,7 +444,7 @@ namespace ShowCaseModel.Models
             {
                 if (borrowedBooks.Count > 0)
                 {
-                    return GetBorrowedBookList(borrowedBooks);
+                    return GetPatronsBorrowedBookList(borrowedBooks);
                 }
                 else
                 {
@@ -437,7 +457,7 @@ namespace ShowCaseModel.Models
             }
         };
 
-        private static Result<List<LibraryBorrowedBook>> GetBorrowedBookList(List<BorrowedBook> borrowedBooks)
+        private static Result<List<LibraryBorrowedBook>> GetPatronsBorrowedBookList(List<BorrowedBook> borrowedBooks)
         {
             List<LibraryBorrowedBook> borrowedLibraryBooks = new List<LibraryBorrowedBook>();
             foreach (BorrowedBook book in borrowedBooks)
@@ -456,6 +476,26 @@ namespace ShowCaseModel.Models
             }
             return new Result<List<LibraryBorrowedBook>>(borrowedLibraryBooks);
         }
+
+        public Try<List<LibraryBorrowedBook>> GetBorrowedBooksList() => () => 
+        {
+            var db = dBFactory.GetDbContext();
+            var borrowedBooks = db.BorrowedBooks.ToList();
+            if (borrowedBooks.Count > 0)
+            {
+                List<LibraryBorrowedBook> BookList = new List<LibraryBorrowedBook>();
+                foreach (var book in borrowedBooks)
+                {
+                    var BorrowedBook = BorrowedBookDatabaseToDTO(book);
+                    BookList.Add(BorrowedBook);
+                }
+                return new Result<List<LibraryBorrowedBook>>(BookList);
+            }
+            else
+            {
+                return new Result<List<LibraryBorrowedBook>>(new Exception("No Borrowed books found"));
+            }
+        };
 
         public Try<List<LibraryBook>> GetAuthorBooks(int authorId) => () => 
         {
@@ -509,6 +549,27 @@ namespace ShowCaseModel.Models
                     return new Result<List<LibraryBook>>(new Exception("Invalid Publisher"));
                 }
             }
+        };
+
+        public Try<List<LibraryPublisher>> GetPublisherList() => () => 
+        {
+            var db = dBFactory.GetDbContext();
+            var publishers = db.Publishers.ToList();
+            if (publishers.Count > 0)
+            {
+                var list = new List<LibraryPublisher>();
+                foreach (var publisher in publishers)
+                {
+                    var publisherDTO = PublisherDatabaseToDTO(publisher);
+                    list.Add(publisherDTO);
+                }
+                return new Result<List<LibraryPublisher>>(list);
+            }
+            else
+            {
+                return new Result<List<LibraryPublisher>>(new Exception("No publishers available"));
+            }
+
         };
     }
 }
