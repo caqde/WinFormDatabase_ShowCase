@@ -364,6 +364,30 @@ namespace ShowCaseModel.Models
             }
         };
 
+        public Try<bool> RemovePatron(int PatronId) => () => 
+        {
+            var db = dBFactory.GetDbContext();
+            var patron = db.Patrons.Include(x => x.BorrowedBooks).FirstOrDefault(x => x.Id == PatronId);
+            if (patron is not null)
+            {
+                if (patron.BorrowedBooks.Count == 0)
+                {
+                    patron.IsDeleted = true;
+                    patron.IsActive = false;
+                    db.SaveChanges();
+                    return new Result<bool>(true);
+                }
+                else
+                {
+                    return new Result<bool>(new Exception($"Patron has Books that are listed as borrowed please resolve the borrowed books before deleting the patron"));
+                }
+            }
+            else
+            {
+                return new Result<bool>(new Exception($"Invalid Patron Id no Patron with ID = {PatronId} found"));
+            }
+        };
+
         public Try<bool> BorrowBook(int PatronId, int BookId, TimeSpan returnTimeSpan) => () => 
         {
             var db = dBFactory.GetDbContext();

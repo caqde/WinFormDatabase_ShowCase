@@ -332,5 +332,17 @@ namespace ShowCaseModelUnitTests
             var TestPublisher2Get = GetPublisherFromDatabase(publisher1.Id);
             Assert.Null(TestPublisher2Get);
         }
+
+        [Fact]
+        public void DeletePatron()
+        {
+            var patron = AddPatronToDatabase("Test", "TestAddress", 12345, "TestCity", "12345");
+            var testPatron = GetPatronFromDatabase(patron.Id);
+            Assert.NotNull(testPatron);
+            database.Library.RemovePatron(testPatron.Id).Match(Success => Assert.True(Success),
+                                                                Failure => Assert.Equal("", Failure.Message));
+            var NullPatron = GetPatronFromDatabase(patron.Id);
+            Assert.Null(NullPatron);
+        }
     }
 }
