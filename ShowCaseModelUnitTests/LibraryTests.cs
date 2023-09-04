@@ -12,6 +12,7 @@ using EFCore_DBModels.Library;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 using System.Net;
 using System.Xml.Linq;
+using LanguageExt.UnitsOfMeasure;
 
 namespace ShowCaseModelUnitTests
 {
@@ -189,6 +190,7 @@ namespace ShowCaseModelUnitTests
         public void BorrowBook()
         {
             var patron = AddPatronToDatabase("Test", "TestAddress", 12345, "TestCity", "12345");
+            var patron2 = AddPatronToDatabase("Test2", "TestAddress2", 12356, "TestCity", "12356");
             var author = AddAuthorToDatabase("Test", "TestBiography");
             var publisher = AddPublisherToDatabase("Test", "TestDescription");
             var book = AddBookToDatabase("Test", "TestDescription", 1, author, publisher);
@@ -198,6 +200,10 @@ namespace ShowCaseModelUnitTests
             Assert.NotNull(borrowedBooks);
             Assert.NotEmpty(borrowedBooks);
             Assert.Single(borrowedBooks);
+            database.Library.BorrowBook(patron2.Id, book.Id, new TimeSpan(7,0,0,0,0)).Match(pass => Assert.Fail("This book should already be borrowed"), Fail => Assert.IsType<System.Exception>(Fail));
+            database.Library.BorrowBook(7, book.Id, new TimeSpan(7, 0, 0, 0, 0)).Match(pass => Assert.Fail("Patron should be invalid"), Fail => Assert.IsType<System.Exception>(Fail));
+            database.Library.BorrowBook(7, 7, new TimeSpan(7, 0, 0, 0, 0)).Match(pass => Assert.Fail("Patron and Book should be invalid"), Fail => Assert.IsType<System.Exception>(Fail));
+            database.Library.BorrowBook(patron2.Id, 7, new TimeSpan(7, 0, 0, 0, 0)).Match(pass => Assert.Fail("Book should be invalid"), Fail => Assert.IsType<System.Exception>(Fail));
         }
         [Fact]
         public void GetBorrowedBooksByPatron()
@@ -358,14 +364,11 @@ namespace ShowCaseModelUnitTests
                                                             ,failure => Assert.Equal("true", failure.Message));
             database.Library.RemoveAuthor(author2.Id).Match(success => Assert.False(success),
                                                             failure => Assert.IsType<System.Exception>(failure));
+            database.Library.RemoveBook(book.Id).Match(success => Assert.True(success), fail =>  Assert.Equal("true", fail.Message));
+            database.Library.RemoveAuthor(author2.Id).Match(success => Assert.True(success), fail => Assert.Equal("false", fail.Message));
+            database.Library.RemoveAuthor(6).Match(success => Assert.False(success), fail => Assert.IsType<System.Exception>(fail));
             var TestAuthor2Get = GetAuthorFromDatabase(author1.Id);
             Assert.Null(TestAuthor2Get);
-        }
-
-        [Fact]
-        public void DeleteAuthorExceptions()
-        {
-
         }
 
         [Fact]
@@ -380,8 +383,11 @@ namespace ShowCaseModelUnitTests
                                                                 failure => Assert.Equal("true", failure.Message));
             database.Library.RemovePublisher(publisher2.Id).Match(success => Assert.False(success),
                                                                    failure => Assert.IsType<System.Exception>(failure) );
-            var TestPublisher2Get = GetPublisherFromDatabase(publisher1.Id);
-            Assert.Null(TestPublisher2Get);
+            var TestPublisher1Get = GetPublisherFromDatabase(publisher1.Id);
+            Assert.Null(TestPublisher1Get);
+            database.Library.RemoveBook(book.Id).Match(success => Assert.True(success), failure =>  Assert.Equal("true", failure.Message));
+            database.Library.RemovePublisher(publisher2.Id).Match(success => Assert.True(success), failure => Assert.Equal("true", failure.Message));
+            database.Library.RemovePublisher(6).Match(success => Assert.False(success), failure => Assert.IsType<System.Exception>(failure) );
         }
 
         [Fact]
@@ -394,6 +400,19 @@ namespace ShowCaseModelUnitTests
                                                                 Failure => Assert.Equal("", Failure.Message));
             var NullPatron = GetPatronFromDatabase(patron.Id);
             Assert.Null(NullPatron);
+        }
+
+        [Fact]
+        public void DeletePatronExceptions()
+        {
+            var patron = AddPatronToDatabase("Test", "TestAddress", 12345, "TestCity", "12345");
+            var author = AddAuthorToDatabase("Test", "TestBiography");
+            var publisher = AddPublisherToDatabase("Test", "TestDescription");
+            var book = AddBookToDatabase("Test", "TestDescription", 1, author, publisher);
+            TimeSpan week = TimeSpan.FromDays(7);
+            AddBorrowedBook(patron.Id, book.Id, week);
+            database.Library.RemovePatron(patron.Id).Match(Success => Assert.False(Success), Fail => Assert.IsType<System.Exception>(Fail));
+            database.Library.RemovePatron(8).Match(Success => Assert.False(Success), Fail => Assert.IsType<System.Exception>(Fail));
         }
 
         [Fact]
@@ -417,11 +436,13 @@ namespace ShowCaseModelUnitTests
             Assert.NotEmpty(bookList2);
             Assert.Equal(2, bookList2.Count);
             Assert.Collection(bookList2, book => Assert.Equal(book1.Id, book.Id), book => Assert.Equal(book3.Id,book.Id));
+            database.Library.RemoveBorrowedBook(6).Match(pass => Assert.Fail("There should not be a book at this location"), fail => Assert.IsType<System.Exception>(fail));
         }
 
         [Fact]
         public void GetBorrowedBooksList()
         {
+            database.Library.GetBorrowedBooksList().Match(pass => Assert.Null(pass), fail => Assert.IsType<System.Exception>(fail));
             var patron = AddPatronToDatabase("Test", "TestAddress", 12345, "TestCity", "12345");
             var patron2 = AddPatronToDatabase("Test2", "TestAddress2", 12345, "TestCity", "1345");
             var author = AddAuthorToDatabase("Test", "TestBiography");
