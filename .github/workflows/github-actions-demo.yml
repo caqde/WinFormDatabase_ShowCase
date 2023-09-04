@@ -2,6 +2,23 @@ name: GitHub Actions Demo
 run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
 on: [push]
 jobs:
+  build:
+    runs-on: [windows, x64]
+    strategy:
+    matrix:
+      dotnet-version: ['7.0.x']
+  steps:
+  -uses: actions/checkout@v3
+  -name: Setup .NET CORE SDK ${{ matrix.dotnet-version}}
+   uses: actions/setup-dotnet@v3
+   with:
+     dotnet-version: ${{matrix.dotnet-version}}
+- name: Install dependencies
+  run: dotnet restore
+- name: Build
+  run: dotnet build --configuration Release --no-restore
+- name: Test
+  run: dotnet test --no-restore --verbosity normal
 - name: Upload coverage reports to Codecov
   uses: codecov/codecov-action@v3
   env:
