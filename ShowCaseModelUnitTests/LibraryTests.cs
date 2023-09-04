@@ -214,6 +214,7 @@ namespace ShowCaseModelUnitTests
             var book = AddBookToDatabase("Test", "TestDescription",1, author,publisher);
             var book2 = AddBookToDatabase("Test2", "TestDescription", 2, author, publisher);
             var book3 = AddBookToDatabase("Test3", "TestDescription", 3, author, publisher);
+            database.Library.GetBorrowedBooksByPatron(patron.Id).Match(pass => Assert.Empty(pass), fail => Assert.Equal("", fail.Message ));
             TimeSpan week = new TimeSpan(7,0,0,0, 0);
             AddBorrowedBook(patron.Id, book.Id, week);
             AddBorrowedBook(patron.Id, book2.Id, week);
@@ -316,6 +317,7 @@ namespace ShowCaseModelUnitTests
             var publisher = AddPublisherToDatabase("Test", "TestDescription");
             var author1 = AddAuthorToDatabase("Test", "TestBiography");
             var author2 = AddAuthorToDatabase("Test", "TestBiography2");
+            var author3 = AddAuthorToDatabase("Test3", "TestBiography3");
             var book1author1 = AddBookToDatabase("Test", "TestDescription", 1, author1, publisher);
             var book2author1 = AddBookToDatabase("Test2", "TestDescription2", 2, author1, publisher);
             var book1author2 = AddBookToDatabase("Test3", "TestDescription3", 3, author2, publisher);
@@ -329,6 +331,8 @@ namespace ShowCaseModelUnitTests
             Assert.NotEmpty(author2BookList);
             Assert.Collection(author1BookList, i => Assert.Equal(book1author1.Title, i.Title), i => Assert.Equal(book2author1.Title, i.Title));
             Assert.Collection(author2BookList, i => Assert.Equal(book1author2.Description, i.Description), i => Assert.Equal(book2author2.Description, i.Description), i => Assert.Equal(book3author2.Description, i.Description));
+            database.Library.GetAuthorBooks(author3.Id).Match(pass => Assert.Empty(pass), Fail => Assert.Equal("", Fail.Message));
+            database.Library.GetAuthorBooks(6).Match(pass => Assert.Fail("Should be an Invalid Author"), fail => Assert.IsType<System.Exception>(fail));
         }
 
         [Fact]
@@ -337,6 +341,7 @@ namespace ShowCaseModelUnitTests
             var author = AddAuthorToDatabase("Test", "TestBiography");
             var publisher1 = AddPublisherToDatabase("Test", "TestDescription");
             var publisher2 = AddPublisherToDatabase("Test2", "TestDescription2");
+            database.Library.GetPublisherBooks(publisher1.Id).Match(pass => Assert.Empty(pass), fail => Assert.Equal("", fail.Message));
             var book1pub1 = AddBookToDatabase("Test", "TestDescription", 1, author, publisher1);
             var book2pub1 = AddBookToDatabase("Test2", "TestDescription2", 2, author, publisher1);
             var book1pub2 = AddBookToDatabase("Test3", "TestDescription3", 3, author, publisher2);
@@ -350,6 +355,7 @@ namespace ShowCaseModelUnitTests
             Assert.NotEmpty(pub2BookList);
             Assert.Collection(pub1BookList, item =>  Assert.Equal(book1pub1.Title, item.Title), item =>  Assert.Equal(book2pub1.Title,item.Title));
             Assert.Collection(pub2BookList, item => Assert.Equal(book1pub2.Description, item.Description), item => Assert.Equal(book2pub2.Description, item.Description), item => Assert.Equal(book3pub2.Description, item.Description));
+            database.Library.GetPublisherBooks(7).Match(pass => Assert.Fail("Should be an Invalid Publisher ID"), Fail => Assert.IsType<System.Exception>(Fail));
         }
 
         [Fact]
