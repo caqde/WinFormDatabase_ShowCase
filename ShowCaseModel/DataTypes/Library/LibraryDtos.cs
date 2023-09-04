@@ -6,21 +6,21 @@ using System.Threading.Tasks;
 
 namespace ShowCaseModel.DataTypes.Library
 {
-    public class LibraryAuthor
+    public class AuthorDto
     {
         public int Id { get; set; }
         public string Name { get; set; }
         public string Biography { get; set; }
     }
 
-    public class LibraryPublisher
+    public class PublisherDto
     {
         public int Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
     }
 
-    public class LibraryBook
+    public class BookDto
     {
         public int Id { get; set; }
         public string Title { get; set; }
@@ -28,15 +28,15 @@ namespace ShowCaseModel.DataTypes.Library
         public int ISBN { get; set; }
     }
 
-    public class LibraryBorrowedBook
+    public class BorrowedBookDto
     {
         public int Id { get; set; }
         public DateTime BorrowedDate { get; set; }
         public DateTime DueDate { get; set; }
-        public LibraryBook BorrowedBook { get; set; }
+        public BookDto BorrowedBook { get; set; }
     }
 
-    public class LibraryPatron
+    public class PatronDto
     {
         public int Id { get; set; }
         public string Name { get; set; }

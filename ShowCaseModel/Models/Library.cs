@@ -40,47 +40,22 @@ namespace ShowCaseModel.Models
             return new BorrowedBook() { Book = book, BookId = book.Id, BorrowedDate = DateTime.Now.ToUniversalTime(), DueDate = duedate.ToUniversalTime(), Patron = patron };
         }
 
-        private static LibraryAuthor AuthorDatabaseToDTO(Author author)
-        {
-            return new LibraryAuthor { Biography = author.Biography, Id = author.Id, Name = author.Name };
-        }
-
-        private static LibraryBook BookDatabaseToDTO(Book book)
-        {
-            return new LibraryBook() { ISBN = book.ISBN, Description = book.Description, Title = book.Title, Id = book.Id };
-        }
-
-        private static LibraryBorrowedBook BorrowedBookDatabaseToDTO(BorrowedBook book)
-        {
-            return new LibraryBorrowedBook() { BorrowedDate = book.BorrowedDate, DueDate = book.DueDate, Id = book.Id };
-        }
-
-        private static LibraryPatron PatronDatabaseToDTO(Patron patron)
-        {
-            return new LibraryPatron() { PhoneNumber = patron.PhoneNumber, Id = patron.Id, City = patron.City, Name = patron.Name, PostalCode = patron.PostalCode, StreetAddress = patron.StreetAddress };
-        }
-
-        private static LibraryPublisher PublisherDatabaseToDTO(Publisher publisher)
-        {
-            return new LibraryPublisher { Description = publisher.Description, Id = publisher.Id, Name = publisher.Name };
-        }
-
-        private static Author AuthorDTOtoDatabase(LibraryAuthor libraryAuthor)
+        private static Author AuthorDTOtoDatabase(AuthorDto libraryAuthor)
         {
             return new Author { Biography = libraryAuthor.Biography, Name = libraryAuthor.Name };
         }
 
-        private static Book BookDTOtoDatabase(LibraryBook book, Author author, Publisher publisher)
+        private static Book BookDTOtoDatabase(BookDto book, Author author, Publisher publisher)
         {
             return new Book() { Author = author, Publisher = publisher, Description = book.Description, ISBN = book.ISBN, Title = book.Title };
         }
 
-        private static Patron PatronDTOtoDatabase(LibraryPatron libraryPatron)
+        private static Patron PatronDTOtoDatabase(PatronDto libraryPatron)
         {
             return new Patron { Name = libraryPatron.Name, City = libraryPatron.City, PhoneNumber = libraryPatron.PhoneNumber, StreetAddress = libraryPatron.StreetAddress, PostalCode = libraryPatron.PostalCode };
         }
 
-        private static Publisher PublisherDtoToDatabase(LibraryPublisher libraryPublisher)
+        private static Publisher PublisherDtoToDatabase(PublisherDto libraryPublisher)
         {
             return new Publisher { Description = libraryPublisher.Description, Name = libraryPublisher.Name };
         }
@@ -138,7 +113,7 @@ namespace ShowCaseModel.Models
             return new Result<bool>(new Exception("Invalid call for DetermineDeletionException"));
         }
 
-        public Try<bool> AddAuthor(LibraryAuthor libraryAuthor) => () => 
+        public Try<bool> AddAuthor(AuthorDto libraryAuthor) => () => 
         {
             var database = dBFactory.GetDbContext();
             Author author = AuthorDTOtoDatabase(libraryAuthor);
@@ -149,7 +124,7 @@ namespace ShowCaseModel.Models
             return new Result<bool>(true);
         };
 
-        public Try<bool> AddBook(LibraryBook book, int AuthorID, int PublisherID) => () => 
+        public Try<bool> AddBook(BookDto book, int AuthorID, int PublisherID) => () => 
         {
             var database = dBFactory.GetDbContext();
             var author = database.Authors.FirstOrDefault(x => x.Id == AuthorID);
@@ -174,7 +149,7 @@ namespace ShowCaseModel.Models
             }
         };
 
-        public Try<bool> AddPatron(LibraryPatron libraryPatron) => () => 
+        public Try<bool> AddPatron(PatronDto libraryPatron) => () => 
         {
             var database = dBFactory.GetDbContext();
             Patron patron = PatronDTOtoDatabase(libraryPatron);
@@ -186,7 +161,7 @@ namespace ShowCaseModel.Models
         };
 
 
-        public Try<bool> AddPublisher(LibraryPublisher libraryPublisher) => () => 
+        public Try<bool> AddPublisher(PublisherDto libraryPublisher) => () => 
         {
             var database = dBFactory.GetDbContext();
             Publisher publisher = PublisherDtoToDatabase(libraryPublisher);
@@ -197,83 +172,83 @@ namespace ShowCaseModel.Models
             return new Result<bool>(true);
         };
 
-        public Try<LibraryAuthor> GetAuthor(int Id) => () => 
+        public Try<AuthorDto> GetAuthor(int Id) => () => 
         {
             var database = dBFactory.GetDbContext();
             var author = database.Authors.FirstOrDefault(x => x.Id == Id);
             if (author == null)
             {
-                return new Result<LibraryAuthor>(new Exception("Author not found"));
+                return new Result<AuthorDto>(new Exception("Author not found"));
             }
             else
             {
                 if (author.IsDeleted)
                 {
-                    return new Result<LibraryAuthor>(new Exception("This Author has been deleted"));
+                    return new Result<AuthorDto>(new Exception("This Author has been deleted"));
                 }
                 else
                 {
-                    return new Result<LibraryAuthor>(AuthorDatabaseToDTO(author));
+                    return new Result<AuthorDto>(author.MapToDto());
                 }
             }
         };
 
-        public Try<LibraryPublisher> GetPublisher(int Id) => () => 
+        public Try<PublisherDto> GetPublisher(int Id) => () => 
         {
             var database = dBFactory.GetDbContext();
             var publisher = database.Publishers.FirstOrDefault(x => x.Id == Id);
             if (publisher == null)
             {
-                return new Result<LibraryPublisher>(new Exception("Publisher not found"));
+                return new Result<PublisherDto>(new Exception("Publisher not found"));
             }
             else
             {
                 if (publisher.IsDeleted)
                 {
-                    return new Result<LibraryPublisher>(new Exception("This Publisher has been deleted"));
+                    return new Result<PublisherDto>(new Exception("This Publisher has been deleted"));
                 }
                 else
                 {
-                    return new Result<LibraryPublisher>(PublisherDatabaseToDTO(publisher));
+                    return new Result<PublisherDto>(publisher.MapToDto());
                 }
             }
         };
 
-        public Try<LibraryBook> GetBook(int Id) => () => 
+        public Try<BookDto> GetBook(int Id) => () => 
         {
             var db = dBFactory.GetDbContext();
             var book = db.Books.FirstOrDefault(x => x.Id == Id);
             if (book == null)
             {
-                return new Result<LibraryBook>(new Exception("Book not found"));
+                return new Result<BookDto>(new Exception("Book not found"));
             }
             else
             {
                 if (book.IsDeleted)
                 {
-                    return new Result<LibraryBook>(new Exception("This Book has been deleted"));
+                    return new Result<BookDto>(new Exception("This Book has been deleted"));
                 }
-                return new Result<LibraryBook>(BookDatabaseToDTO(book));
+                return new Result<BookDto>(book.MapToDto());
             }
         };
 
-        public Try<LibraryPatron> GetPatron(int Id) => () => 
+        public Try<PatronDto> GetPatron(int Id) => () => 
         {
             var db = dBFactory.GetDbContext();
             var patron = db.Patrons.FirstOrDefault(x => x.Id == Id);
             if (patron == null)
             {
-                return new Result<LibraryPatron>(new Exception("Patron doesn't exist"));
+                return new Result<PatronDto>(new Exception("Patron doesn't exist"));
             }
             else
             {
                 if (patron.IsDeleted)
                 {
-                    return new Result<LibraryPatron>(new Exception("Patron has been deleted"));
+                    return new Result<PatronDto>(new Exception("Patron has been deleted"));
                 }
                 else
                 {
-                    return new Result<LibraryPatron>(PatronDatabaseToDTO(patron));
+                    return new Result<PatronDto>(patron.MapToDto());
                 }
             }
         };
@@ -436,7 +411,7 @@ namespace ShowCaseModel.Models
             }
         };
 
-        public Try<List<LibraryBorrowedBook>> GetBorrowedBooksByPatron(int patronId) => () => 
+        public Try<List<BorrowedBookDto>> GetBorrowedBooksByPatron(int patronId) => () => 
         {
             var db = dBFactory.GetDbContext();
             var borrowedBooks = db.BorrowedBooks.AsNoTracking().Include(x => x.Book).Where(x => x.Patron.Id == patronId).ToList();
@@ -448,128 +423,169 @@ namespace ShowCaseModel.Models
                 }
                 else
                 {
-                    return new Result<List<LibraryBorrowedBook>>(new List<LibraryBorrowedBook>());
+                    return new Result<List<BorrowedBookDto>>(new List<BorrowedBookDto>());
                 }
             }
             else
             {
-                return new Result<List<LibraryBorrowedBook>>(new Exception("Invalid Patron"));
+                return new Result<List<BorrowedBookDto>>(new Exception("Invalid Patron"));
             }
         };
 
-        private static Result<List<LibraryBorrowedBook>> GetPatronsBorrowedBookList(List<BorrowedBook> borrowedBooks)
+        private static Result<List<BorrowedBookDto>> GetPatronsBorrowedBookList(List<BorrowedBook> borrowedBooks)
         {
-            List<LibraryBorrowedBook> borrowedLibraryBooks = new List<LibraryBorrowedBook>();
+            List<BorrowedBookDto> borrowedLibraryBooks = new List<BorrowedBookDto>();
             foreach (BorrowedBook book in borrowedBooks)
             {
                 if (book is not null)
                 {
-                    LibraryBorrowedBook borrowedBook = BorrowedBookDatabaseToDTO(book);
-                    LibraryBook newBook = BookDatabaseToDTO(book.Book);
-                    borrowedBook.BorrowedBook = newBook;
-                    borrowedLibraryBooks.Add(borrowedBook);
+                    borrowedLibraryBooks.Add(book.MapToDto());
                 }
                 else
                 {
-                    return new Result<List<LibraryBorrowedBook>>(new Exception("Invalid Book in list, Contact Database Administrator"));
+                    return new Result<List<BorrowedBookDto>>(new Exception("Invalid Book in list, Contact Database Administrator"));
                 }
             }
-            return new Result<List<LibraryBorrowedBook>>(borrowedLibraryBooks);
+            return new Result<List<BorrowedBookDto>>(borrowedLibraryBooks);
         }
 
-        public Try<List<LibraryBorrowedBook>> GetBorrowedBooksList() => () => 
+        public Try<List<BorrowedBookDto>> GetBorrowedBooksList() => () => 
         {
             var db = dBFactory.GetDbContext();
-            var borrowedBooks = db.BorrowedBooks.ToList();
+            var borrowedBooks = db.BorrowedBooks.Include(x => x.Book).ToList();
             if (borrowedBooks.Count > 0)
             {
-                List<LibraryBorrowedBook> BookList = new List<LibraryBorrowedBook>();
+                List<BorrowedBookDto> BookList = new List<BorrowedBookDto>();
                 foreach (var book in borrowedBooks)
                 {
-                    var BorrowedBook = BorrowedBookDatabaseToDTO(book);
-                    BookList.Add(BorrowedBook);
+                    BookList.Add(book.MapToDto());
                 }
-                return new Result<List<LibraryBorrowedBook>>(BookList);
+                return new Result<List<BorrowedBookDto>>(BookList);
             }
             else
             {
-                return new Result<List<LibraryBorrowedBook>>(new Exception("No Borrowed books found"));
+                return new Result<List<BorrowedBookDto>>(new Exception("No Borrowed books found"));
             }
         };
 
-        public Try<List<LibraryBook>> GetAuthorBooks(int authorId) => () => 
+        public Try<List<BookDto>> GetAuthorBooks(int authorId) => () => 
         {
             var db = dBFactory.GetDbContext();
             var author = db.Authors.AsNoTracking().Include(x => x.Books).FirstOrDefault(x => x.Id == authorId);
             if (author is not null && author.Books.Count > 0)
             {
-                var BookList = new List<LibraryBook>();
+                var BookList = new List<BookDto>();
                 foreach (var book in author.Books)
                 {
-                    LibraryBook libraryBook = BookDatabaseToDTO(book);
-                    BookList.Add(libraryBook);
+                    BookList.Add(book.MapToDto());
                 }
-                return new Result<List<LibraryBook>>(BookList);
+                return new Result<List<BookDto>>(BookList);
             }
             else
             {
                 if (author is not null)
                 {
-                    return new Result<List<LibraryBook>>(new List<LibraryBook>());
+                    return new Result<List<BookDto>>(new List<BookDto>());
                 }
                 else
                 {
-                    return new Result<List<LibraryBook>>(new Exception("Invalid Author"));
+                    return new Result<List<BookDto>>(new Exception("Invalid Author"));
                 }
             }
         };
 
-        public Try<List<LibraryBook>> GetPublisherBooks(int publisherId) => () => 
+        public Try<List<BookDto>> GetPublisherBooks(int publisherId) => () => 
         {
             var db = dBFactory.GetDbContext();
             var publisher = db.Publishers.AsNoTracking().Include(x => x.Books).FirstOrDefault(x => x.Id == publisherId);
             if (publisher is not null && publisher.Books.Count > 0)
             {
-                var bookList = new List<LibraryBook>();
+                var bookList = new List<BookDto>();
                 foreach (Book book in publisher.Books)
                 {
-                    LibraryBook libraryBook = BookDatabaseToDTO(book);
-                    bookList.Add(libraryBook);
+                    bookList.Add(book.MapToDto());
                 }
-                return new Result<List<LibraryBook>>(bookList);
+                return new Result<List<BookDto>>(bookList);
             }
             else
             {
                 if (publisher is not null)
                 {
-                    return new Result<List<LibraryBook>>(new List<LibraryBook>());
+                    return new Result<List<BookDto>>(new List<BookDto>());
                 }
                 else
                 {
-                    return new Result<List<LibraryBook>>(new Exception("Invalid Publisher"));
+                    return new Result<List<BookDto>>(new Exception("Invalid Publisher"));
                 }
             }
         };
 
-        public Try<List<LibraryPublisher>> GetPublisherList() => () => 
+        public Try<List<PublisherDto>> GetPublisherList() => () => 
         {
             var db = dBFactory.GetDbContext();
             var publishers = db.Publishers.ToList();
             if (publishers.Count > 0)
             {
-                var list = new List<LibraryPublisher>();
+                var list = new List<PublisherDto>();
                 foreach (var publisher in publishers)
                 {
-                    var publisherDTO = PublisherDatabaseToDTO(publisher);
-                    list.Add(publisherDTO);
+                    list.Add(publisher.MapToDto());
                 }
-                return new Result<List<LibraryPublisher>>(list);
+                return new Result<List<PublisherDto>>(list);
             }
             else
             {
-                return new Result<List<LibraryPublisher>>(new Exception("No publishers available"));
+                return new Result<List<PublisherDto>>(new Exception("No publishers available"));
             }
 
+        };
+
+        public Try<List<AuthorDto>> GetAuthorList() => () => 
+        {
+            var db = dBFactory.GetDbContext();
+            var authors = db.Authors.ToList();
+            if (authors.Count > 0)
+            {
+                var list = new List<AuthorDto>();
+                foreach (var author in authors)
+                {
+                    list.Add(author.MapToDto());
+                }
+                return new Result<List<AuthorDto>>(list);
+            }
+            else
+            {
+                return new Result<List<AuthorDto>>(new Exception("No Authors available"));
+            }
+        };
+
+        public Try<List<BookDto>> GetBookList() => () => 
+        {
+            var db = dBFactory.GetDbContext();
+            var books = db.Books.ToList();
+            if (books.Count > 0 && books.Any(x => x.IsDeleted == false))
+            {
+                var list = new List<BookDto>();
+                foreach (var book in books)
+                {
+                    if (book.IsDeleted == false)
+                    {
+                        list.Add(book.MapToDto());
+                    }
+                }
+                return new Result<List<BookDto>>(list);
+            }
+            else
+            {
+                if (books.Count > 0)
+                {
+                    return new Result<List<BookDto>>(new Exception("All books in list are deleted"));
+                }
+                else
+                {
+                    return new Result<List<BookDto>>(new Exception("No Books available"));
+                }
+            }
         };
     }
 }
