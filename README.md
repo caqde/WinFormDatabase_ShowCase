@@ -3,7 +3,7 @@
 A C# Database application that is built on Windows Forms(WinForms), Entity Framework Core (EFCore) connected to PostgreSQL, and the Community MVVM Toolkit. This application is designed to showcase how I design applications.
 
 ## Current Features
-- Save, Add, Delete data to PostGreSQL Database
+- Save, Add, Delete data to PostgreSQL Database
 - Open Form onto a Form Panel
 - Open Form Dialog
 - Multi Project design to separate concerns based on Model View View Model (MVVM) Design Pattern.
