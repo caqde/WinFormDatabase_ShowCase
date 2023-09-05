@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.7.33920.267
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WinFormDatabase", "WinForm Database\WinFormDatabase.csproj", "{480B1D79-ED16-489F-B18E-9C49C9ACFD39}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WinFormDatabase", "WinFormDatabase\WinFormDatabase.csproj", "{480B1D79-ED16-489F-B18E-9C49C9ACFD39}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EFCore_DBLibrary", "EFCore_DBLibrary\EFCore_DBLibrary.csproj", "{60E0817B-0D9B-429E-A809-7F5C0A08BF6F}"
 EndProject
