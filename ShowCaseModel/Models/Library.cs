@@ -175,7 +175,7 @@ namespace ShowCaseModel.Models
         public Try<AuthorDto> GetAuthor(int Id) => () => 
         {
             var database = dBFactory.GetDbContext();
-            var author = database.Authors.FirstOrDefault(x => x.Id == Id);
+            var author = database.Authors.AsNoTracking().FirstOrDefault(x => x.Id == Id);
             if (author == null)
             {
                 return new Result<AuthorDto>(new Exception("Author not found"));
@@ -196,7 +196,7 @@ namespace ShowCaseModel.Models
         public Try<PublisherDto> GetPublisher(int Id) => () => 
         {
             var database = dBFactory.GetDbContext();
-            var publisher = database.Publishers.FirstOrDefault(x => x.Id == Id);
+            var publisher = database.Publishers.AsNoTracking().FirstOrDefault(x => x.Id == Id);
             if (publisher == null)
             {
                 return new Result<PublisherDto>(new Exception("Publisher not found"));
@@ -217,7 +217,7 @@ namespace ShowCaseModel.Models
         public Try<BookDto> GetBook(int Id) => () => 
         {
             var db = dBFactory.GetDbContext();
-            var book = db.Books.FirstOrDefault(x => x.Id == Id);
+            var book = db.Books.AsNoTracking().FirstOrDefault(x => x.Id == Id);
             if (book == null)
             {
                 return new Result<BookDto>(new Exception("Book not found"));
@@ -235,7 +235,7 @@ namespace ShowCaseModel.Models
         public Try<PatronDto> GetPatron(int Id) => () => 
         {
             var db = dBFactory.GetDbContext();
-            var patron = db.Patrons.FirstOrDefault(x => x.Id == Id);
+            var patron = db.Patrons.AsNoTracking().FirstOrDefault(x => x.Id == Id);
             if (patron == null)
             {
                 return new Result<PatronDto>(new Exception("Patron doesn't exist"));
@@ -452,7 +452,7 @@ namespace ShowCaseModel.Models
         public Try<List<BorrowedBookDto>> GetBorrowedBooksList() => () => 
         {
             var db = dBFactory.GetDbContext();
-            var borrowedBooks = db.BorrowedBooks.Include(x => x.Book).ToList();
+            var borrowedBooks = db.BorrowedBooks.AsNoTracking().Include(x => x.Book).ToList();
             if (borrowedBooks.Count > 0)
             {
                 List<BorrowedBookDto> BookList = new List<BorrowedBookDto>();
@@ -523,8 +523,8 @@ namespace ShowCaseModel.Models
         public Try<List<PublisherDto>> GetPublisherList() => () => 
         {
             var db = dBFactory.GetDbContext();
-            var publishers = db.Publishers.ToList();
-            if (publishers.Count > 0)
+            var publishers = db.Publishers.AsNoTracking().ToList();
+            if (publishers.Count > 0 && publishers.Any(x => x.IsDeleted == false))
             {
                 var list = new List<PublisherDto>();
                 foreach (var publisher in publishers)
@@ -535,7 +535,14 @@ namespace ShowCaseModel.Models
             }
             else
             {
-                return new Result<List<PublisherDto>>(new Exception("No publishers available"));
+                if (publishers.Count > 0)
+                {
+                    return new Result<List<PublisherDto>>(new Exception("All publisher have been deleted"));
+                }
+                else
+                {
+                    return new Result<List<PublisherDto>>(new Exception("No publishers available"));
+                }
             }
 
         };
@@ -543,8 +550,8 @@ namespace ShowCaseModel.Models
         public Try<List<AuthorDto>> GetAuthorList() => () => 
         {
             var db = dBFactory.GetDbContext();
-            var authors = db.Authors.ToList();
-            if (authors.Count > 0)
+            var authors = db.Authors.AsNoTracking().ToList();
+            if (authors.Count > 0 && authors.Any(x => x.IsDeleted == false))
             {
                 var list = new List<AuthorDto>();
                 foreach (var author in authors)
@@ -555,14 +562,21 @@ namespace ShowCaseModel.Models
             }
             else
             {
-                return new Result<List<AuthorDto>>(new Exception("No Authors available"));
+                if (authors.Count > 0)
+                {
+                    return new Result<List<AuthorDto>>(new Exception("All Authors have been deleted"));
+                }
+                else
+                {
+                    return new Result<List<AuthorDto>>(new Exception("No Authors available"));
+                }
             }
         };
 
         public Try<List<BookDto>> GetBookList() => () => 
         {
             var db = dBFactory.GetDbContext();
-            var books = db.Books.ToList();
+            var books = db.Books.AsNoTracking().ToList();
             if (books.Count > 0 && books.Any(x => x.IsDeleted == false))
             {
                 var list = new List<BookDto>();
@@ -584,6 +598,35 @@ namespace ShowCaseModel.Models
                 else
                 {
                     return new Result<List<BookDto>>(new Exception("No Books available"));
+                }
+            }
+        };
+
+        public Try<List<PatronDto>> GetPatronList() => () => 
+        {
+            var db = dBFactory.GetDbContext();
+            var patrons = db.Patrons.AsNoTracking().ToList();
+            if (patrons.Count > 0 && patrons.Any(p => p.IsDeleted == false))
+            {
+                var list = new List<PatronDto>();
+                foreach (var patron in patrons)
+                {
+                    if (patron.IsDeleted == false)
+                    {
+                        list.Add(patron.MapToDto());
+                    }
+                }
+                return new Result<List<PatronDto>>(list);
+            }
+            else
+            {
+                if (patrons.Count > 0)
+                {
+                    return new Result<List<PatronDto>>(new Exception("All patrons in list are deleted"));
+                }
+                else
+                {
+                    return new Result<List<PatronDto>>(new Exception("No Patrons available"));
                 }
             }
         };

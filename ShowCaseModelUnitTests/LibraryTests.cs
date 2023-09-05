@@ -472,6 +472,8 @@ namespace ShowCaseModelUnitTests
         public void GetPublisherList()
         {
             var publisher1 = AddPublisherToDatabase("Test", "TestDescription");
+            database.Library.RemovePublisher(publisher1.Id).Match(pass => Assert.True(pass), fail => Assert.Equal("", fail.Message));
+            database.Library.GetPublisherList().Match(pass => Assert.Fail("This should be empty as all publishers have been deleted"), fail => Assert.IsType<System.Exception>(fail));
             var publisher2 = AddPublisherToDatabase("Test2", "TestDescription2");
             var publisher3 = AddPublisherToDatabase("Test3", "TestDescription3");
             var publisher4 = AddPublisherToDatabase("Test4", "TestDescription4");
@@ -494,6 +496,8 @@ namespace ShowCaseModelUnitTests
         {
             database.Library.GetAuthorList().Match(pass => Assert.Fail("This should be empty"), fail => Assert.IsType<System.Exception>(fail));
             var author1 = AddAuthorToDatabase("Test", "TestDescription");
+            database.Library.RemoveAuthor(author1.Id).Match(pass => Assert.True(pass), fail => Assert.Equal("", fail.Message));
+            database.Library.GetAuthorList().Match(pass => Assert.Fail("This should be empty as all authors are deleted"), fail => Assert.IsType<System.Exception>(fail));
             var author2 = AddAuthorToDatabase("Test2", "TestDescription");
             var author3 = AddAuthorToDatabase("Test3", "TestDescription");
             var author4 = AddAuthorToDatabase("Test4", "TestDescription");
@@ -507,20 +511,37 @@ namespace ShowCaseModelUnitTests
         [Fact]
         public void GetBookList()
         {
-            //database.Library.GetBookList().Match();
+            database.Library.GetBookList().Match(pass => Assert.Fail("This should be Empty"), fail => Assert.IsType<System.Exception>(fail));
             var author = AddAuthorToDatabase("Test", "TestBiography");
             var publisher = AddPublisherToDatabase("Test", "TestDescription");
             var book1 = AddBookToDatabase("Test", "TestDescription", 1, author, publisher);
+            database.Library.RemoveBook(book1.Id).Match(pass => Assert.True(pass), fail => Assert.Equal("", fail.Message));
+            database.Library.GetBookList().Match(pass => Assert.Fail("List should be Empty due to everything being deleted"), fail => Assert.IsType<System.Exception>(fail));
             var book2 = AddBookToDatabase("Test2","TestDescription", 2, author, publisher);
             var book3 = AddBookToDatabase("Test3", "TestDescription", 3, author, publisher);
             var book4 = AddBookToDatabase("Test4", "TestDescription", 4, author, publisher);
             var book5 = AddBookToDatabase("Test5", "TestDescription", 5, author, publisher);
+            var bookList = new List<BookDto>();
+            database.Library.GetBookList().Match(pass => bookList = pass, fail => Assert.Equal("", fail.Message));
+            Assert.NotEmpty(bookList);
+            Assert.Equal(4, bookList.Count);
         }
 
         [Fact]
         public void GetPatronList()
         {
-
+            database.Library.GetPatronList().Match(pass => Assert.Fail("This should be empty"), fail => Assert.IsType<System.Exception>(fail));
+            var patron1 = AddPatronToDatabase("Test", "TestAddress", 12345, "TestCity", "12345");
+            database.Library.RemovePatron(patron1.Id).Match(pass => Assert.True(pass), fail => Assert.Equal("", fail.Message));
+            database.Library.GetPatronList().Match(pass => Assert.Fail("This should be empty as all patrons have been deleted"), fail => Assert.IsType<System.Exception>(fail));
+            var patron2 = AddPatronToDatabase("Test2", "TestAddress2", 12345, "TestCity", "12345");
+            var patron3 = AddPatronToDatabase("Test3", "TestAddress3", 12345, "TestCity", "12345");
+            var patron4 = AddPatronToDatabase("Test4", "TestAddress4", 12345, "TestCity", "12345");
+            var patron5 = AddPatronToDatabase("Test5", "TestAddress5", 12345, "TestCity", "12345");
+            var patronList = new List<PatronDto>();
+            database.Library.GetPatronList().Match(pass => patronList = pass, fail => Assert.Equal("", fail.Message));
+            Assert.NotEmpty(patronList);
+            Assert.Equal(4, patronList.Count);
         }
     }
 }
