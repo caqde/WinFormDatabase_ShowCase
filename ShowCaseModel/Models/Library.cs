@@ -113,14 +113,14 @@ namespace ShowCaseModel.Models
             return new Result<bool>(new Exception("Invalid call for DetermineDeletionException"));
         }
 
-        public Try<bool> AddAuthor(AuthorDto libraryAuthor) => () => 
+        public Try<bool> AddAuthor(AuthorDto authorDto) => () => 
         {
             var database = dBFactory.GetDbContext();
-            Author author = AuthorDTOtoDatabase(libraryAuthor);
+            Author author = AuthorDTOtoDatabase(authorDto);
             SetCreationValues(author);
             database.Authors.Add(author);
             database.SaveChanges();
-            libraryAuthor.Id = author.Id;
+            authorDto.Id = author.Id;
             return new Result<bool>(true);
         };
 
@@ -149,33 +149,33 @@ namespace ShowCaseModel.Models
             }
         };
 
-        public Try<bool> AddPatron(PatronDto libraryPatron) => () => 
+        public Try<bool> AddPatron(PatronDto patronDto) => () => 
         {
             var database = dBFactory.GetDbContext();
-            Patron patron = PatronDTOtoDatabase(libraryPatron);
+            Patron patron = PatronDTOtoDatabase(patronDto);
             SetCreationValues(patron);
             database.Patrons.Add(patron);
             database.SaveChanges();
-            libraryPatron.Id = patron.Id;
+            patronDto.Id = patron.Id;
             return new Result<bool>(true);
         };
 
 
-        public Try<bool> AddPublisher(PublisherDto libraryPublisher) => () => 
+        public Try<bool> AddPublisher(PublisherDto publisherDto) => () => 
         {
             var database = dBFactory.GetDbContext();
-            Publisher publisher = PublisherDtoToDatabase(libraryPublisher);
+            Publisher publisher = PublisherDtoToDatabase(publisherDto);
             SetCreationValues(publisher);
             database.Publishers.Add(publisher);
             database.SaveChanges();
-            libraryPublisher.Id = publisher.Id;
+            publisherDto.Id = publisher.Id;
             return new Result<bool>(true);
         };
 
-        public Try<AuthorDto> GetAuthor(int Id) => () => 
+        public Try<AuthorDto> GetAuthor(int AuthorID) => () => 
         {
             var database = dBFactory.GetDbContext();
-            var author = database.Authors.AsNoTracking().FirstOrDefault(x => x.Id == Id);
+            var author = database.Authors.AsNoTracking().FirstOrDefault(x => x.Id == AuthorID);
             if (author == null)
             {
                 return new Result<AuthorDto>(new Exception("Author not found"));
@@ -193,10 +193,10 @@ namespace ShowCaseModel.Models
             }
         };
 
-        public Try<PublisherDto> GetPublisher(int Id) => () => 
+        public Try<PublisherDto> GetPublisher(int PublisherID) => () => 
         {
             var database = dBFactory.GetDbContext();
-            var publisher = database.Publishers.AsNoTracking().FirstOrDefault(x => x.Id == Id);
+            var publisher = database.Publishers.AsNoTracking().FirstOrDefault(x => x.Id == PublisherID);
             if (publisher == null)
             {
                 return new Result<PublisherDto>(new Exception("Publisher not found"));
@@ -214,10 +214,10 @@ namespace ShowCaseModel.Models
             }
         };
 
-        public Try<BookDto> GetBook(int Id) => () => 
+        public Try<BookDto> GetBook(int BookID) => () => 
         {
             var db = dBFactory.GetDbContext();
-            var book = db.Books.AsNoTracking().FirstOrDefault(x => x.Id == Id);
+            var book = db.Books.AsNoTracking().FirstOrDefault(x => x.Id == BookID);
             if (book == null)
             {
                 return new Result<BookDto>(new Exception("Book not found"));
@@ -232,10 +232,10 @@ namespace ShowCaseModel.Models
             }
         };
 
-        public Try<PatronDto> GetPatron(int Id) => () => 
+        public Try<PatronDto> GetPatron(int PatronID) => () => 
         {
             var db = dBFactory.GetDbContext();
-            var patron = db.Patrons.AsNoTracking().FirstOrDefault(x => x.Id == Id);
+            var patron = db.Patrons.AsNoTracking().FirstOrDefault(x => x.Id == PatronID);
             if (patron == null)
             {
                 return new Result<PatronDto>(new Exception("Patron doesn't exist"));
@@ -253,10 +253,10 @@ namespace ShowCaseModel.Models
             }
         };
 
-        public Try<bool> RemoveBook(int Id) => () => 
+        public Try<bool> RemoveBook(int BookID) => () => 
         {
             var db = dBFactory.GetDbContext();
-            var book = db.Books.Include(x => x.BorrowedBook).FirstOrDefault(x => x.Id == Id);
+            var book = db.Books.Include(x => x.BorrowedBook).FirstOrDefault(x => x.Id == BookID);
             if (book is not null)
             {
                 if (book.IsDeleted && !book.IsActive)
@@ -275,10 +275,10 @@ namespace ShowCaseModel.Models
             return new Result<bool>(new Exception("Book doesn't exist"));
         };
 
-        public Try<bool> RemoveAuthor(int Id) => () => 
+        public Try<bool> RemoveAuthor(int AuthorID) => () => 
         {
             var db = dBFactory.GetDbContext();
-            var author = db.Authors.Include(x => x.Books).FirstOrDefault(x => x.Id == Id);
+            var author = db.Authors.Include(x => x.Books).FirstOrDefault(x => x.Id == AuthorID);
             if (author is not null)
             {
                 if (author.Books.Count == 0)
@@ -309,10 +309,10 @@ namespace ShowCaseModel.Models
             }
         };
 
-        public Try<bool> RemovePublisher(int Id) => () => 
+        public Try<bool> RemovePublisher(int PublisherID) => () => 
         {
             var db = dBFactory.GetDbContext();
-            var publisher = db.Publishers.Include(x => x.Books).FirstOrDefault(x => x.Id == Id);
+            var publisher = db.Publishers.Include(x => x.Books).FirstOrDefault(x => x.Id == PublisherID);
             if (publisher is not null)
             {
                 if (publisher.Books.Count == 0)
@@ -343,10 +343,10 @@ namespace ShowCaseModel.Models
             }
         };
 
-        public Try<bool> RemovePatron(int PatronId) => () => 
+        public Try<bool> RemovePatron(int PatronID) => () => 
         {
             var db = dBFactory.GetDbContext();
-            var patron = db.Patrons.Include(x => x.BorrowedBooks).FirstOrDefault(x => x.Id == PatronId);
+            var patron = db.Patrons.Include(x => x.BorrowedBooks).FirstOrDefault(x => x.Id == PatronID);
             if (patron is not null)
             {
                 if (patron.BorrowedBooks.Count == 0)
@@ -363,14 +363,14 @@ namespace ShowCaseModel.Models
             }
             else
             {
-                return new Result<bool>(new Exception($"Invalid Patron Id no Patron with ID = {PatronId} found"));
+                return new Result<bool>(new Exception($"Invalid Patron Id no Patron with ID = {PatronID} found"));
             }
         };
 
-        public Try<bool> RemoveBorrowedBook(int BorrowedBookId) => () => 
+        public Try<bool> RemoveBorrowedBook(int BorrowedBookID) => () => 
         {
             var db = dBFactory.GetDbContext();
-            var borrowedBook = db.BorrowedBooks.FirstOrDefault(x => x.Id == BorrowedBookId);
+            var borrowedBook = db.BorrowedBooks.FirstOrDefault(x => x.Id == BorrowedBookID);
             if (borrowedBook is not null)
             {
                 db.BorrowedBooks.Remove(borrowedBook);
@@ -379,15 +379,15 @@ namespace ShowCaseModel.Models
             }
             else
             {
-                return new Result<bool>(new Exception($"There is no Borrowed book with ID {BorrowedBookId}"));
+                return new Result<bool>(new Exception($"There is no Borrowed book with ID {BorrowedBookID}"));
             }
         };
 
-        public Try<bool> BorrowBook(int PatronId, int BookId, TimeSpan returnTimeSpan) => () => 
+        public Try<bool> BorrowBook(int PatronID, int BookID, TimeSpan returnTimeSpan) => () => 
         {
             var db = dBFactory.GetDbContext();
-            var book = db.Books.Include(x => x.BorrowedBook).FirstOrDefault(x => x.Id == BookId);
-            var patron = db.Patrons.Include(x => x.BorrowedBooks).FirstOrDefault(x => x.Id == PatronId);
+            var book = db.Books.Include(x => x.BorrowedBook).FirstOrDefault(x => x.Id == BookID);
+            var patron = db.Patrons.Include(x => x.BorrowedBooks).FirstOrDefault(x => x.Id == PatronID);
             if (patron is null || book is null)
             {
                 return DetermineNullException(book, patron);
@@ -411,10 +411,10 @@ namespace ShowCaseModel.Models
             }
         };
 
-        public Try<List<BorrowedBookDto>> GetBorrowedBooksByPatron(int patronId) => () => 
+        public Try<List<BorrowedBookDto>> GetBorrowedBooksByPatron(int PatronID) => () => 
         {
             var db = dBFactory.GetDbContext();
-            var borrowedBooks = db.BorrowedBooks.AsNoTracking().Include(x => x.Book).Where(x => x.Patron.Id == patronId).ToList();
+            var borrowedBooks = db.BorrowedBooks.AsNoTracking().Include(x => x.Book).Where(x => x.Patron.Id == PatronID).ToList();
             if (borrowedBooks is not null)
             {
                 if (borrowedBooks.Count > 0)
@@ -468,10 +468,10 @@ namespace ShowCaseModel.Models
             }
         };
 
-        public Try<List<BookDto>> GetAuthorBooks(int authorId) => () => 
+        public Try<List<BookDto>> GetAuthorBooks(int AuthorID) => () => 
         {
             var db = dBFactory.GetDbContext();
-            var author = db.Authors.AsNoTracking().Include(x => x.Books).FirstOrDefault(x => x.Id == authorId);
+            var author = db.Authors.AsNoTracking().Include(x => x.Books).FirstOrDefault(x => x.Id == AuthorID);
             if (author is not null && author.Books.Count > 0)
             {
                 var BookList = new List<BookDto>();
@@ -494,10 +494,10 @@ namespace ShowCaseModel.Models
             }
         };
 
-        public Try<List<BookDto>> GetPublisherBooks(int publisherId) => () => 
+        public Try<List<BookDto>> GetPublisherBooks(int PublisherID) => () => 
         {
             var db = dBFactory.GetDbContext();
-            var publisher = db.Publishers.AsNoTracking().Include(x => x.Books).FirstOrDefault(x => x.Id == publisherId);
+            var publisher = db.Publishers.AsNoTracking().Include(x => x.Books).FirstOrDefault(x => x.Id == PublisherID);
             if (publisher is not null && publisher.Books.Count > 0)
             {
                 var bookList = new List<BookDto>();
