@@ -11,7 +11,7 @@ namespace ShowCaseModel.Models
     public interface ILibrary
     {
         public Try<bool> AddAuthor(AuthorDto authorDto);
-        public Try<bool> AddBook(BookDto book, int AuthorID, int PublisherID);
+        public Try<bool> AddBook(BookDto book);
         public Try<bool> AddPatron(PatronDto patronDto);
         public Try<bool> AddPublisher(PublisherDto publisherDto);
 

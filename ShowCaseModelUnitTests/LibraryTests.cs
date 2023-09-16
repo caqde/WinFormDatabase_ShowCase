@@ -47,8 +47,8 @@ namespace ShowCaseModelUnitTests
 
         private BookDto AddBookToDatabase(string title, string description, int ISBN, AuthorDto author, PublisherDto publisher)
         {
-            BookDto book = new BookDto() { Title = title, Description = description, ISBN = ISBN };
-            database.Library.AddBook(book, author.Id, publisher.Id).Match(pass => Assert.True(pass), fail => Assert.Equal("", fail.Message));
+            BookDto book = new BookDto() { Title = title, Description = description, ISBN = ISBN, authorID = author.Id, publisherID = publisher.Id };
+            database.Library.AddBook(book).Match(pass => Assert.True(pass), fail => Assert.Equal("", fail.Message));
             return book;
         }
 
@@ -177,13 +177,21 @@ namespace ShowCaseModelUnitTests
                                                 , failure => Assert.Equal("true", failure.Message));
             database.Library.RemovePublisher(publisher.Id).Match(success => Assert.True(success)
             , failure => Assert.Equal("true", failure.Message));
-            BookDto book = new BookDto() { Title = "TestTitle", Description = "TestDescription", ISBN = 1 };
-            database.Library.AddBook(book, author.Id, publisher.Id).Match(pass => Assert.False(pass), fail => Assert.IsType<Exception>(fail));
-            database.Library.AddBook(book, author2.Id, publisher.Id).Match(pass => Assert.False(pass), fail => Assert.IsType<Exception>(fail));
-            database.Library.AddBook(book, author.Id, publisher2.Id).Match(pass => Assert.False(pass), fail => Assert.IsType<Exception>(fail));
-            database.Library.AddBook(book, 6, publisher.Id).Match(pass => Assert.False(pass), fail => Assert.IsType<Exception>(fail));
-            database.Library.AddBook(book, author.Id, 6).Match(pass => Assert.False(pass), fail => Assert.IsType<Exception>(fail));
-            database.Library.AddBook(book, 6, 6).Match(pass => Assert.False(pass), fail => Assert.IsType<Exception>(fail));
+            BookDto book = new BookDto() { Title = "TestTitle", Description = "TestDescription", ISBN = 1, publisherID = publisher.Id, authorID = author.Id };
+            database.Library.AddBook(book).Match(pass => Assert.False(pass), fail => Assert.IsType<Exception>(fail));
+            book.authorID = author2.Id;
+            database.Library.AddBook(book).Match(pass => Assert.False(pass), fail => Assert.IsType<Exception>(fail));
+            book.authorID = author.Id;
+            book.publisherID = publisher2.Id;
+            database.Library.AddBook(book).Match(pass => Assert.False(pass), fail => Assert.IsType<Exception>(fail));
+            book.authorID = 6;
+            book.publisherID = publisher.Id;
+            database.Library.AddBook(book).Match(pass => Assert.False(pass), fail => Assert.IsType<Exception>(fail));
+            book.authorID = author.Id;
+            book.publisherID = 6;
+            database.Library.AddBook(book).Match(pass => Assert.False(pass), fail => Assert.IsType<Exception>(fail));
+            book.authorID = 6;
+            database.Library.AddBook(book).Match(pass => Assert.False(pass), fail => Assert.IsType<Exception>(fail));
         }
 
         [Fact]
@@ -196,7 +204,7 @@ namespace ShowCaseModelUnitTests
             var book = AddBookToDatabase("Test", "TestDescription", 1, author, publisher);
             AddBorrowedBook(patron.Id, book.Id, new TimeSpan(7, 0, 0, 0, 0));
             List<BorrowedBookDto> borrowedBooks = new List<BorrowedBookDto>();
-            database.Library.GetBorrowedBooksByPatron(patron.Id).Match(pass => borrowedBooks = pass, fail => borrowedBooks = null);
+            database.Library.GetBorrowedBooksByPatron(patron.Id).Match(pass => borrowedBooks = pass, fail => Assert.Equal("", fail.Message));
             Assert.NotNull(borrowedBooks);
             Assert.NotEmpty(borrowedBooks);
             Assert.Single(borrowedBooks);

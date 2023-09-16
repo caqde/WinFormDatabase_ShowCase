@@ -26,6 +26,8 @@ namespace ShowCaseModel.DataTypes.Library
         public string Title { get; set; }
         public string Description { get; set; }
         public int ISBN { get; set; }
+        public int authorID { get; set; }
+        public int publisherID { get; set; }
     }
 
     public class BorrowedBookDto

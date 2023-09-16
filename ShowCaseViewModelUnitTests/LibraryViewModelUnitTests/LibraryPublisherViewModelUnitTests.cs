@@ -1,9 +1,13 @@
-﻿using LanguageExt;
+﻿using CommunityToolkit.Mvvm.Messaging;
+using LanguageExt;
 using LanguageExt.Common;
 using Moq;
 using ShowCaseModel;
 using ShowCaseModel.DataTypes.Library;
 using ShowCaseModel.Models;
+using ShowCaseViewModel.Library;
+using ShowCaseViewModel.Messages.LibraryMessages;
+using ShowCaseViewModel.Messages.Universal;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -33,6 +37,8 @@ namespace ShowCaseViewModelUnitTests.LibraryViewModelUnitTests
                 mockILibrary.Reset();
             }
             SetupLibraryBoolReturn();
+            SetupLibraryValueReturn();
+            showcase.SetupLibrary(mockILibrary.Object);
         }
 
         private void SetupLibraryBoolReturn()
@@ -41,7 +47,7 @@ namespace ShowCaseViewModelUnitTests.LibraryViewModelUnitTests
                 .Setup(x => x.AddAuthor(It.IsAny<AuthorDto>()))
                 .Returns(() => true);
             mockILibrary
-                .Setup(x => x.AddBook(It.IsAny<BookDto>(), It.IsAny<int>(), It.IsAny<int>()))
+                .Setup(x => x.AddBook(It.IsAny<BookDto>()))
                 .Returns(() => true);
             mockILibrary
                 .Setup(x => x.AddPatron(It.IsAny<PatronDto>()))
@@ -99,16 +105,20 @@ namespace ShowCaseViewModelUnitTests.LibraryViewModelUnitTests
 
             mockILibrary
                 .SetupSequence(x => x.GetAuthor(It.IsAny<int>()))
-                .Returns(() => authorDto1);
+                .Returns(() => authorDto1)
+                .Returns(() => new Result<AuthorDto>(new Exception()));
             mockILibrary
                 .SetupSequence(x => x.GetBook(It.IsAny<int>()))
-                .Returns(() => bookDto1);
+                .Returns(() => bookDto1)
+                .Returns(() => new Result<BookDto>(new Exception()));
             mockILibrary
                 .SetupSequence(x => x.GetPatron(It.IsAny<int>()))
-                .Returns(() => patronDto1);
+                .Returns(() => patronDto1)
+                .Returns(() => new Result<PatronDto>(new Exception()));
             mockILibrary
                 .SetupSequence(x => x.GetPublisher(It.IsAny<int>()))
-                .Returns(() => publisherDto1);
+                .Returns(() => publisherDto1)
+                .Returns(() => new Result<PublisherDto>(new Exception()));
             mockILibrary
                 .SetupSequence(x => x.GetAuthorBooks(It.IsAny<int>()))
                 .Returns(() => new List<BookDto>() { bookDto1, bookDto2, bookDto3, bookDto4 });
@@ -138,7 +148,28 @@ namespace ShowCaseViewModelUnitTests.LibraryViewModelUnitTests
         [Fact]
         public void GetBook()
         {
-            
+            LibraryBookViewModel libraryBookViewModel = new LibraryBookViewModel();
+            Assert.True(libraryBookViewModel.getBookCommand.CanExecute(null));
+            bool testValue = false;
+            Exception exception = null;
+            WeakReferenceMessenger.Default.Register<LibraryGetItem>(this, (t, actual) => {
+                testValue = true;
+            });
+            WeakReferenceMessenger.Default.Register<ExceptionMessage>(this, (t, actual) => {
+                exception = actual.Value;
+            });
+            libraryBookViewModel.getBookCommand.Execute(null);
+            Assert.False(testValue);
+            libraryBookViewModel.SelectedBookID = 5;
+            libraryBookViewModel.getBookCommand.Execute(null);
+            if (exception != null)
+            {
+                Assert.Equal("", exception.Message);
+            }
+            Assert.True(testValue);
+            Assert.Equal(bookDto1.Description, libraryBookViewModel.Description);
+            Assert.Equal(bookDto1.Title, libraryBookViewModel.Title);
+            mockILibrary.Verify(mock => mock.GetBook(It.IsAny<int>()), Times.Once());
         }
 
         [Fact]

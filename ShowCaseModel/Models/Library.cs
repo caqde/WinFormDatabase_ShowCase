@@ -124,11 +124,11 @@ namespace ShowCaseModel.Models
             return new Result<bool>(true);
         };
 
-        public Try<bool> AddBook(BookDto book, int AuthorID, int PublisherID) => () => 
+        public Try<bool> AddBook(BookDto book) => () => 
         {
             var database = dBFactory.GetDbContext();
-            var author = database.Authors.FirstOrDefault(x => x.Id == AuthorID);
-            var publisher = database.Publishers.FirstOrDefault(x => x.Id == PublisherID);
+            var author = database.Authors.FirstOrDefault(x => x.Id == book.authorID);
+            var publisher = database.Publishers.FirstOrDefault(x => x.Id == book.publisherID);
             if (publisher is not null && author is not null)
             {
                 if (author.IsDeleted || publisher.IsDeleted)
@@ -217,7 +217,7 @@ namespace ShowCaseModel.Models
         public Try<BookDto> GetBook(int BookID) => () => 
         {
             var db = dBFactory.GetDbContext();
-            var book = db.Books.AsNoTracking().FirstOrDefault(x => x.Id == BookID);
+            var book = db.Books.AsNoTracking().Include(x => x.Author).Include(x => x.Publisher).FirstOrDefault(x => x.Id == BookID);
             if (book == null)
             {
                 return new Result<BookDto>(new Exception("Book not found"));
@@ -414,7 +414,7 @@ namespace ShowCaseModel.Models
         public Try<List<BorrowedBookDto>> GetBorrowedBooksByPatron(int PatronID) => () => 
         {
             var db = dBFactory.GetDbContext();
-            var borrowedBooks = db.BorrowedBooks.AsNoTracking().Include(x => x.Book).Where(x => x.Patron.Id == PatronID).ToList();
+            var borrowedBooks = db.BorrowedBooks.AsNoTracking().Include(x => x.Book).ThenInclude(x => x.Author).Include(x => x.Book).ThenInclude(x => x.Publisher).Where(x => x.Patron.Id == PatronID).ToList();
             if (borrowedBooks is not null)
             {
                 if (borrowedBooks.Count > 0)
@@ -452,7 +452,7 @@ namespace ShowCaseModel.Models
         public Try<List<BorrowedBookDto>> GetBorrowedBooksList() => () => 
         {
             var db = dBFactory.GetDbContext();
-            var borrowedBooks = db.BorrowedBooks.AsNoTracking().Include(x => x.Book).ToList();
+            var borrowedBooks = db.BorrowedBooks.AsNoTracking().Include(x => x.Book).ThenInclude(x => x.Author).Include(x => x.Book).ThenInclude(x => x.Publisher).ToList();
             if (borrowedBooks.Count > 0)
             {
                 List<BorrowedBookDto> BookList = new List<BorrowedBookDto>();
@@ -471,7 +471,7 @@ namespace ShowCaseModel.Models
         public Try<List<BookDto>> GetAuthorBooks(int AuthorID) => () => 
         {
             var db = dBFactory.GetDbContext();
-            var author = db.Authors.AsNoTracking().Include(x => x.Books).FirstOrDefault(x => x.Id == AuthorID);
+            var author = db.Authors.AsNoTracking().Include(x => x.Books).ThenInclude(x => x.Publisher).FirstOrDefault(x => x.Id == AuthorID);
             if (author is not null && author.Books.Count > 0)
             {
                 var BookList = new List<BookDto>();
@@ -497,7 +497,7 @@ namespace ShowCaseModel.Models
         public Try<List<BookDto>> GetPublisherBooks(int PublisherID) => () => 
         {
             var db = dBFactory.GetDbContext();
-            var publisher = db.Publishers.AsNoTracking().Include(x => x.Books).FirstOrDefault(x => x.Id == PublisherID);
+            var publisher = db.Publishers.AsNoTracking().Include(x => x.Books).ThenInclude(x => x.Author).FirstOrDefault(x => x.Id == PublisherID);
             if (publisher is not null && publisher.Books.Count > 0)
             {
                 var bookList = new List<BookDto>();
@@ -576,7 +576,7 @@ namespace ShowCaseModel.Models
         public Try<List<BookDto>> GetBookList() => () => 
         {
             var db = dBFactory.GetDbContext();
-            var books = db.Books.AsNoTracking().ToList();
+            var books = db.Books.AsNoTracking().Include(x => x.Author).Include(x => x.Publisher).ToList();
             if (books.Count > 0 && books.Any(x => x.IsDeleted == false))
             {
                 var list = new List<BookDto>();

@@ -34,7 +34,9 @@ namespace ShowCaseModel.DataTypes.Library
                 Id = book.Id,
                 ISBN = book.ISBN,
                 Description = book.Description,
-                Title = book.Title
+                Title = book.Title,
+                authorID = book.Author.Id,
+                publisherID = book.Publisher.Id
             };
         }
 

@@ -1,6 +1,11 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
+using ShowCaseModel;
 using ShowCaseModel.DataTypes.Library;
+using ShowCaseModel.Models;
+using ShowCaseViewModel.Messages.LibraryMessages;
+using ShowCaseViewModel.Messages.Universal;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,6 +16,17 @@ namespace ShowCaseViewModel.Library
 {
     public partial class LibraryBookViewModel: ObservableObject
     {
+        public LibraryBookViewModel() 
+        {
+            ShowCaseInstance libraryInstance = ShowCaseInstance.Instance;
+            data = libraryInstance.getLibrary();
+            _ = data.GetBookList().Match(pass => books = pass, fail => books = new List<BookDto>());
+            _ = data.GetAuthorList().Match(pass => authors = pass, fail => authors = new List<AuthorDto>());
+            _ = data.GetPublisherList().Match(pass => publishers = pass, fail =>  publishers = new List<PublisherDto>());
+        }
+
+        private ILibrary data;
+
         private bool newBook = false;
 
         [ObservableProperty]
@@ -22,9 +38,9 @@ namespace ShowCaseViewModel.Library
         [ObservableProperty]
         private int selectedPublisherID;
 
-        private bool authorSelected;
-        private bool bookSelected;
-        private bool publisherSelected;
+        private bool authorSelected = false;
+        private bool bookSelected = false;
+        private bool publisherSelected = false;
 
         partial void OnSelectedAuthorIDChanged(int value)
         {
@@ -41,6 +57,7 @@ namespace ShowCaseViewModel.Library
             publisherSelected = true;
         }
 
+        private int currentBookID;
 
         [ObservableProperty]
         private List<BookDto> books;
@@ -58,6 +75,9 @@ namespace ShowCaseViewModel.Library
         private string description;
 
         [ObservableProperty]
+        private int iSBN;
+
+        [ObservableProperty]
         private int authorID;
 
         [ObservableProperty]
@@ -67,9 +87,24 @@ namespace ShowCaseViewModel.Library
         private int borrowedID;
 
         [RelayCommand]
-        private void getBook(int bookID)
+        private void getBook()
         {
-
+            if (!bookSelected) return;
+            BookDto? book = null;
+            Exception? exception = null;
+            data.GetBook(SelectedBookID).Match(pass => book = pass, fail => exception = fail);
+            if (exception is not null)
+            {
+                WeakReferenceMessenger.Default.Send<ExceptionMessage>(new ExceptionMessage(exception));
+                return;
+            }
+            Title = book.Title;
+            Description = book.Description;
+            currentBookID = book.Id;
+            ISBN = book.ISBN;
+            AuthorID = book.authorID;
+            PublisherID = book.publisherID;
+            WeakReferenceMessenger.Default.Send<LibraryGetItem>(new LibraryGetItem(true));
         }
 
         [RelayCommand]
