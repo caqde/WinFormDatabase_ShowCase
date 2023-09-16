@@ -12,6 +12,17 @@ namespace ShowCaseViewModel.Library
     public partial class LibraryPatronViewModel: ObservableObject
     {
         [ObservableProperty]
+        private int selectedPatronID;
+
+        private bool patronSelected = false;
+
+        partial void OnSelectedPatronIDChanged(int value)
+        {
+            patronSelected = true;
+        }
+
+
+        [ObservableProperty]
         private List<PatronDto> patrons;
 
         [ObservableProperty]

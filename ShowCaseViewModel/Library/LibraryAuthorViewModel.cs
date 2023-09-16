@@ -14,6 +14,16 @@ namespace ShowCaseViewModel.Library
         private bool newAuthor = false;
 
         [ObservableProperty]
+        private int selectedAuthorID;
+
+        private bool authorSelected;
+
+        partial void OnSelectedAuthorIDChanged(int value)
+        {
+            authorSelected = true;
+        }
+
+        [ObservableProperty]
         private List<AuthorDto> authorList;
 
         [ObservableProperty]
@@ -32,7 +42,7 @@ namespace ShowCaseViewModel.Library
         }
 
         [RelayCommand]
-        private void getAuthor(int authorID)
+        private void getAuthor()
         {
 
         }

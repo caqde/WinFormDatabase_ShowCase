@@ -11,8 +11,36 @@ namespace ShowCaseViewModel.Library
 {
     public partial class LibraryBookViewModel: ObservableObject
     {
-
         private bool newBook = false;
+
+        [ObservableProperty]
+        private int selectedBookID;
+
+        [ObservableProperty]
+        private int selectedAuthorID;
+
+        [ObservableProperty]
+        private int selectedPublisherID;
+
+        private bool authorSelected;
+        private bool bookSelected;
+        private bool publisherSelected;
+
+        partial void OnSelectedAuthorIDChanged(int value)
+        {
+            authorSelected = true;
+        }
+
+        partial void OnSelectedBookIDChanged(int value)
+        {
+            bookSelected = true;
+        }
+
+        partial void OnSelectedPublisherIDChanged(int value)
+        {
+            publisherSelected = true;
+        }
+
 
         [ObservableProperty]
         private List<BookDto> books;

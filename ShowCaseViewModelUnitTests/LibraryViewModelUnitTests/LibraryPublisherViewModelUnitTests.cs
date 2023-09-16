@@ -159,5 +159,87 @@ namespace ShowCaseViewModelUnitTests.LibraryViewModelUnitTests
 
         }
 
+        [Fact]
+        public void BorrowedBook() 
+        {
+            
+        }
+
+        [Fact]
+        public void ReturnBook()
+        {
+
+        }
+
+        [Fact]
+        public void AddAuthor()
+        {
+
+        }
+
+        [Fact]
+        public void RemoveAuthor()
+        {
+
+        }
+
+        [Fact]
+        public void GetAuthor()
+        {
+
+        }
+
+        [Fact]
+        public void UpdateAuthor() 
+        { 
+        }
+
+        [Fact]
+        public void AddPatron()
+        {
+
+        }
+
+        [Fact]
+        public void RemovePatron()
+        {
+
+        }
+
+        [Fact]
+        public void GetPatron()
+        {
+
+        }
+
+        [Fact]
+        public void UpdatePatron()
+        {
+
+        }
+
+        [Fact]
+        public void AddPublisher()
+        {
+
+        }
+
+        [Fact]
+        public void GetPublisher()
+        {
+
+        }
+
+        [Fact]
+        public void RemovePublisher()
+        {
+
+        }
+
+        [Fact]
+        public void UpdatePublisher()
+        {
+
+        }
     }
 }

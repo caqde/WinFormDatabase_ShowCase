@@ -1,4 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using ShowCaseModel;
 using ShowCaseModel.DataTypes.Library;
 using ShowCaseModel.Models;
@@ -31,6 +32,35 @@ namespace ShowCaseViewModel.Library
             }
         }
 
+        [ObservableProperty]
+        private int selectedBook;
+
+        [ObservableProperty]
+        private int selectedPatron;
+
+        [ObservableProperty]
+        private int selectedBorrowedBook;
+
+        private bool patronSelected = false;
+        private bool bookSelected = false;
+        private bool borrowedBookSelected = false;
+
+        partial void OnSelectedBookChanged(int value)
+        {
+            bookSelected = true;
+        }
+
+        partial void OnSelectedBorrowedBookChanged(int value)
+        {
+            borrowedBookSelected = true;
+        }
+
+        partial void OnSelectedPatronChanged(int value)
+        {
+            patronSelected = true;
+        }
+
+
         private ShowCaseInstance DatabaseInstance;
 
         [ObservableProperty]
@@ -40,6 +70,16 @@ namespace ShowCaseViewModel.Library
         [ObservableProperty]
         private BindingList<BorrowedBookDto> borrowedBookList;
 
-        
+        [RelayCommand]
+        private void borrowBook()
+        {
+
+        }
+
+        [RelayCommand]
+        private void returnBook()
+        {
+
+        }
     }
 }

@@ -12,6 +12,17 @@ namespace ShowCaseViewModel.Library
     public partial class LibraryPublisherViewModel: ObservableObject
     {
         [ObservableProperty]
+        private int selectedPublisherID;
+
+        private bool publisherSelected;
+
+        partial void OnSelectedPublisherIDChanged(int value)
+        {
+            publisherSelected = true;
+        }
+
+
+        [ObservableProperty]
         private List<PublisherDto> publishers;
 
         [ObservableProperty]
