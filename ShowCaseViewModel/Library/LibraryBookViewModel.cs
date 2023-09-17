@@ -14,20 +14,22 @@ using System.Threading.Tasks;
 
 namespace ShowCaseViewModel.Library
 {
-    public partial class LibraryBookViewModel: ObservableObject
+    public partial class LibraryBookViewModel : ObservableObject
     {
-        public LibraryBookViewModel() 
+        public LibraryBookViewModel()
         {
             ShowCaseInstance libraryInstance = ShowCaseInstance.Instance;
             data = libraryInstance.getLibrary();
             _ = data.GetBookList().Match(pass => books = pass, fail => books = new List<BookDto>());
             _ = data.GetAuthorList().Match(pass => authors = pass, fail => authors = new List<AuthorDto>());
-            _ = data.GetPublisherList().Match(pass => publishers = pass, fail =>  publishers = new List<PublisherDto>());
+            _ = data.GetPublisherList().Match(pass => publishers = pass, fail => publishers = new List<PublisherDto>());
         }
 
         private ILibrary data;
 
         private bool newBook = false;
+
+        private bool bookChanged = false;
 
         [ObservableProperty]
         private int selectedBookID;
@@ -49,6 +51,18 @@ namespace ShowCaseViewModel.Library
 
         partial void OnSelectedBookIDChanged(int value)
         {
+            bookChanged = false;
+            if (value == -1)
+            {
+                authorSelected = false;
+                publisherSelected = false;
+                newBook = true;
+                bookSelected = false;
+                ISBN = 0;
+                Description = "";
+                Title = "";
+                return;
+            }
             bookSelected = true;
         }
 
@@ -86,6 +100,37 @@ namespace ShowCaseViewModel.Library
         [ObservableProperty]
         private int borrowedID;
 
+        partial void OnAuthorIDChanged(int value)
+        {
+            bookValueChanged();
+        }
+
+        partial void OnPublisherIDChanged(int value)
+        {
+            bookValueChanged();
+        }
+
+        partial void OnISBNChanged(int value)
+        {
+            bookValueChanged();
+        }
+
+        partial void OnDescriptionChanged(string value)
+        {
+            bookValueChanged();
+        }
+
+        partial void OnTitleChanged(string value)
+        {
+            bookValueChanged();
+        }
+
+
+        private void bookValueChanged()
+        {
+            bookChanged = true;
+        }
+
         [RelayCommand]
         private void getBook()
         {
@@ -110,13 +155,37 @@ namespace ShowCaseViewModel.Library
         [RelayCommand]
         private void addBook()
         {
-
+            if (!newBook)
+            {
+                WeakReferenceMessenger.Default.Send<ExceptionMessage>(new ExceptionMessage(new Exception("This command should not be click-able, a new book is not selected")));
+                return;
+            }
+                
+            if (!authorSelected || !publisherSelected)
+            {
+                WeakReferenceMessenger.Default.Send<ExceptionMessage>(new ExceptionMessage(new Exception("An Author and Publisher needs to be selected")));
+                return;
+            }
+            if (Description == "" || ISBN == 0 || Title == "")
+            {
+                WeakReferenceMessenger.Default.Send(new ExceptionMessage(new Exception("Please fill out all fields")));
+                return;
+            }
+            BookDto book = new BookDto() { Description = Description, authorID = AuthorID, ISBN = ISBN, publisherID = PublisherID, Title = Title };
+            data.AddBook(book).Match(pass => WeakReferenceMessenger.Default.Send<LibraryAddItem>(new LibraryAddItem(pass)) 
+                                , Fail => WeakReferenceMessenger.Default.Send<ExceptionMessage>(new ExceptionMessage(Fail)));
         }
 
         [RelayCommand]
         private void removeBook()
         {
-
+            if (!bookSelected)
+            {
+                WeakReferenceMessenger.Default.Send<ExceptionMessage>(new ExceptionMessage(new Exception("Book not selected")));
+                return;
+            }
+            data.RemoveBook(selectedBookID).Match(Pass => WeakReferenceMessenger.Default.Send<LibraryRemoveItem>(new LibraryRemoveItem(Pass)),
+                                                  Fail => WeakReferenceMessenger.Default.Send<ExceptionMessage>(new ExceptionMessage(Fail)));
         }
 
         [RelayCommand]

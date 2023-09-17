@@ -28,6 +28,12 @@ namespace ShowCaseModel.Models
         public Try<bool> RemovePatron(int PatronID);
         public Try<bool> RemovePublisher(int PublisherID);
 
+        public Try<bool> UpdateAuthor(AuthorDto authorDto);
+        public Try<bool> UpdateBook(BookDto bookDto);
+        public Try<bool> UpdateBorrowedBook(BorrowedBookDto bookDto);
+        public Try<bool> UpdatePatron(PatronDto patronDto);
+        public Try<bool> UpdatePublisher(PublisherDto publisherDto);
+
         public Try<List<BookDto>> GetAuthorBooks(int AuthorID);
         public Try<List<AuthorDto>> GetAuthorList();
         public Try<List<BookDto>> GetBookList();

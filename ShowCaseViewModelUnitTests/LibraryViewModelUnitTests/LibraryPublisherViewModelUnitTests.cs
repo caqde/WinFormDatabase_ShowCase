@@ -162,32 +162,108 @@ namespace ShowCaseViewModelUnitTests.LibraryViewModelUnitTests
             Assert.False(testValue);
             libraryBookViewModel.SelectedBookID = 5;
             libraryBookViewModel.getBookCommand.Execute(null);
-            if (exception != null)
+            if (exception is not null)
             {
                 Assert.Equal("", exception.Message);
             }
             Assert.True(testValue);
             Assert.Equal(bookDto1.Description, libraryBookViewModel.Description);
             Assert.Equal(bookDto1.Title, libraryBookViewModel.Title);
+            Assert.Equal(bookDto1.ISBN, libraryBookViewModel.ISBN);
             mockILibrary.Verify(mock => mock.GetBook(It.IsAny<int>()), Times.Once());
         }
 
         [Fact]
         public void AddBook()
         {
+            LibraryBookViewModel libraryBookViewModel = new LibraryBookViewModel();
+            Assert.True(libraryBookViewModel.addBookCommand.CanExecute(null));
+            bool testValue = false;
+            Exception exception = null;
+            WeakReferenceMessenger.Default.Register<LibraryAddItem>(this, (t, actual) => {
+                testValue = actual.Value;
+            });
+            WeakReferenceMessenger.Default.Register<ExceptionMessage>(this, (t, actual) => {
+                exception = actual.Value;
+            });
+            libraryBookViewModel.addBookCommand.Execute(null);
+            Assert.False(testValue);
+            Assert.NotNull(exception);
+            exception = null;
+            libraryBookViewModel.SelectedBookID = -1;
+            libraryBookViewModel.addBookCommand.Execute(null);
+            Assert.False(testValue);
+            Assert.NotNull(exception);
+            exception = null;
+            libraryBookViewModel.SelectedPublisherID = 4;
+            libraryBookViewModel.SelectedAuthorID = 3;
+            libraryBookViewModel.addBookCommand.Execute(null);
+            Assert.False(testValue);
+            Assert.NotNull(exception);
+            exception = null;
+            libraryBookViewModel.Title = "Test";
+            libraryBookViewModel.Description = "Test";
+            libraryBookViewModel.ISBN = 12345;
+            libraryBookViewModel.addBookCommand.Execute(null);
+            if (exception is not null)
+            {
+                Assert.Equal("", exception.Message);
+            }
+            Assert.True(testValue);
+            mockILibrary.Verify(mock => mock.AddBook(It.IsAny<BookDto>()), Times.Once());
 
         }
 
         [Fact]
         public void RemoveBook()
         {
-
+            LibraryBookViewModel libraryBookViewModel = new LibraryBookViewModel();
+            Assert.True(libraryBookViewModel.removeBookCommand.CanExecute(null));
+            bool testValue = false;
+            Exception exception = null;
+            WeakReferenceMessenger.Default.Register<LibraryRemoveItem>(this, (t, actual) => {
+                testValue = actual.Value;
+            });
+            WeakReferenceMessenger.Default.Register<ExceptionMessage>(this, (t, actual) => {
+                exception = actual.Value;
+            });
+            libraryBookViewModel.removeBookCommand.Execute(null);
+            Assert.False(testValue);
+            Assert.NotNull(exception);
+            exception= null;
+            libraryBookViewModel.SelectedBookID = 1;
+            libraryBookViewModel.removeBookCommand.Execute(null);
+            Assert.True(testValue);
+            mockILibrary.Verify(mock => mock.RemoveBook(It.IsAny<int>()), Times.Once());
         }
 
         [Fact]
         public void UpdateBook()
         {
-
+            LibraryBookViewModel libraryBookViewModel= new LibraryBookViewModel();
+            Assert.True(libraryBookViewModel.updateBookCommand.CanExecute(null));
+            bool testValue = false;
+            Exception exception = null;
+            WeakReferenceMessenger.Default.Register<LibraryUpdateItem>(this, (t, actual) => {
+                testValue = actual.Value;
+            });
+            WeakReferenceMessenger.Default.Register<ExceptionMessage>(this, (t, actual) => {
+                exception = actual.Value;
+            });
+            libraryBookViewModel.updateBookCommand.Execute(null);
+            Assert.False(testValue);
+            Assert.NotNull(exception);
+            exception = null;
+            libraryBookViewModel.SelectedBookID= 1;
+            libraryBookViewModel.getBookCommand.Execute(null);
+            libraryBookViewModel.updateBookCommand.Execute(null);
+            Assert.False(testValue);
+            Assert.NotNull(exception);
+            exception= null;
+            libraryBookViewModel.Title = "Title";
+            libraryBookViewModel.updateBookCommand.Execute(null);
+            Assert.True(testValue);
+            Assert.Null(exception);
         }
 
         [Fact]

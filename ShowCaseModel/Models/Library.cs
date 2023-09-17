@@ -630,5 +630,88 @@ namespace ShowCaseModel.Models
                 }
             }
         };
+
+        public Try<bool> UpdateAuthor(AuthorDto author) => () => 
+        {
+            var db = dBFactory.GetDbContext();
+            var dbAuthor = db.Authors.FirstOrDefault(x => x.Id == author.Id);
+            if (dbAuthor is null)
+                return new Result<bool>(new Exception("Author not Found"));
+            dbAuthor.Name = author.Name;
+            dbAuthor.Biography = author.Biography;
+            db.Update(dbAuthor);
+            db.SaveChanges();
+            return new Result<bool>(true);
+        };
+
+        public Try<bool> UpdateBook(BookDto book) => () => 
+        {
+            var db = dBFactory.GetDbContext();
+            var dbBook = db.Books.Include(x => x.Author).Include(x => x.Publisher).FirstOrDefault(x => x.Id == book.Id);
+            if (dbBook is null)
+                return new Result<bool>(new Exception("Book not found"));
+            if (dbBook.Author.Id != book.authorID)
+            {
+                var dbAuthor = db.Authors.FirstOrDefault(x => x.Id == book.authorID);
+                if (dbAuthor is null)
+                    return new Result<bool>(new Exception("Selected Author not found"));
+                dbBook.Author = dbAuthor;
+            }
+            if (dbBook.Publisher.Id != book.publisherID)
+            {
+                var dbPublisher = db.Publishers.FirstOrDefault(x => x.Id == book.publisherID);
+                if (dbPublisher is null)
+                    return new Result<bool>(new Exception("Selected Publisher not found"));
+                dbBook.Publisher = dbPublisher;
+            }
+            dbBook.Title = book.Title; 
+            dbBook.Description = book.Description;
+            dbBook.ISBN = book.ISBN;
+            db.Update(dbBook);
+            db.SaveChanges();
+            return new Result<bool>(true);
+        };
+
+        public Try<bool> UpdateBorrowedBook(BorrowedBookDto book) => () => 
+        {
+            var db = dBFactory.GetDbContext();
+            var dbBorrowedBook = db.BorrowedBooks.FirstOrDefault(x => x.Id == book.Id);
+            if (dbBorrowedBook is null)
+                return new Result<bool>(new Exception("BorrowedBook not found"));
+            dbBorrowedBook.DueDate = book.DueDate;
+            dbBorrowedBook.BorrowedDate = book.BorrowedDate;
+            db.Update(dbBorrowedBook);
+            db.SaveChanges();
+            return new Result<bool>(true);
+        };
+
+        public Try<bool> UpdatePatron(PatronDto patron) => () => 
+        {
+            var db = dBFactory.GetDbContext();
+            var dbPatron = db.Patrons.FirstOrDefault(x =>x.Id == patron.Id);
+            if (dbPatron is null)
+                return new Result<bool>(new Exception("Patron not found"));
+            dbPatron.City = patron.City;
+            dbPatron.StreetAddress = patron.StreetAddress;
+            dbPatron.Name = patron.Name;
+            dbPatron.PhoneNumber = patron.PhoneNumber;
+            dbPatron.PostalCode = patron.PostalCode;
+            db.Update(dbPatron);
+            db.SaveChanges();
+            return new Result<bool>(true);
+        };
+
+        public Try<bool> UpdatePublisher(PublisherDto publisher) => () => 
+        {
+            var db = dBFactory.GetDbContext();
+            var dbPublisher = db.Publishers.FirstOrDefault(x =>  x.Id == publisher.Id);
+            if (dbPublisher is null) 
+                return new Result<bool>(new Exception("Publisher not found"));
+            dbPublisher.Description = publisher.Description;
+            dbPublisher.Name = publisher.Name;
+            db.Update(dbPublisher);
+            db.SaveChanges();
+            return new Result<bool>(true);
+        };
     }
 }

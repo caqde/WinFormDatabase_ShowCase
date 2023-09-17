@@ -551,5 +551,100 @@ namespace ShowCaseModelUnitTests
             Assert.NotEmpty(patronList);
             Assert.Equal(4, patronList.Count);
         }
+
+        [Fact]
+        public void UpdateAuthor()
+        {
+            var author = AddAuthorToDatabase("Test", "TestBiography");
+            author.Biography = "NewBiography";
+            author.Name = "NewName";
+            database.Library.UpdateAuthor(author).Match( pass => Assert.True(pass), fail => Assert.Fail(fail.Message));
+            AuthorDto updatedAuthor = null;
+            database.Library.GetAuthor(author.Id).Match(pass => updatedAuthor = pass, fail => Assert.Fail(fail.Message));
+            Assert.NotNull(updatedAuthor);
+            Assert.Equal(author.Biography, updatedAuthor.Biography);
+            Assert.Equal(author.Name, updatedAuthor.Name);
+            updatedAuthor.Id = 6;
+            database.Library.UpdateAuthor(updatedAuthor).Match(pass => Assert.Fail("This Id should not be valid"), fail => Assert.IsType<Exception>(fail));
+        }
+
+        [Fact]
+        public void UpdateBook()
+        {
+            var author = AddAuthorToDatabase("Test", "TestBiography");
+            var publisher = AddPublisherToDatabase("Test", "TestDescription");
+            var book = AddBookToDatabase("Test", "TestDescription", 12345, author, publisher);
+            var author2 = AddAuthorToDatabase("Test2", "TestBiography2");
+            var publisher2 = AddPublisherToDatabase("Test2", "TestPublisher2");
+            book.Description = "NewDescription";
+            book.Title = "NewTitle";
+            book.authorID = author2.Id;
+            book.publisherID = publisher2.Id;
+            database.Library.UpdateBook(book).Match(pass => Assert.True(pass), fail => Assert.Fail(fail.Message));
+            BookDto updatedBook = null;
+            database.Library.GetBook(book.Id).Match(pass => updatedBook = pass, fail => Assert.Fail(fail.Message));
+            Assert.NotNull(updatedBook);
+            Assert.Equal(book.Description, updatedBook.Description);
+            Assert.Equal(book.Title, updatedBook.Title);
+            Assert.Equal(book.authorID, updatedBook.authorID);
+            Assert.Equal(book.publisherID, updatedBook.publisherID);
+            updatedBook.publisherID = 6;
+            database.Library.UpdateBook(updatedBook).Match(pass => Assert.Fail("PublisherID should be invalid"), fail => Assert.IsType<Exception>(fail));
+            updatedBook.authorID = 6;
+            database.Library.UpdateBook(updatedBook).Match(pass => Assert.Fail("AuthorID should be invalid"), fail => Assert.IsType<Exception>(fail));
+            updatedBook.Id = 7;
+            database.Library.UpdateBook(updatedBook).Match(pass => Assert.Fail("This Id should not be valid"), fail => Assert.IsType<Exception>(fail));
+        }
+
+        [Fact]
+        public void UpdateBorrowedBook()
+        {
+            var author = AddAuthorToDatabase("Test", "TestBiography");
+            var publisher = AddPublisherToDatabase("Test", "TestDescription");
+            var book = AddBookToDatabase("Test", "TestDescription", 12345, author, publisher);
+            var patron = AddPatronToDatabase("Test", "TestAddress", 12345, "TestCity", "12345");
+            AddBorrowedBook(patron.Id, book.Id, TimeSpan.FromDays(7));
+            BorrowedBookDto borrowedBook = null;
+            database.Library.GetBorrowedBooksByPatron(patron.Id).Match(pass => borrowedBook = pass[0], fail => Assert.Fail(fail.Message));
+            Assert.NotNull(borrowedBook);
+            BorrowedBookDto updatedBorrowedBook = borrowedBook;
+            updatedBorrowedBook.DueDate = updatedBorrowedBook.DueDate + TimeSpan.FromDays(7);
+            database.Library.UpdateBorrowedBook(updatedBorrowedBook).Match(pass => Assert.True(pass), fail => Assert.Fail(fail.Message));
+            database.Library.GetBorrowedBooksByPatron(patron.Id).Match(pass => borrowedBook = pass[0], fail => Assert.Fail(fail.Message));
+            Assert.NotNull(borrowedBook);
+            Assert.Equal(updatedBorrowedBook.DueDate, borrowedBook.DueDate);
+            borrowedBook.Id = 7;
+            database.Library.UpdateBorrowedBook(borrowedBook).Match(pass => Assert.Fail("This Id should not be valid"), fail =>  Assert.IsType<Exception>(fail));
+        }
+
+        [Fact]
+        public void UpdatePatron()
+        {
+            var patron = AddPatronToDatabase("Test", "TestAddress", 12345, "TestCity", "12345");
+            patron.StreetAddress = "NewAddress";
+            patron.PhoneNumber = "23456";
+            database.Library.UpdatePatron(patron).Match(pass => Assert.True(pass), fail => Assert.Fail(fail.Message));
+            PatronDto updatedPatron = null;
+            database.Library.GetPatron(patron.Id).Match(pass => updatedPatron = pass, fail =>  Assert.Fail(fail.Message));
+            Assert.NotNull(updatedPatron);
+            Assert.Equal(patron.StreetAddress, updatedPatron.StreetAddress);
+            Assert.Equal(patron.PhoneNumber, updatedPatron.PhoneNumber);
+            updatedPatron.Id = 7;
+            database.Library.UpdatePatron(updatedPatron).Match(pass => Assert.Fail("This Id should not be valid"), fail => Assert.IsType<Exception>(fail));
+        }
+
+        [Fact]
+        public void UpdatePublisher()
+        {
+            var publisher = AddPublisherToDatabase("Test", "TestDescription");
+            publisher.Description = "NewDescription";
+            database.Library.UpdatePublisher(publisher).Match(pass => Assert.True(pass), fail => Assert.Fail(fail.Message));
+            PublisherDto updatedPublisher = null;
+            database.Library.GetPublisher(publisher.Id).Match(pass => updatedPublisher = pass, fail => Assert.Fail(fail.Message));
+            Assert.NotNull(updatedPublisher);
+            Assert.Equal(publisher.Description, updatedPublisher.Description);
+            updatedPublisher.Id = 7;
+            database.Library.UpdatePublisher(updatedPublisher).Match(pass => Assert.Fail("This Id should not be valid"), fail => Assert.IsType<Exception>(fail));
+        }
     }
 }
