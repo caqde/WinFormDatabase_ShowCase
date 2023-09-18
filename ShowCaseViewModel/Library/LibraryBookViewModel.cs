@@ -25,10 +25,15 @@ namespace ShowCaseViewModel.Library
             _ = data.GetPublisherList().Match(pass => publishers = pass, fail => publishers = new List<PublisherDto>());
         }
 
+        private void RefreshBookList()
+        {
+            _ = data.GetBookList().Match(pass => books = pass, fail => books.Clear());
+        }
+
         private ILibrary data;
 
         private bool newBook = false;
-
+        private bool bookLoaded = false;
         private bool bookChanged = false;
 
         [ObservableProperty]
@@ -149,6 +154,8 @@ namespace ShowCaseViewModel.Library
             ISBN = book.ISBN;
             AuthorID = book.authorID;
             PublisherID = book.publisherID;
+            bookLoaded = true;
+            bookChanged = false;
             WeakReferenceMessenger.Default.Send<LibraryGetItem>(new LibraryGetItem(true));
         }
 
@@ -172,8 +179,14 @@ namespace ShowCaseViewModel.Library
                 return;
             }
             BookDto book = new BookDto() { Description = Description, authorID = AuthorID, ISBN = ISBN, publisherID = PublisherID, Title = Title };
-            data.AddBook(book).Match(pass => WeakReferenceMessenger.Default.Send<LibraryAddItem>(new LibraryAddItem(pass)) 
+            data.AddBook(book).Match(pass => AddBookData(pass, book ) 
                                 , Fail => WeakReferenceMessenger.Default.Send<ExceptionMessage>(new ExceptionMessage(Fail)));
+        }
+
+        private void AddBookData(bool pass, BookDto book)
+        {
+            WeakReferenceMessenger.Default.Send<LibraryAddItem>(new LibraryAddItem(pass));
+            RefreshBookList();
         }
 
         [RelayCommand]
@@ -184,14 +197,37 @@ namespace ShowCaseViewModel.Library
                 WeakReferenceMessenger.Default.Send<ExceptionMessage>(new ExceptionMessage(new Exception("Book not selected")));
                 return;
             }
-            data.RemoveBook(selectedBookID).Match(Pass => WeakReferenceMessenger.Default.Send<LibraryRemoveItem>(new LibraryRemoveItem(Pass)),
+            data.RemoveBook(SelectedBookID).Match(Pass => removeBookData(Pass),
                                                   Fail => WeakReferenceMessenger.Default.Send<ExceptionMessage>(new ExceptionMessage(Fail)));
+        }
+
+        private void removeBookData(bool pass)
+        {
+            if (SelectedBookID == currentBookID)
+            {
+                bookLoaded = false;
+            }
+            WeakReferenceMessenger.Default.Send<LibraryRemoveItem>(new LibraryRemoveItem(pass));
+            RefreshBookList();
         }
 
         [RelayCommand]
         private void updateBook()
         {
+            if (!bookLoaded)
+            {
+                WeakReferenceMessenger.Default.Send<ExceptionMessage>(new ExceptionMessage(new Exception("No book open")));
+                return;
+            }
+            if (!bookChanged)
+            {
+                WeakReferenceMessenger.Default.Send<ExceptionMessage>(new ExceptionMessage(new Exception("No changes to save")));
+                return;
+            }
 
+            BookDto book = new BookDto() { Id = currentBookID, authorID = AuthorID, Description = Description, ISBN = ISBN, publisherID = PublisherID, Title = Title };
+            data.UpdateBook(book).Match(Pass => WeakReferenceMessenger.Default.Send<LibraryUpdateItem>(new LibraryUpdateItem(Pass)),
+                                        Fail => WeakReferenceMessenger.Default.Send<ExceptionMessage>(new ExceptionMessage(Fail)));
         }
     }
 }

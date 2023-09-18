@@ -73,6 +73,21 @@ namespace ShowCaseViewModelUnitTests.LibraryViewModelUnitTests
             mockILibrary
                 .Setup(x => x.RemovePublisher(It.IsAny<int>()))
                 .Returns(() => true);
+            mockILibrary
+                .Setup(x => x.UpdateAuthor(It.IsAny<AuthorDto>()))
+                .Returns(() => true);
+            mockILibrary
+                .Setup(x => x.UpdateBook(It.IsAny<BookDto>()))
+                .Returns(() => true);
+            mockILibrary
+                .Setup(x => x.UpdateBorrowedBook(It.IsAny<BorrowedBookDto>()))
+                .Returns(() => true);
+            mockILibrary
+                .Setup(x => x.UpdatePatron(It.IsAny<PatronDto>()))
+                .Returns(() => true);
+            mockILibrary
+                .Setup(x => x.UpdatePublisher(It.IsAny<PublisherDto>()))
+                .Returns(() => true);
         }
 
         private readonly AuthorDto authorDto1 = new AuthorDto() { Biography = "TestBiography", Id = 1, Name = "Test" };
@@ -254,7 +269,7 @@ namespace ShowCaseViewModelUnitTests.LibraryViewModelUnitTests
             Assert.False(testValue);
             Assert.NotNull(exception);
             exception = null;
-            libraryBookViewModel.SelectedBookID= 1;
+            libraryBookViewModel.SelectedBookID= 2;
             libraryBookViewModel.getBookCommand.Execute(null);
             libraryBookViewModel.updateBookCommand.Execute(null);
             Assert.False(testValue);
