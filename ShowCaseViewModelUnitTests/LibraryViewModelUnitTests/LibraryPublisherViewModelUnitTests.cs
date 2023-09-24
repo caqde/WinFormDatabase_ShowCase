@@ -247,6 +247,7 @@ namespace ShowCaseViewModelUnitTests.LibraryViewModelUnitTests
             Assert.NotNull(exception);
             exception= null;
             libraryBookViewModel.SelectedBookID = 1;
+            libraryBookViewModel.getBookCommand.Execute(null);
             libraryBookViewModel.removeBookCommand.Execute(null);
             Assert.True(testValue);
             mockILibrary.Verify(mock => mock.RemoveBook(It.IsAny<int>()), Times.Once());
@@ -279,89 +280,394 @@ namespace ShowCaseViewModelUnitTests.LibraryViewModelUnitTests
             libraryBookViewModel.updateBookCommand.Execute(null);
             Assert.True(testValue);
             Assert.Null(exception);
-        }
-
-        [Fact]
-        public void BorrowedBook() 
-        {
-            
-        }
-
-        [Fact]
-        public void ReturnBook()
-        {
-
+            mockILibrary.Verify(mock => mock.UpdateBook(It.IsAny<BookDto>()), Times.Once());
         }
 
         [Fact]
         public void AddAuthor()
         {
-
+            LibraryAuthorViewModel libraryAuthorViewModel= new LibraryAuthorViewModel();
+            Assert.True(libraryAuthorViewModel.addAuthorCommand.CanExecute(null));
+            bool testValue = false;
+            Exception exception = null;
+            WeakReferenceMessenger.Default.Register<LibraryAddItem>(this, (t, actual) => {
+                testValue = actual.Value;
+            });
+            WeakReferenceMessenger.Default.Register<ExceptionMessage>(this, (t, actual) => {
+                exception = actual.Value;
+            });
+            libraryAuthorViewModel.addAuthorCommand.Execute(null);
+            Assert.False(testValue);
+            Assert.NotNull(exception);
+            exception = null;
+            libraryAuthorViewModel.SelectedAuthorID = -1;
+            libraryAuthorViewModel.addAuthorCommand.Execute(null);
+            Assert.False(testValue);
+            Assert.NotNull(exception);
+            exception = null;
+            libraryAuthorViewModel.AuthorName = "Test";
+            libraryAuthorViewModel.AuthorBiography = "TestBiography";
+            libraryAuthorViewModel.addAuthorCommand.Execute(null);
+            Assert.True(testValue);
+            Assert.Null(exception);
+            mockILibrary.Verify(mock => mock.AddAuthor(It.IsAny<AuthorDto>()), Times.Once());
         }
 
         [Fact]
         public void RemoveAuthor()
         {
-
+            LibraryAuthorViewModel libraryAuthorViewModel = new LibraryAuthorViewModel();
+            Assert.True(libraryAuthorViewModel.removeAuthorCommand.CanExecute(null));
+            bool testValue = false;
+            Exception exception = null;
+            WeakReferenceMessenger.Default.Register<LibraryRemoveItem>(this, (t, actual) => {
+                testValue = actual.Value; 
+            });
+            WeakReferenceMessenger.Default.Register<ExceptionMessage>(this, (t, actual) => {
+                exception = actual.Value;
+            });
+            libraryAuthorViewModel.removeAuthorCommand.Execute(null);
+            Assert.False(testValue);
+            Assert.NotNull(exception);
+            exception= null;
+            libraryAuthorViewModel.SelectedAuthorID = 1;
+            libraryAuthorViewModel.removeAuthorCommand.Execute(null);
+            Assert.True(testValue);
+            Assert.Null(exception);
+            mockILibrary.Verify(mock => mock.RemoveAuthor(It.IsAny<int>()), Times.Once());
         }
 
         [Fact]
         public void GetAuthor()
         {
-
+            LibraryAuthorViewModel libraryAuthorViewModel= new LibraryAuthorViewModel();
+            Assert.True(libraryAuthorViewModel.getAuthorCommand.CanExecute(null));
+            bool testValue = false;
+            Exception exception = null;
+            WeakReferenceMessenger.Default.Register<LibraryGetItem>(this, (t, actual) => {
+                testValue = actual.Value;
+            });
+            WeakReferenceMessenger.Default.Register<ExceptionMessage>(this, (t, actual) => {
+                exception = actual.Value;
+            });
+            libraryAuthorViewModel.getAuthorCommand.Execute(null);
+            Assert.False(testValue);
+            Assert.NotNull(exception);
+            exception = null;
+            libraryAuthorViewModel.SelectedAuthorID= 1;
+            libraryAuthorViewModel.getAuthorCommand.Execute(null);
+            Assert.True(testValue);
+            Assert.Null(exception);
+            Assert.Equal(authorDto1.Name, libraryAuthorViewModel.AuthorName);
+            Assert.Equal(authorDto1.Biography, libraryAuthorViewModel.AuthorBiography);
+            mockILibrary.Verify(mock => mock.GetAuthor(It.IsAny<int>()), Times.Once());
+            mockILibrary.Verify(mock => mock.GetAuthorBooks(It.IsAny<int>()), Times.Once);
         }
 
         [Fact]
         public void UpdateAuthor() 
         { 
+            LibraryAuthorViewModel libraryAuthorViewModel = new LibraryAuthorViewModel();
+            Assert.True(libraryAuthorViewModel.updateAuthorCommand.CanExecute(null));
+            bool testValue = false;
+            Exception exception = null;
+            WeakReferenceMessenger.Default.Register<LibraryUpdateItem>(this, (t, actual) => {
+                testValue = actual.Value;
+            });
+            WeakReferenceMessenger.Default.Register<ExceptionMessage>(this, (t, actual) => {
+                exception = actual.Value;
+            });
+            libraryAuthorViewModel.updateAuthorCommand.Execute(null);
+            Assert.False(testValue);
+            Assert.NotNull(exception);
+            exception = null;
+            libraryAuthorViewModel.SelectedAuthorID = 1;
+            libraryAuthorViewModel.getAuthorCommand.Execute(null);
+            libraryAuthorViewModel.updateAuthorCommand.Execute(null);
+            Assert.False(testValue);
+            Assert.NotNull(exception);
+            exception = null;
+            libraryAuthorViewModel.AuthorBiography = "NewBiography";
+            libraryAuthorViewModel.AuthorName = "NewName";
+            libraryAuthorViewModel.updateAuthorCommand.Execute(null);
+            Assert.True(testValue); 
+            Assert.Null(exception);
+            mockILibrary.Verify(mock => mock.UpdateAuthor(It.IsAny<AuthorDto>()), Times.Once());
         }
 
         [Fact]
         public void AddPatron()
         {
-
+            LibraryPatronViewModel libraryPatronViewModel = new LibraryPatronViewModel();
+            Assert.True(libraryPatronViewModel.addPatronCommand.CanExecute(null));
+            bool testValue = false;
+            Exception exception = null;
+            WeakReferenceMessenger.Default.Register<LibraryAddItem>(this, (t, actual) => {
+                testValue = actual.Value;
+            });
+            WeakReferenceMessenger.Default.Register<ExceptionMessage>(this, (t, actual) => {
+                exception = actual.Value;
+            });
+            libraryPatronViewModel.addPatronCommand.Execute(null);
+            Assert.False(testValue);
+            Assert.NotNull(exception);
+            exception = null;
+            libraryPatronViewModel.SelectedPatronID = -1;
+            libraryPatronViewModel.addPatronCommand.Execute(null);
+            Assert.False(testValue);
+            Assert.NotNull(exception);
+            exception = null;
+            libraryPatronViewModel.PatronName = "Test";
+            libraryPatronViewModel.PatronPhoneNumber = "123-456-7891";
+            libraryPatronViewModel.PatronAddress = "TestAddress";
+            libraryPatronViewModel.PatronCity = "TestCity";
+            libraryPatronViewModel.PatronPostalCode = 12345;
+            libraryPatronViewModel.addPatronCommand.Execute(null);
+            Assert.True(testValue);
+            Assert.Null(exception);
+            mockILibrary.Verify(mock => mock.AddPatron(It.IsAny<PatronDto>()), Times.Once);
         }
 
         [Fact]
         public void RemovePatron()
         {
+            LibraryPatronViewModel libraryPatronViewModel = new LibraryPatronViewModel();
+            Assert.True(libraryPatronViewModel.removePatronCommand.CanExecute(null));
+            bool testValue = false;
+            Exception exception = null;
+            WeakReferenceMessenger.Default.Register<LibraryRemoveItem>(this, (t, actual) => { testValue = actual.Value; });
+            WeakReferenceMessenger.Default.Register<ExceptionMessage>(this, (t, actual) => { exception = actual.Value; });
+            libraryPatronViewModel.removePatronCommand.Execute(null);
+            Assert.False(testValue);
+            Assert.NotNull(exception);
+            exception = null;
+            libraryPatronViewModel.SelectedPatronID = 4;
+            libraryPatronViewModel.removePatronCommand.Execute(null);
+            Assert.True(testValue);
+            Assert.Null(exception);
+            mockILibrary.Verify(mock => mock.RemovePatron(It.IsAny<int>()), Times.Once);
 
         }
 
         [Fact]
         public void GetPatron()
         {
-
+            LibraryPatronViewModel libraryPatronViewModel = new LibraryPatronViewModel();
+            Assert.True(libraryPatronViewModel.getPatronCommand.CanExecute(null));
+            bool testValue = false;
+            Exception exception = null;
+            WeakReferenceMessenger.Default.Register<LibraryGetItem>(this, (t,actual) => { testValue = actual.Value; });
+            WeakReferenceMessenger.Default.Register<ExceptionMessage>(this, (t, actual) => { exception = actual.Value; });
+            libraryPatronViewModel.getPatronCommand.Execute(null);
+            Assert.False(testValue);
+            Assert.NotNull(exception);
+            exception= null;
+            libraryPatronViewModel.SelectedPatronID = 4;
+            libraryPatronViewModel.getPatronCommand.Execute(null);
+            Assert.True(testValue);
+            Assert.Null(exception);
+            mockILibrary.Verify(mock => mock.GetPatron(It.IsAny<int>()), Times.Once);
+            Assert.Equal(patronDto1.Name, libraryPatronViewModel.PatronName);
+            Assert.Equal(patronDto1.City, libraryPatronViewModel.PatronCity);
+            Assert.Equal(patronDto1.StreetAddress, libraryPatronViewModel.PatronAddress);
         }
 
         [Fact]
         public void UpdatePatron()
         {
-
+            LibraryPatronViewModel libraryPatronViewModel = new LibraryPatronViewModel();
+            Assert.True(libraryPatronViewModel.updatePatronCommand.CanExecute(null));
+            bool testValue = false;
+            Exception exception = null;
+            WeakReferenceMessenger.Default.Register<LibraryUpdateItem>(this, (t, actual) => { testValue = actual.Value; });
+            WeakReferenceMessenger.Default.Register<ExceptionMessage>(this, (t, actual) => { exception = actual.Value; });
+            libraryPatronViewModel.updatePatronCommand.Execute(null);
+            Assert.False(testValue);
+            Assert.NotNull(exception);
+            exception = null;
+            libraryPatronViewModel.SelectedPatronID = 1;
+            libraryPatronViewModel.updatePatronCommand.Execute(null);
+            Assert.False(testValue);
+            Assert.NotNull(exception);
+            exception = null;
+            libraryPatronViewModel.getPatronCommand.Execute(null);
+            libraryPatronViewModel.updatePatronCommand.Execute(null);
+            Assert.False(testValue);
+            Assert.NotNull(exception);
+            exception = null;
+            libraryPatronViewModel.PatronAddress = "NewAddress";
+            libraryPatronViewModel.updatePatronCommand.Execute(null);
+            Assert.True(testValue);
+            Assert.Null(exception);
+            mockILibrary.Verify(mock => mock.UpdatePatron(It.IsAny<PatronDto>()), Times.Once);
         }
 
         [Fact]
         public void AddPublisher()
         {
-
+            LibraryPublisherViewModel libraryPublisherViewModel = new LibraryPublisherViewModel();
+            Assert.True(libraryPublisherViewModel.addPublisherCommand.CanExecute(null));
+            bool testValue = false;
+            Exception exception = null;
+            WeakReferenceMessenger.Default.Register<LibraryAddItem>(this, (t,actual) => { testValue = actual.Value; });
+            WeakReferenceMessenger.Default.Register<ExceptionMessage>(this, (t, actual) => { exception = actual.Value; });
+            libraryPublisherViewModel.addPublisherCommand.Execute(null);
+            Assert.False(testValue);
+            Assert.NotNull(exception);
+            exception= null;
+            libraryPublisherViewModel.SelectedPublisherID = -1;
+            libraryPublisherViewModel.addPublisherCommand.Execute(null);
+            Assert.False(testValue);
+            Assert.NotNull(exception);
+            exception = null;
+            libraryPublisherViewModel.PublisherName = "Test";
+            libraryPublisherViewModel.PublisherDescription = "TestDescription";
+            libraryPublisherViewModel.addPublisherCommand.Execute(null);
+            Assert.True(testValue);
+            Assert.Null(exception);
+            mockILibrary.Verify(mock => mock.AddPublisher(It.IsAny<PublisherDto>()), Times.Once());
         }
 
         [Fact]
         public void GetPublisher()
         {
-
+            LibraryPublisherViewModel libraryPublisherViewModel = new LibraryPublisherViewModel();
+            Assert.True(libraryPublisherViewModel.getPublisherCommand.CanExecute(null));
+            bool testValue = false;
+            Exception exception = null;
+            WeakReferenceMessenger.Default.Register<LibraryGetItem>(this, (t,actual) => { testValue = actual.Value; });
+            WeakReferenceMessenger.Default.Register<ExceptionMessage>(this, (t, actual) => { exception = actual.Value; });
+            libraryPublisherViewModel.getPublisherCommand.Execute(null);
+            Assert.False(testValue);
+            Assert.NotNull(exception);
+            exception = null;
+            libraryPublisherViewModel.SelectedPublisherID = 4;
+            libraryPublisherViewModel.getPublisherCommand.Execute(null);
+            Assert.True(testValue);
+            Assert.Null(exception);
+            mockILibrary.Verify(mock => mock.GetPatron(It.IsAny<int>()), Times.Once());
+            Assert.Equal(publisherDto1.Name, libraryPublisherViewModel.PublisherName);
+            Assert.Equal(publisherDto1.Description, libraryPublisherViewModel.PublisherDescription);
         }
 
         [Fact]
         public void RemovePublisher()
         {
-
+            LibraryPublisherViewModel libraryPublisherViewModel = new LibraryPublisherViewModel();
+            Assert.True(libraryPublisherViewModel.removePublisherCommand.CanExecute(null));
+            bool testValue = false;
+            Exception exception = null;
+            WeakReferenceMessenger.Default.Register<LibraryRemoveItem>(this, (t,actual) => { testValue = actual.Value; });
+            WeakReferenceMessenger.Default.Register<ExceptionMessage>(this, (t, actual) => { exception = actual.Value; });
+            libraryPublisherViewModel.removePublisherCommand.Execute(null);
+            Assert.False(testValue);
+            Assert.NotNull(exception);
+            exception= null;
+            libraryPublisherViewModel.SelectedPublisherID= 4;
+            libraryPublisherViewModel.removePublisherCommand.Execute(null);
+            Assert.True(testValue);
+            Assert.Null(exception);
+            mockILibrary.Verify(mock => mock.RemovePublisher(It.IsAny<int>()), Times.Once());
         }
 
         [Fact]
         public void UpdatePublisher()
         {
+            LibraryPublisherViewModel libraryPublisherViewModel= new LibraryPublisherViewModel();
+            Assert.True(libraryPublisherViewModel.updatePublisherCommand.CanExecute(null));
+            bool testValue = false;
+            Exception exception = null;
+            WeakReferenceMessenger.Default.Register<LibraryUpdateItem>(this, (t,actual) => { testValue = actual.Value; });
+            WeakReferenceMessenger.Default.Register<ExceptionMessage>(this, (t,actual) => { exception = actual.Value; });
+            libraryPublisherViewModel.updatePublisherCommand.Execute(null);
+            Assert.False(testValue);
+            Assert.NotNull(exception);
+            exception= null;
+            libraryPublisherViewModel.SelectedPublisherID = 5;
+            libraryPublisherViewModel.updatePublisherCommand.Execute(null);
+            Assert.False(testValue);
+            Assert.NotNull(exception);
+            exception = null;
+            libraryPublisherViewModel.getPublisherCommand.Execute(null);
+            libraryPublisherViewModel.updatePublisherCommand.Execute(null);
+            Assert.False(testValue);
+            Assert.NotNull(exception);
+            exception = null;
+            libraryPublisherViewModel.PublisherDescription = "NewDescription";
+            libraryPublisherViewModel.updatePublisherCommand.Execute(null);
+            Assert.True(testValue); 
+            Assert.Null(exception);
+            mockILibrary.Verify(mock => mock.UpdatePublisher(It.IsAny<PublisherDto>()), Times.Once());
+        }
 
+        [Fact]
+        public void BorrowBook()
+        {
+            LibraryMainCheckoutViewModel libraryMainCheckoutViewModel = new LibraryMainCheckoutViewModel();
+            Assert.True(libraryMainCheckoutViewModel.borrowBookCommand.CanExecute(null));
+            bool testValue = false;
+            Exception exception = null;
+            WeakReferenceMessenger.Default.Register<LibraryBorrowBook>(this, (t,actual) => { testValue = actual.Value; });
+            WeakReferenceMessenger.Default.Register<ExceptionMessage>(this, (t, actual) => { exception = actual.Value; });
+            libraryMainCheckoutViewModel.borrowBookCommand.Execute(null);
+            Assert.False(testValue);
+            Assert.NotNull(exception);
+            exception = null;
+            libraryMainCheckoutViewModel.SelectedBook = 4;
+            libraryMainCheckoutViewModel.borrowBookCommand.Execute(null);
+            Assert.False(testValue);
+            Assert.NotNull(exception);
+            exception= null;
+            libraryMainCheckoutViewModel.SelectedPatron = 4;
+            libraryMainCheckoutViewModel.SelectedBook = -1;
+            libraryMainCheckoutViewModel.borrowBookCommand.Execute(null);
+            Assert.False(testValue);
+            Assert.NotNull(exception);
+            exception = null;
+            libraryMainCheckoutViewModel.SelectedBook = 3;
+            Assert.True(testValue);
+            Assert.Null(exception);
+            mockILibrary.Verify(mock => mock.BorrowBook(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<TimeSpan>()), Times.Once());
+        }
+
+        [Fact]
+        public void ReturnBook()
+        {
+            LibraryMainCheckoutViewModel libraryMainCheckoutViewModel = new LibraryMainCheckoutViewModel();
+            Assert.True(libraryMainCheckoutViewModel.returnBookCommand.CanExecute(null));
+            bool testValue = false;
+            Exception exception = null;
+            WeakReferenceMessenger.Default.Register<LibraryReturnBook>(this, (t, actual) => { testValue = actual.Value; });
+            WeakReferenceMessenger.Default.Register<ExceptionMessage>(this, (t, actual) => { exception = actual.Value; });
+            libraryMainCheckoutViewModel.returnBookCommand.Execute(null);
+            Assert.False(testValue);
+            Assert.NotNull(exception);
+            exception= null;
+            libraryMainCheckoutViewModel.SelectedBorrowedBook = 3;
+            libraryMainCheckoutViewModel.returnBookCommand.Execute(null);
+            Assert.True(testValue);
+            Assert.Null(exception);
+            mockILibrary.Verify(mock => mock.RemoveBorrowedBook(It.IsAny<int>()), Times.Once());
+        }
+
+        [Fact]
+        public void ReBorrowBook()
+        {
+            LibraryMainCheckoutViewModel libraryMainCheckoutViewModel = new LibraryMainCheckoutViewModel();
+            Assert.True(libraryMainCheckoutViewModel.reBorrowBookCommand.CanExecute(null));
+            bool testValue = false;
+            Exception exception = null;
+            WeakReferenceMessenger.Default.Register<LibraryReBorrowBook>(this, (t, actual) => { testValue = actual.Value; });
+            WeakReferenceMessenger.Default.Register<ExceptionMessage>(this, (t,actual) => { exception = actual.Value; });
+            libraryMainCheckoutViewModel.reBorrowBookCommand.Execute(null);
+            Assert.False(testValue);
+            Assert.NotNull(exception);
+            exception= null;
+            libraryMainCheckoutViewModel.SelectedBorrowedBook=3;
+            libraryMainCheckoutViewModel.reBorrowBookCommand.Execute(null);
+            Assert.True(testValue);
+            Assert.Null(exception);
+            mockILibrary.Verify(mock => mock.UpdateBorrowedBook(It.IsAny<BorrowedBookDto>()), Times.Once());
         }
     }
 }

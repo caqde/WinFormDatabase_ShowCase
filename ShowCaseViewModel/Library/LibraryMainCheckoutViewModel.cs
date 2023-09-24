@@ -81,5 +81,11 @@ namespace ShowCaseViewModel.Library
         {
 
         }
+
+        [RelayCommand]
+        private void reBorrowBook()
+        {
+
+        }
     }
 }

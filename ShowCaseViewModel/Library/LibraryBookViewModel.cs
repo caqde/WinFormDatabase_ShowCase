@@ -20,14 +20,14 @@ namespace ShowCaseViewModel.Library
         {
             ShowCaseInstance libraryInstance = ShowCaseInstance.Instance;
             data = libraryInstance.getLibrary();
-            _ = data.GetBookList().Match(pass => books = pass, fail => books = new List<BookDto>());
-            _ = data.GetAuthorList().Match(pass => authors = pass, fail => authors = new List<AuthorDto>());
-            _ = data.GetPublisherList().Match(pass => publishers = pass, fail => publishers = new List<PublisherDto>());
+            _ = data.GetBookList().Match(pass => Books = pass, fail => Books = new List<BookDto>());
+            _ = data.GetAuthorList().Match(pass => Authors = pass, fail => Authors = new List<AuthorDto>());
+            _ = data.GetPublisherList().Match(pass => Publishers = pass, fail => Publishers = new List<PublisherDto>());
         }
 
         private void RefreshBookList()
         {
-            _ = data.GetBookList().Match(pass => books = pass, fail => books.Clear());
+            _ = data.GetBookList().Match(pass => Books = pass, fail => Books.Clear());
         }
 
         private ILibrary data;
@@ -64,8 +64,8 @@ namespace ShowCaseViewModel.Library
                 newBook = true;
                 bookSelected = false;
                 ISBN = 0;
-                Description = "";
-                Title = "";
+                Description = string.Empty;
+                Title = string.Empty;
                 return;
             }
             bookSelected = true;
@@ -179,11 +179,11 @@ namespace ShowCaseViewModel.Library
                 return;
             }
             BookDto book = new BookDto() { Description = Description, authorID = AuthorID, ISBN = ISBN, publisherID = PublisherID, Title = Title };
-            data.AddBook(book).Match(pass => AddBookData(pass, book ) 
+            data.AddBook(book).Match(pass => AddBookData(pass) 
                                 , Fail => WeakReferenceMessenger.Default.Send<ExceptionMessage>(new ExceptionMessage(Fail)));
         }
 
-        private void AddBookData(bool pass, BookDto book)
+        private void AddBookData(bool pass)
         {
             WeakReferenceMessenger.Default.Send<LibraryAddItem>(new LibraryAddItem(pass));
             RefreshBookList();
@@ -206,6 +206,11 @@ namespace ShowCaseViewModel.Library
             if (SelectedBookID == currentBookID)
             {
                 bookLoaded = false;
+                Description = string.Empty;
+                Title = string.Empty;
+                ISBN = 0;
+                AuthorID = 0;
+                PublisherID = 0;
             }
             WeakReferenceMessenger.Default.Send<LibraryRemoveItem>(new LibraryRemoveItem(pass));
             RefreshBookList();
