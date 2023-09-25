@@ -189,7 +189,7 @@ namespace ShowCaseViewModel.Library
         {
             if (!patronSelected)
             {
-                WeakReferenceMessenger.Default.Send(new ExceptionMessage(new Exception("No Patron Selected for removal")));
+                WeakReferenceMessenger.Default.Send<ExceptionMessage>(new ExceptionMessage(new Exception("No Patron Selected for removal")));
                 return;
             }
 

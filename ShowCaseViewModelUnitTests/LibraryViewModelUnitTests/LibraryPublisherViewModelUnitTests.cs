@@ -467,6 +467,7 @@ namespace ShowCaseViewModelUnitTests.LibraryViewModelUnitTests
             Assert.True(testValue);
             Assert.Null(exception);
             mockILibrary.Verify(mock => mock.GetPatron(It.IsAny<int>()), Times.Once);
+            mockILibrary.Verify(mock => mock.GetBorrowedBooksByPatron(It.IsAny<int>()), Times.Once());
             Assert.Equal(patronDto1.Name, libraryPatronViewModel.PatronName);
             Assert.Equal(patronDto1.City, libraryPatronViewModel.PatronCity);
             Assert.Equal(patronDto1.StreetAddress, libraryPatronViewModel.PatronAddress);
@@ -545,7 +546,8 @@ namespace ShowCaseViewModelUnitTests.LibraryViewModelUnitTests
             libraryPublisherViewModel.getPublisherCommand.Execute(null);
             Assert.True(testValue);
             Assert.Null(exception);
-            mockILibrary.Verify(mock => mock.GetPatron(It.IsAny<int>()), Times.Once());
+            mockILibrary.Verify(mock => mock.GetPublisher(It.IsAny<int>()), Times.Once());
+            mockILibrary.Verify(mock => mock.GetPublisherBooks(It.IsAny<int>()), Times.Once());
             Assert.Equal(publisherDto1.Name, libraryPublisherViewModel.PublisherName);
             Assert.Equal(publisherDto1.Description, libraryPublisherViewModel.PublisherDescription);
         }
@@ -625,6 +627,7 @@ namespace ShowCaseViewModelUnitTests.LibraryViewModelUnitTests
             Assert.NotNull(exception);
             exception = null;
             libraryMainCheckoutViewModel.SelectedBook = 3;
+            libraryMainCheckoutViewModel.borrowBookCommand.Execute (null);
             Assert.True(testValue);
             Assert.Null(exception);
             mockILibrary.Verify(mock => mock.BorrowBook(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<TimeSpan>()), Times.Once());
