@@ -30,9 +30,10 @@
         {
             components = new System.ComponentModel.Container();
             menuPanel = new Panel();
-            formPanel = new Panel();
+            LibraryDatabaseButton = new Button();
             SingleDatabaseButton = new Button();
             mainViewModelBindingSource = new BindingSource(components);
+            formPanel = new Panel();
             menuPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)mainViewModelBindingSource).BeginInit();
             SuspendLayout();
@@ -40,22 +41,23 @@
             // menuPanel
             // 
             menuPanel.BackColor = SystemColors.ControlDark;
+            menuPanel.Controls.Add(LibraryDatabaseButton);
             menuPanel.Controls.Add(SingleDatabaseButton);
             menuPanel.Location = new Point(0, 0);
             menuPanel.Name = "menuPanel";
             menuPanel.Size = new Size(200, 533);
             menuPanel.TabIndex = 0;
             // 
-            // formPanel
+            // LibraryDatabaseButton
             // 
-            formPanel.AutoSizeMode = AutoSizeMode.GrowAndShrink;
-            formPanel.BackColor = SystemColors.Control;
-            formPanel.BorderStyle = BorderStyle.Fixed3D;
-            formPanel.Location = new Point(202, 0);
-            formPanel.Margin = new Padding(2);
-            formPanel.Name = "formPanel";
-            formPanel.Size = new Size(673, 533);
-            formPanel.TabIndex = 1;
+            LibraryDatabaseButton.DataBindings.Add(new Binding("Command", mainViewModelBindingSource, "LoadLibraryViewCommand", true));
+            LibraryDatabaseButton.Location = new Point(3, 86);
+            LibraryDatabaseButton.Name = "LibraryDatabaseButton";
+            LibraryDatabaseButton.RightToLeft = RightToLeft.No;
+            LibraryDatabaseButton.Size = new Size(194, 68);
+            LibraryDatabaseButton.TabIndex = 0;
+            LibraryDatabaseButton.Text = "Library Demo";
+            LibraryDatabaseButton.UseVisualStyleBackColor = true;
             // 
             // SingleDatabaseButton
             // 
@@ -70,6 +72,17 @@
             // mainViewModelBindingSource
             // 
             mainViewModelBindingSource.DataSource = typeof(ShowCaseViewModel.MainViewModel);
+            // 
+            // formPanel
+            // 
+            formPanel.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+            formPanel.BackColor = SystemColors.Control;
+            formPanel.BorderStyle = BorderStyle.Fixed3D;
+            formPanel.Location = new Point(202, 0);
+            formPanel.Margin = new Padding(2);
+            formPanel.Name = "formPanel";
+            formPanel.Size = new Size(673, 533);
+            formPanel.TabIndex = 1;
             // 
             // Main
             // 
@@ -91,5 +104,6 @@
         private Button SingleDatabaseButton;
         private Panel formPanel;
         private BindingSource mainViewModelBindingSource;
+        private Button LibraryDatabaseButton;
     }
 }
