@@ -21,22 +21,22 @@ namespace ShowCaseViewModel.Library
         {
             DatabaseInstance = ShowCaseInstance.Instance;
             data = DatabaseInstance.getLibrary();
-            _ = data.GetBookList().Match(pass => bookList = new BindingList<BookDto>(pass), fail => bookList = new BindingList<BookDto>());
-            _ = data.GetPatronList().Match(pass => patronList = new BindingList<PatronDto>(pass), fail => patronList = new BindingList<PatronDto>());
-            _ = data.GetBorrowedBooksList().Match(pass => borrowedBookList = new BindingList<BorrowedBookDto>(pass), fail => borrowedBookList = new BindingList<BorrowedBookDto>());
+            _ = data.GetBookList().Match(pass => bookList = pass, fail => bookList = new List<BookDto>());
+            _ = data.GetPatronList().Match(pass => patronList = pass, fail => patronList = new List<PatronDto>());
+            _ = data.GetBorrowedBooksList().Match(pass => borrowedBookList = pass, fail => borrowedBookList = new List<BorrowedBookDto>());
             RemoveBorrowedBooksFromList();
         }
 
         private void RefreshBorrowedBookList()
         {
-            _ = data.GetBorrowedBooksList().Match(pass => BorrowedBookList = new BindingList<BorrowedBookDto>(pass), fail => BorrowedBookList.Clear());
+            _ = data.GetBorrowedBooksList().Match(pass => BorrowedBookList = pass, fail => BorrowedBookList.Clear());
         }
 
         private void RemoveBorrowedBooksFromList()
         {
             foreach (var book in BorrowedBookList) 
             {
-                bookList.Remove(book.BorrowedBook);
+                BookList.Remove(book.BorrowedBook);
             }
         }
 
@@ -79,11 +79,11 @@ namespace ShowCaseViewModel.Library
         private ShowCaseInstance DatabaseInstance;
 
         [ObservableProperty]
-        private BindingList<BookDto> bookList;
+        private List<BookDto> bookList;
         [ObservableProperty]
-        private BindingList<PatronDto> patronList;
+        private List<PatronDto> patronList;
         [ObservableProperty]
-        private BindingList<BorrowedBookDto> borrowedBookList;
+        private List<BorrowedBookDto> borrowedBookList;
 
         [RelayCommand]
         private void borrowBook()
@@ -103,7 +103,7 @@ namespace ShowCaseViewModel.Library
                 WeakReferenceMessenger.Default.Send<ExceptionMessage>(new ExceptionMessage(new Exception("Please select a patron to borrow the book")));
                 return;
             }
-            data.BorrowBook(selectedPatron, selectedBook, TimeSpan.FromDays(7)).Match(pass => BorrowBookRefresh(pass),
+            data.BorrowBook(SelectedPatron, SelectedBook, TimeSpan.FromDays(7)).Match(pass => BorrowBookRefresh(pass),
                                                                                     fail => WeakReferenceMessenger.Default.Send<ExceptionMessage>(new ExceptionMessage(fail)));
         }
 

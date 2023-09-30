@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ShowCaseViewModel.Library;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -12,9 +13,18 @@ namespace WinForm_Database.LibraryDatabase
 {
     public partial class LibraryAuthor : Form
     {
+        private LibraryAuthorViewModel _viewModel;
+
         public LibraryAuthor()
         {
             InitializeComponent();
+            _viewModel = new LibraryAuthorViewModel();
+            libraryAuthorViewModelBindingSource.DataSource = _viewModel;
+        }
+
+        private void AuthorListBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            _viewModel.SelectedAuthorID = AuthorListBox.SelectedIndex;
         }
     }
 }

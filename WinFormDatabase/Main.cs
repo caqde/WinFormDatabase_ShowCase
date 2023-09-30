@@ -17,7 +17,7 @@ using WinForm_Database.LibraryDatabase;
 
 namespace WinForm_Database
 {
-    public partial class Main : Form, IRecipient<LaunchSingleDatabaseViewMessage>, IRecipient<LaunchLibraryDatabaseMessage>, IRecipient<ExceptionMessage>
+    public partial class Main : Form, IRecipient<LaunchSingleDatabaseViewMessage>, IRecipient<LaunchLibraryDatabaseMessage>
     {
         enum FormTable
         {
@@ -135,15 +135,6 @@ namespace WinForm_Database
             }
         }
 
-        public void Receive(ExceptionMessage message)
-        {
-            if (message.Value.GetType() == typeof(Exception))
-            {
-                MessageBox.Show(message.Value.Message, "Minor Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-            MessageBox.Show(message.Value.Message, "Critical Error", MessageBoxButtons.OK, MessageBoxIcon.Stop);
 
-        }
     }
 }
