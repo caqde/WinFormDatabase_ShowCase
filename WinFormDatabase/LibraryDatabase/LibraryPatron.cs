@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ShowCaseViewModel.Library;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -12,9 +13,18 @@ namespace WinForm_Database.LibraryDatabase
 {
     public partial class LibraryPatron : Form
     {
+        LibraryPatronViewModel model;
+
         public LibraryPatron()
         {
             InitializeComponent();
+            model = new LibraryPatronViewModel();
+            libraryPatronViewModelBindingSource.DataSource = model;
+        }
+
+        private void PatronList_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            model.SelectedPatronID = PatronList.SelectedIndex;
         }
     }
 }
