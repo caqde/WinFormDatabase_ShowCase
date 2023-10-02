@@ -17,6 +17,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ShowCaseModelUnitTests", "S
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ShowCaseViewModelUnitTests", "ShowCaseViewModelUnitTests\ShowCaseViewModelUnitTests.csproj", "{59BE371C-706F-436B-8E62-E5CCFBEB4304}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WPFView", "WPFView\WPFView.csproj", "{BEDCFECD-8CBA-446E-9D04-01BB584E280D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -51,6 +53,10 @@ Global
 		{59BE371C-706F-436B-8E62-E5CCFBEB4304}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{59BE371C-706F-436B-8E62-E5CCFBEB4304}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{59BE371C-706F-436B-8E62-E5CCFBEB4304}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BEDCFECD-8CBA-446E-9D04-01BB584E280D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BEDCFECD-8CBA-446E-9D04-01BB584E280D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BEDCFECD-8CBA-446E-9D04-01BB584E280D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BEDCFECD-8CBA-446E-9D04-01BB584E280D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
