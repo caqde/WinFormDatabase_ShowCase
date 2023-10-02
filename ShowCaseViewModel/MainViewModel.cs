@@ -19,7 +19,13 @@ namespace ShowCaseViewModel
         [RelayCommand]
         private void LoadMainView()
         {
-            WeakReferenceMessenger.Default.Send(new LaunchSingleDatabaseViewMessage(true));
+            WeakReferenceMessenger.Default.Send<LaunchSingleDatabaseViewMessage>(new LaunchSingleDatabaseViewMessage(true));
+        }
+
+        [RelayCommand]
+        private void LoadLibraryView() 
+        {
+            WeakReferenceMessenger.Default.Send<LaunchLibraryDatabaseMessage>(new LaunchLibraryDatabaseMessage(true));
         }
     }
 }

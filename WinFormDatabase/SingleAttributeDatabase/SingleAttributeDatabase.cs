@@ -123,7 +123,6 @@ namespace WinForm_Database
                 else
                 {
                     WeakReferenceMessenger.Default.UnregisterAll(this);
-                    MainDataSource.DataSource = null;
                 }
             }
         }

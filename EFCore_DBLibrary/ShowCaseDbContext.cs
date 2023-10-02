@@ -1,4 +1,5 @@
-﻿using EFCore_DBModels;
+﻿using EFCore_DBModels.Library;
+using EFCore_DBModels.SingleAttribute;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
@@ -8,7 +9,15 @@ namespace EFCore_DBLibrary
     {
         private static IConfigurationRoot? _configuration;
 
+        //SingleAttribute
         public DbSet<dbObject> dbObjects { get; set; }
+        //Library
+        public DbSet<Author> Authors { get; set; }
+        public DbSet<Book> Books { get; set; }
+        public DbSet<BorrowedBook>  BorrowedBooks { get; set; }
+        public DbSet<Patron> Patrons { get; set; }
+        public DbSet<Publisher> Publishers { get; set; }
+
 
         public ShowCaseDbContext()
         {
@@ -28,7 +37,7 @@ namespace EFCore_DBLibrary
                     .SetBasePath(Directory.GetCurrentDirectory())
                     .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
                 _configuration = builder.Build();
-                var connectionString = _configuration.GetConnectionString("TestShowCaseDB");
+                var connectionString = _configuration.GetConnectionString("ShowCaseDB");
                 optionsBuilder.UseNpgsql(connectionString, options => 
                 { 
                     options.EnableRetryOnFailure();
@@ -40,6 +49,11 @@ namespace EFCore_DBLibrary
         {
             modelBuilder.Entity<dbObject>()
                 .HasKey(e => e.Id);
+            modelBuilder.Entity<BorrowedBook>()
+                .HasOne(a => a.Patron)
+                .WithMany(a => a.BorrowedBooks)
+                .IsRequired()
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

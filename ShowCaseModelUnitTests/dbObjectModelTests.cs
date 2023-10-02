@@ -3,11 +3,11 @@ using ShowCaseModelUnitTests.TestTools;
 
 namespace ShowCaseModelUnitTests
 {
-    public class dbObjectModelTests : IClassFixture<DatabaseFixture>
+    public class dbObjectModelTests : IClassFixture<DatabaseFixtureDbObject>
     {
-        readonly DatabaseFixture database;
+        readonly DatabaseFixtureDbObject database;
 
-        public dbObjectModelTests(DatabaseFixture fixture)
+        public dbObjectModelTests(DatabaseFixtureDbObject fixture)
         {
             this.database = fixture;
             DatabaseTracker.New(false);

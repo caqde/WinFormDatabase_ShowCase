@@ -8,6 +8,7 @@ namespace ShowCaseModel
         public static ShowCaseInstance Instance => _Lazy.Value;
 
         private IDbObject? DBObject;
+        private ILibrary? Library;
 
         private ShowCaseInstance()
         {
@@ -17,6 +18,11 @@ namespace ShowCaseModel
         public void SetupDBObject(IDbObject dbObject)
         {
             DBObject = dbObject;
+        }
+
+        public void SetupLibrary(ILibrary library)
+        {
+            Library = library;
         }
 
         public IDbObject getDBObject()
@@ -29,6 +35,19 @@ namespace ShowCaseModel
             {
                 DBObject = new DbObjectModel();
                 return DBObject;
+            }
+        }
+
+        public ILibrary getLibrary()
+        {
+            if (Library is not null)
+            {
+                return Library;
+            }
+            else
+            {
+                Library = new Library();
+                return Library;
             }
         }
     }

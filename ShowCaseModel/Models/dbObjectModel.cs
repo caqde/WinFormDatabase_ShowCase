@@ -1,5 +1,5 @@
 ﻿using EFCore_DBLibrary;
-using EFCore_DBModels;
+using EFCore_DBModels.SingleAttribute;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -52,18 +52,6 @@ namespace ShowCaseModel.Models
             {
                 GetFirstEntry();
                 return false;
-            }
-        }
-
-        [Obsolete("AddEntry() is deprecated, please use AddEntry(string name) instead")]
-        public bool AddEntry()
-        {
-            using (var context = dBFactory.GetDbContext())
-            {
-                currentdBObject = new dbObject { Name = "tempNew" };
-                context.Add(currentdBObject);
-                context.SaveChanges();
-                return true;
             }
         }
 
