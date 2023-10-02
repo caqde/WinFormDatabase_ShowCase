@@ -62,6 +62,7 @@
             AuthorListBox.Name = "AuthorListBox";
             AuthorListBox.Size = new Size(192, 349);
             AuthorListBox.TabIndex = 0;
+            AuthorListBox.ValueMember = "Id";
             AuthorListBox.SelectedIndexChanged += AuthorListBox_SelectedIndexChanged;
             // 
             // authorListBindingSource

@@ -38,17 +38,26 @@ namespace WinForm_Database.LibraryDatabase
 
         private void borrowedBooksListBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            viewModel.SelectedBorrowedBook = borrowedBooksListBox.SelectedIndex;
+            if (borrowedBooksListBox.SelectedValue is int)
+            {
+                viewModel.SelectedBorrowedBook = (int)borrowedBooksListBox.SelectedValue;
+            }
         }
 
         private void patronListBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            viewModel.SelectedPatron = patronListBox.SelectedIndex;
+            if (patronListBox.SelectedValue is int)
+            {
+                viewModel.SelectedPatron = (int)patronListBox.SelectedValue;
+            }
         }
 
         private void booksListBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            viewModel.SelectedBook = booksListBox.SelectedIndex;
+            if (booksListBox.SelectedValue is int)
+            {
+                viewModel.SelectedBook = (int)booksListBox.SelectedValue;
+            }
         }
 
         private void AuthorButton_Click(object sender, EventArgs e)

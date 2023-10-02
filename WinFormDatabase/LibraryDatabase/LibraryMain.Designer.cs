@@ -99,7 +99,7 @@
             // borrowedBooksListBox
             // 
             borrowedBooksListBox.DataSource = borrowedBookListBindingSource;
-            borrowedBooksListBox.DisplayMember = "BorrowedBook";
+            borrowedBooksListBox.DisplayMember = "BorrowedBook.Title";
             borrowedBooksListBox.FormattingEnabled = true;
             borrowedBooksListBox.ItemHeight = 15;
             borrowedBooksListBox.Location = new Point(581, 35);

@@ -24,21 +24,31 @@ namespace WinForm_Database.LibraryDatabase
             libraryBookViewModel = new LibraryBookViewModel();
             libraryBookViewModelBindingSource.DataSource = libraryBookViewModel;
             WeakReferenceMessenger.Default.RegisterAll(this);
+            libraryBookViewModel.SelectedBookID = -1;
         }
 
         private void AuthorSelection_SelectedIndexChanged(object sender, EventArgs e)
         {
-            libraryBookViewModel.SelectedAuthorID = AuthorSelection.SelectedIndex;
+            if (AuthorSelection.SelectedValue is int)
+            {
+                libraryBookViewModel.SelectedAuthorID = (int)AuthorSelection.SelectedValue;
+            }
         }
 
         private void PublisherSelection_SelectedIndexChanged(object sender, EventArgs e)
         {
-            libraryBookViewModel.SelectedPublisherID = PublisherSelection.SelectedIndex;
+            if (PublisherSelection.SelectedValue is int)
+            {
+                libraryBookViewModel.SelectedPublisherID = (int)PublisherSelection.SelectedValue;
+            }
         }
 
         private void BookList_SelectedIndexChanged(object sender, EventArgs e)
         {
-            libraryBookViewModel.SelectedBookID = BookList.SelectedIndex;
+            if (BookList.SelectedValue is int)
+            {
+                libraryBookViewModel.SelectedBookID = (int)BookList.SelectedValue;
+            }
         }
 
         public void Receive(LibraryAddItem message)

@@ -24,6 +24,7 @@ namespace WinForm_Database.LibraryDatabase
             model = new LibraryPatronViewModel();
             libraryPatronViewModelBindingSource.DataSource = model;
             WeakReferenceMessenger.Default.RegisterAll(this);
+            model.SelectedPatronID = -1;
         }
 
         public void Receive(LibraryAddItem message)
@@ -58,7 +59,10 @@ namespace WinForm_Database.LibraryDatabase
 
         private void PatronList_SelectedIndexChanged(object sender, EventArgs e)
         {
-            model.SelectedPatronID = PatronList.SelectedIndex;
+            if (PatronList.SelectedValue is int)
+            {
+                model.SelectedPatronID = (int)PatronList.SelectedValue;
+            }
         }
     }
 }
