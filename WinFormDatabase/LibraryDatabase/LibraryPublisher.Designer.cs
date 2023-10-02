@@ -30,6 +30,8 @@
         {
             components = new System.ComponentModel.Container();
             PublisherList = new ListBox();
+            publisherListBindingSource = new BindingSource(components);
+            libraryPublisherViewModelBindingSource = new BindingSource(components);
             label1 = new Label();
             textBox1 = new TextBox();
             PublisherName = new Label();
@@ -40,13 +42,14 @@
             RemovePublisher = new Button();
             AddPublisher = new Button();
             UpdatePublisher = new Button();
-            libraryPublisherViewModelBindingSource = new BindingSource(components);
-            publisherListBindingSource = new BindingSource(components);
             listBox1 = new ListBox();
             publisherBooksBindingSource = new BindingSource(components);
-            ((System.ComponentModel.ISupportInitialize)libraryPublisherViewModelBindingSource).BeginInit();
+            statusStrip1 = new StatusStrip();
+            PublisherStatus = new ToolStripStatusLabel();
             ((System.ComponentModel.ISupportInitialize)publisherListBindingSource).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)libraryPublisherViewModelBindingSource).BeginInit();
             ((System.ComponentModel.ISupportInitialize)publisherBooksBindingSource).BeginInit();
+            statusStrip1.SuspendLayout();
             SuspendLayout();
             // 
             // PublisherList
@@ -61,6 +64,15 @@
             PublisherList.TabIndex = 0;
             PublisherList.ValueMember = "Id";
             PublisherList.SelectedIndexChanged += PublisherList_SelectedIndexChanged;
+            // 
+            // publisherListBindingSource
+            // 
+            publisherListBindingSource.DataMember = "PublisherList";
+            publisherListBindingSource.DataSource = libraryPublisherViewModelBindingSource;
+            // 
+            // libraryPublisherViewModelBindingSource
+            // 
+            libraryPublisherViewModelBindingSource.DataSource = typeof(ShowCaseViewModel.Library.LibraryPublisherViewModel);
             // 
             // label1
             // 
@@ -155,15 +167,6 @@
             UpdatePublisher.Text = "Update";
             UpdatePublisher.UseVisualStyleBackColor = true;
             // 
-            // libraryPublisherViewModelBindingSource
-            // 
-            libraryPublisherViewModelBindingSource.DataSource = typeof(ShowCaseViewModel.Library.LibraryPublisherViewModel);
-            // 
-            // publisherListBindingSource
-            // 
-            publisherListBindingSource.DataMember = "PublisherList";
-            publisherListBindingSource.DataSource = libraryPublisherViewModelBindingSource;
-            // 
             // listBox1
             // 
             listBox1.DataSource = publisherBooksBindingSource;
@@ -181,11 +184,26 @@
             publisherBooksBindingSource.DataMember = "PublisherBooks";
             publisherBooksBindingSource.DataSource = libraryPublisherViewModelBindingSource;
             // 
+            // statusStrip1
+            // 
+            statusStrip1.Items.AddRange(new ToolStripItem[] { PublisherStatus });
+            statusStrip1.Location = new Point(0, 428);
+            statusStrip1.Name = "statusStrip1";
+            statusStrip1.Size = new Size(800, 22);
+            statusStrip1.TabIndex = 14;
+            statusStrip1.Text = "statusStrip1";
+            // 
+            // PublisherStatus
+            // 
+            PublisherStatus.Name = "PublisherStatus";
+            PublisherStatus.Size = new Size(0, 17);
+            // 
             // LibraryPublisher
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
+            Controls.Add(statusStrip1);
             Controls.Add(listBox1);
             Controls.Add(UpdatePublisher);
             Controls.Add(AddPublisher);
@@ -200,9 +218,11 @@
             Controls.Add(PublisherList);
             Name = "LibraryPublisher";
             Text = "LibraryPublisher";
-            ((System.ComponentModel.ISupportInitialize)libraryPublisherViewModelBindingSource).EndInit();
             ((System.ComponentModel.ISupportInitialize)publisherListBindingSource).EndInit();
+            ((System.ComponentModel.ISupportInitialize)libraryPublisherViewModelBindingSource).EndInit();
             ((System.ComponentModel.ISupportInitialize)publisherBooksBindingSource).EndInit();
+            statusStrip1.ResumeLayout(false);
+            statusStrip1.PerformLayout();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -224,5 +244,7 @@
         private BindingSource publisherListBindingSource;
         private ListBox listBox1;
         private BindingSource publisherBooksBindingSource;
+        private StatusStrip statusStrip1;
+        public ToolStripStatusLabel PublisherStatus;
     }
 }

@@ -50,9 +50,12 @@
             RemovePatron = new Button();
             AddPatron = new Button();
             UpdatePatron = new Button();
+            statusStrip1 = new StatusStrip();
+            PatronStatus = new ToolStripStatusLabel();
             ((System.ComponentModel.ISupportInitialize)patronListBindingSource).BeginInit();
             ((System.ComponentModel.ISupportInitialize)libraryPatronViewModelBindingSource).BeginInit();
             ((System.ComponentModel.ISupportInitialize)patronBorrowedBooksBindingSource).BeginInit();
+            statusStrip1.SuspendLayout();
             SuspendLayout();
             // 
             // PatronList
@@ -237,11 +240,26 @@
             UpdatePatron.Text = "Update";
             UpdatePatron.UseVisualStyleBackColor = true;
             // 
+            // statusStrip1
+            // 
+            statusStrip1.Items.AddRange(new ToolStripItem[] { PatronStatus });
+            statusStrip1.Location = new Point(0, 428);
+            statusStrip1.Name = "statusStrip1";
+            statusStrip1.Size = new Size(800, 22);
+            statusStrip1.TabIndex = 18;
+            statusStrip1.Text = "statusStrip1";
+            // 
+            // PatronStatus
+            // 
+            PatronStatus.Name = "PatronStatus";
+            PatronStatus.Size = new Size(0, 17);
+            // 
             // LibraryPatron
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
+            Controls.Add(statusStrip1);
             Controls.Add(UpdatePatron);
             Controls.Add(AddPatron);
             Controls.Add(RemovePatron);
@@ -265,6 +283,8 @@
             ((System.ComponentModel.ISupportInitialize)patronListBindingSource).EndInit();
             ((System.ComponentModel.ISupportInitialize)libraryPatronViewModelBindingSource).EndInit();
             ((System.ComponentModel.ISupportInitialize)patronBorrowedBooksBindingSource).EndInit();
+            statusStrip1.ResumeLayout(false);
+            statusStrip1.PerformLayout();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -292,5 +312,7 @@
         private Button RemovePatron;
         private Button AddPatron;
         private Button UpdatePatron;
+        private StatusStrip statusStrip1;
+        private ToolStripStatusLabel PatronStatus;
     }
 }

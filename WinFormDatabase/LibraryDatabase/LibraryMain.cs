@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.Messaging;
 using ShowCaseViewModel.Library;
+using ShowCaseViewModel.Messages.LibraryMessages;
 using ShowCaseViewModel.Messages.Universal;
 using System;
 using System.Collections.Generic;
@@ -13,7 +14,7 @@ using System.Windows.Forms;
 
 namespace WinForm_Database.LibraryDatabase
 {
-    public partial class LibraryMain : Form, IRecipient<ExceptionMessage>
+    public partial class LibraryMain : Form, IRecipient<ExceptionMessage>, IRecipient<LibraryReBorrowBook>, IRecipient<LibraryBorrowBook>, IRecipient<LibraryReturnBook>
     {
         LibraryMainCheckoutViewModel viewModel;
 
@@ -22,6 +23,7 @@ namespace WinForm_Database.LibraryDatabase
             InitializeComponent();
             viewModel = new LibraryMainCheckoutViewModel();
             libraryMainCheckoutViewModelBindingSource.DataSource = viewModel;
+            WeakReferenceMessenger.Default.RegisterAll(this);
         }
 
         public void Receive(ExceptionMessage message)
@@ -71,6 +73,21 @@ namespace WinForm_Database.LibraryDatabase
         {
             LibraryPublisher libraryPublisher = new LibraryPublisher();
             libraryPublisher.Show();
+        }
+
+        public void Receive(LibraryReBorrowBook message)
+        {
+            StatusBarLabel.Text = "Book's borrow time has been successfully extended";
+        }
+
+        public void Receive(LibraryBorrowBook message)
+        {
+            StatusBarLabel.Text = "Book has been borrowed";
+        }
+
+        public void Receive(LibraryReturnBook message)
+        {
+            StatusBarLabel.Text = "Book has been returned";
         }
     }
 }

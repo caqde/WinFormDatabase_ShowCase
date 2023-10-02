@@ -44,9 +44,12 @@
             GetAuthor = new Button();
             UpdateAuthor = new Button();
             RemoveAuthor = new Button();
+            statusStrip1 = new StatusStrip();
+            AuthorStatus = new ToolStripStatusLabel();
             ((System.ComponentModel.ISupportInitialize)authorListBindingSource).BeginInit();
             ((System.ComponentModel.ISupportInitialize)libraryAuthorViewModelBindingSource).BeginInit();
             ((System.ComponentModel.ISupportInitialize)authorBookListBindingSource).BeginInit();
+            statusStrip1.SuspendLayout();
             SuspendLayout();
             // 
             // AuthorListBox
@@ -181,11 +184,26 @@
             RemoveAuthor.Text = "Remove";
             RemoveAuthor.UseVisualStyleBackColor = true;
             // 
+            // statusStrip1
+            // 
+            statusStrip1.Items.AddRange(new ToolStripItem[] { AuthorStatus });
+            statusStrip1.Location = new Point(0, 428);
+            statusStrip1.Name = "statusStrip1";
+            statusStrip1.Size = new Size(800, 22);
+            statusStrip1.TabIndex = 12;
+            statusStrip1.Text = "statusStrip1";
+            // 
+            // AuthorStatus
+            // 
+            AuthorStatus.Name = "AuthorStatus";
+            AuthorStatus.Size = new Size(0, 17);
+            // 
             // LibraryAuthor
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
+            Controls.Add(statusStrip1);
             Controls.Add(RemoveAuthor);
             Controls.Add(UpdateAuthor);
             Controls.Add(GetAuthor);
@@ -203,6 +221,8 @@
             ((System.ComponentModel.ISupportInitialize)authorListBindingSource).EndInit();
             ((System.ComponentModel.ISupportInitialize)libraryAuthorViewModelBindingSource).EndInit();
             ((System.ComponentModel.ISupportInitialize)authorBookListBindingSource).EndInit();
+            statusStrip1.ResumeLayout(false);
+            statusStrip1.PerformLayout();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -224,5 +244,7 @@
         private Button GetAuthor;
         private Button UpdateAuthor;
         private Button RemoveAuthor;
+        private StatusStrip statusStrip1;
+        private ToolStripStatusLabel AuthorStatus;
     }
 }

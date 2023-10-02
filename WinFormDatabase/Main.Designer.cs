@@ -31,8 +31,8 @@
             components = new System.ComponentModel.Container();
             menuPanel = new Panel();
             LibraryDatabaseButton = new Button();
-            SingleDatabaseButton = new Button();
             mainViewModelBindingSource = new BindingSource(components);
+            SingleDatabaseButton = new Button();
             formPanel = new Panel();
             menuPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)mainViewModelBindingSource).BeginInit();
@@ -43,9 +43,10 @@
             menuPanel.BackColor = SystemColors.ControlDark;
             menuPanel.Controls.Add(LibraryDatabaseButton);
             menuPanel.Controls.Add(SingleDatabaseButton);
+            menuPanel.Dock = DockStyle.Left;
             menuPanel.Location = new Point(0, 0);
             menuPanel.Name = "menuPanel";
-            menuPanel.Size = new Size(200, 533);
+            menuPanel.Size = new Size(200, 531);
             menuPanel.TabIndex = 0;
             // 
             // LibraryDatabaseButton
@@ -59,6 +60,10 @@
             LibraryDatabaseButton.Text = "Library Demo";
             LibraryDatabaseButton.UseVisualStyleBackColor = true;
             // 
+            // mainViewModelBindingSource
+            // 
+            mainViewModelBindingSource.DataSource = typeof(ShowCaseViewModel.MainViewModel);
+            // 
             // SingleDatabaseButton
             // 
             SingleDatabaseButton.DataBindings.Add(new Binding("Command", mainViewModelBindingSource, "LoadMainViewCommand", true));
@@ -69,26 +74,23 @@
             SingleDatabaseButton.Text = "Single Attribute Database Demo";
             SingleDatabaseButton.UseVisualStyleBackColor = true;
             // 
-            // mainViewModelBindingSource
-            // 
-            mainViewModelBindingSource.DataSource = typeof(ShowCaseViewModel.MainViewModel);
-            // 
             // formPanel
             // 
-            formPanel.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+            formPanel.AutoSize = true;
             formPanel.BackColor = SystemColors.Control;
             formPanel.BorderStyle = BorderStyle.Fixed3D;
-            formPanel.Location = new Point(202, 0);
+            formPanel.Dock = DockStyle.Fill;
+            formPanel.Location = new Point(200, 0);
             formPanel.Margin = new Padding(2);
             formPanel.Name = "formPanel";
-            formPanel.Size = new Size(673, 533);
+            formPanel.Size = new Size(798, 531);
             formPanel.TabIndex = 1;
             // 
             // Main
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(877, 531);
+            ClientSize = new Size(998, 531);
             Controls.Add(formPanel);
             Controls.Add(menuPanel);
             Name = "Main";
@@ -96,6 +98,7 @@
             menuPanel.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)mainViewModelBindingSource).EndInit();
             ResumeLayout(false);
+            PerformLayout();
         }
 
         #endregion
