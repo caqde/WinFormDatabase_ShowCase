@@ -52,6 +52,7 @@
             UpdatePatron = new Button();
             statusStrip1 = new StatusStrip();
             PatronStatus = new ToolStripStatusLabel();
+            NewPatron = new Button();
             ((System.ComponentModel.ISupportInitialize)patronListBindingSource).BeginInit();
             ((System.ComponentModel.ISupportInitialize)libraryPatronViewModelBindingSource).BeginInit();
             ((System.ComponentModel.ISupportInitialize)patronBorrowedBooksBindingSource).BeginInit();
@@ -66,7 +67,7 @@
             PatronList.ItemHeight = 15;
             PatronList.Location = new Point(12, 29);
             PatronList.Name = "PatronList";
-            PatronList.Size = new Size(206, 334);
+            PatronList.Size = new Size(237, 334);
             PatronList.TabIndex = 0;
             PatronList.ValueMember = "Id";
             PatronList.SelectedIndexChanged += PatronList_SelectedIndexChanged;
@@ -92,7 +93,7 @@
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new Point(250, 32);
+            label2.Location = new Point(260, 32);
             label2.Name = "label2";
             label2.Size = new Size(39, 15);
             label2.TabIndex = 2;
@@ -101,7 +102,7 @@
             // label3
             // 
             label3.AutoSize = true;
-            label3.Location = new Point(250, 61);
+            label3.Location = new Point(260, 61);
             label3.Name = "label3";
             label3.Size = new Size(49, 15);
             label3.TabIndex = 3;
@@ -110,7 +111,7 @@
             // label4
             // 
             label4.AutoSize = true;
-            label4.Location = new Point(250, 90);
+            label4.Location = new Point(260, 90);
             label4.Name = "label4";
             label4.Size = new Size(28, 15);
             label4.TabIndex = 4;
@@ -119,7 +120,7 @@
             // PatronName
             // 
             PatronName.DataBindings.Add(new Binding("Text", libraryPatronViewModelBindingSource, "PatronName", true));
-            PatronName.Location = new Point(344, 29);
+            PatronName.Location = new Point(365, 29);
             PatronName.Name = "PatronName";
             PatronName.Size = new Size(177, 23);
             PatronName.TabIndex = 5;
@@ -127,7 +128,7 @@
             // PatronAddress
             // 
             PatronAddress.DataBindings.Add(new Binding("Text", libraryPatronViewModelBindingSource, "PatronAddress", true));
-            PatronAddress.Location = new Point(344, 58);
+            PatronAddress.Location = new Point(365, 58);
             PatronAddress.Name = "PatronAddress";
             PatronAddress.Size = new Size(177, 23);
             PatronAddress.TabIndex = 6;
@@ -135,7 +136,7 @@
             // PatronCity
             // 
             PatronCity.DataBindings.Add(new Binding("Text", libraryPatronViewModelBindingSource, "PatronCity", true));
-            PatronCity.Location = new Point(344, 87);
+            PatronCity.Location = new Point(365, 87);
             PatronCity.Name = "PatronCity";
             PatronCity.Size = new Size(177, 23);
             PatronCity.TabIndex = 7;
@@ -143,7 +144,7 @@
             // label5
             // 
             label5.AutoSize = true;
-            label5.Location = new Point(250, 119);
+            label5.Location = new Point(260, 119);
             label5.Name = "label5";
             label5.Size = new Size(70, 15);
             label5.TabIndex = 8;
@@ -152,7 +153,7 @@
             // label6
             // 
             label6.AutoSize = true;
-            label6.Location = new Point(250, 148);
+            label6.Location = new Point(260, 148);
             label6.Name = "label6";
             label6.Size = new Size(88, 15);
             label6.TabIndex = 9;
@@ -161,7 +162,7 @@
             // PatronPostalCode
             // 
             PatronPostalCode.DataBindings.Add(new Binding("Text", libraryPatronViewModelBindingSource, "PatronPostalCode", true));
-            PatronPostalCode.Location = new Point(344, 116);
+            PatronPostalCode.Location = new Point(365, 116);
             PatronPostalCode.Name = "PatronPostalCode";
             PatronPostalCode.Size = new Size(177, 23);
             PatronPostalCode.TabIndex = 10;
@@ -169,7 +170,7 @@
             // PatronPhoneNumber
             // 
             PatronPhoneNumber.DataBindings.Add(new Binding("Text", libraryPatronViewModelBindingSource, "PatronPhoneNumber", true));
-            PatronPhoneNumber.Location = new Point(344, 145);
+            PatronPhoneNumber.Location = new Point(365, 145);
             PatronPhoneNumber.Name = "PatronPhoneNumber";
             PatronPhoneNumber.Size = new Size(177, 23);
             PatronPhoneNumber.TabIndex = 11;
@@ -177,7 +178,7 @@
             // BorrowedBookList
             // 
             BorrowedBookList.DataSource = patronBorrowedBooksBindingSource;
-            BorrowedBookList.DisplayMember = "BorrowedBook";
+            BorrowedBookList.DisplayMember = "BorrowedBook.Title";
             BorrowedBookList.FormattingEnabled = true;
             BorrowedBookList.ItemHeight = 15;
             BorrowedBookList.Location = new Point(601, 29);
@@ -203,7 +204,7 @@
             // GetPatron
             // 
             GetPatron.DataBindings.Add(new Binding("Command", libraryPatronViewModelBindingSource, "getPatronCommand", true));
-            GetPatron.Location = new Point(12, 369);
+            GetPatron.Location = new Point(93, 369);
             GetPatron.Name = "GetPatron";
             GetPatron.Size = new Size(75, 23);
             GetPatron.TabIndex = 14;
@@ -213,7 +214,7 @@
             // RemovePatron
             // 
             RemovePatron.DataBindings.Add(new Binding("Command", libraryPatronViewModelBindingSource, "removePatronCommand", true));
-            RemovePatron.Location = new Point(143, 369);
+            RemovePatron.Location = new Point(174, 369);
             RemovePatron.Name = "RemovePatron";
             RemovePatron.Size = new Size(75, 23);
             RemovePatron.TabIndex = 15;
@@ -254,11 +255,22 @@
             PatronStatus.Name = "PatronStatus";
             PatronStatus.Size = new Size(0, 17);
             // 
+            // NewPatron
+            // 
+            NewPatron.Location = new Point(12, 369);
+            NewPatron.Name = "NewPatron";
+            NewPatron.Size = new Size(75, 23);
+            NewPatron.TabIndex = 19;
+            NewPatron.Text = "New";
+            NewPatron.UseVisualStyleBackColor = true;
+            NewPatron.Click += NewPatron_Click;
+            // 
             // LibraryPatron
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
+            Controls.Add(NewPatron);
             Controls.Add(statusStrip1);
             Controls.Add(UpdatePatron);
             Controls.Add(AddPatron);
@@ -314,5 +326,6 @@
         private Button UpdatePatron;
         private StatusStrip statusStrip1;
         private ToolStripStatusLabel PatronStatus;
+        private Button NewPatron;
     }
 }

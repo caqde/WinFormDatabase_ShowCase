@@ -52,6 +52,7 @@
             RemoveBook = new Button();
             statusStrip1 = new StatusStrip();
             BookStatus = new ToolStripStatusLabel();
+            NewBook = new Button();
             ((System.ComponentModel.ISupportInitialize)booksBindingSource).BeginInit();
             ((System.ComponentModel.ISupportInitialize)libraryBookViewModelBindingSource).BeginInit();
             ((System.ComponentModel.ISupportInitialize)publishersBindingSource).BeginInit();
@@ -67,7 +68,7 @@
             BookList.ItemHeight = 15;
             BookList.Location = new Point(12, 35);
             BookList.Name = "BookList";
-            BookList.Size = new Size(190, 334);
+            BookList.Size = new Size(237, 334);
             BookList.TabIndex = 0;
             BookList.SelectedIndexChanged += BookList_SelectedIndexChanged;
             // 
@@ -209,7 +210,7 @@
             // GetBook
             // 
             GetBook.DataBindings.Add(new Binding("Command", libraryBookViewModelBindingSource, "getBookCommand", true));
-            GetBook.Location = new Point(12, 375);
+            GetBook.Location = new Point(93, 375);
             GetBook.Name = "GetBook";
             GetBook.Size = new Size(75, 23);
             GetBook.TabIndex = 13;
@@ -239,7 +240,7 @@
             // RemoveBook
             // 
             RemoveBook.DataBindings.Add(new Binding("Command", libraryBookViewModelBindingSource, "removeBookCommand", true));
-            RemoveBook.Location = new Point(127, 375);
+            RemoveBook.Location = new Point(174, 375);
             RemoveBook.Name = "RemoveBook";
             RemoveBook.Size = new Size(75, 23);
             RemoveBook.TabIndex = 16;
@@ -260,11 +261,22 @@
             BookStatus.Name = "BookStatus";
             BookStatus.Size = new Size(0, 17);
             // 
+            // NewBook
+            // 
+            NewBook.Location = new Point(12, 375);
+            NewBook.Name = "NewBook";
+            NewBook.Size = new Size(75, 23);
+            NewBook.TabIndex = 18;
+            NewBook.Text = "New";
+            NewBook.UseVisualStyleBackColor = true;
+            NewBook.Click += NewBook_Click;
+            // 
             // LibraryBooks
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
+            Controls.Add(NewBook);
             Controls.Add(statusStrip1);
             Controls.Add(RemoveBook);
             Controls.Add(UpdateBook);
@@ -320,5 +332,6 @@
         private Button RemoveBook;
         private StatusStrip statusStrip1;
         private ToolStripStatusLabel BookStatus;
+        private Button NewBook;
     }
 }

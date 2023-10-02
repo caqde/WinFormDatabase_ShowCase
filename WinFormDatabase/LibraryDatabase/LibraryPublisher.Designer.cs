@@ -46,6 +46,7 @@
             publisherBooksBindingSource = new BindingSource(components);
             statusStrip1 = new StatusStrip();
             PublisherStatus = new ToolStripStatusLabel();
+            NewPublisher = new Button();
             ((System.ComponentModel.ISupportInitialize)publisherListBindingSource).BeginInit();
             ((System.ComponentModel.ISupportInitialize)libraryPublisherViewModelBindingSource).BeginInit();
             ((System.ComponentModel.ISupportInitialize)publisherBooksBindingSource).BeginInit();
@@ -60,7 +61,7 @@
             PublisherList.ItemHeight = 15;
             PublisherList.Location = new Point(12, 27);
             PublisherList.Name = "PublisherList";
-            PublisherList.Size = new Size(204, 334);
+            PublisherList.Size = new Size(237, 334);
             PublisherList.TabIndex = 0;
             PublisherList.ValueMember = "Id";
             PublisherList.SelectedIndexChanged += PublisherList_SelectedIndexChanged;
@@ -103,7 +104,7 @@
             // label3
             // 
             label3.AutoSize = true;
-            label3.Location = new Point(239, 59);
+            label3.Location = new Point(393, 66);
             label3.Name = "label3";
             label3.Size = new Size(67, 15);
             label3.TabIndex = 6;
@@ -121,7 +122,7 @@
             // richTextBox1
             // 
             richTextBox1.DataBindings.Add(new Binding("Text", libraryPublisherViewModelBindingSource, "PublisherDescription", true));
-            richTextBox1.Location = new Point(312, 56);
+            richTextBox1.Location = new Point(312, 84);
             richTextBox1.Name = "richTextBox1";
             richTextBox1.Size = new Size(238, 183);
             richTextBox1.TabIndex = 8;
@@ -130,7 +131,7 @@
             // GetPublisher
             // 
             GetPublisher.DataBindings.Add(new Binding("Command", libraryPublisherViewModelBindingSource, "getPublisherCommand", true));
-            GetPublisher.Location = new Point(12, 367);
+            GetPublisher.Location = new Point(93, 367);
             GetPublisher.Name = "GetPublisher";
             GetPublisher.Size = new Size(75, 23);
             GetPublisher.TabIndex = 9;
@@ -140,7 +141,7 @@
             // RemovePublisher
             // 
             RemovePublisher.DataBindings.Add(new Binding("Command", libraryPublisherViewModelBindingSource, "removePublisherCommand", true));
-            RemovePublisher.Location = new Point(141, 367);
+            RemovePublisher.Location = new Point(174, 367);
             RemovePublisher.Name = "RemovePublisher";
             RemovePublisher.Size = new Size(75, 23);
             RemovePublisher.TabIndex = 10;
@@ -198,11 +199,22 @@
             PublisherStatus.Name = "PublisherStatus";
             PublisherStatus.Size = new Size(0, 17);
             // 
+            // NewPublisher
+            // 
+            NewPublisher.Location = new Point(12, 367);
+            NewPublisher.Name = "NewPublisher";
+            NewPublisher.Size = new Size(75, 23);
+            NewPublisher.TabIndex = 15;
+            NewPublisher.Text = "New";
+            NewPublisher.UseVisualStyleBackColor = true;
+            NewPublisher.Click += NewPublisher_Click;
+            // 
             // LibraryPublisher
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
+            Controls.Add(NewPublisher);
             Controls.Add(statusStrip1);
             Controls.Add(listBox1);
             Controls.Add(UpdatePublisher);
@@ -246,5 +258,6 @@
         private BindingSource publisherBooksBindingSource;
         private StatusStrip statusStrip1;
         public ToolStripStatusLabel PublisherStatus;
+        private Button NewPublisher;
     }
 }

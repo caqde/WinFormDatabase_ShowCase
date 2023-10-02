@@ -46,6 +46,7 @@
             RemoveAuthor = new Button();
             statusStrip1 = new StatusStrip();
             AuthorStatus = new ToolStripStatusLabel();
+            NewAuthor = new Button();
             ((System.ComponentModel.ISupportInitialize)authorListBindingSource).BeginInit();
             ((System.ComponentModel.ISupportInitialize)libraryAuthorViewModelBindingSource).BeginInit();
             ((System.ComponentModel.ISupportInitialize)authorBookListBindingSource).BeginInit();
@@ -60,7 +61,7 @@
             AuthorListBox.ItemHeight = 15;
             AuthorListBox.Location = new Point(12, 31);
             AuthorListBox.Name = "AuthorListBox";
-            AuthorListBox.Size = new Size(192, 349);
+            AuthorListBox.Size = new Size(237, 349);
             AuthorListBox.TabIndex = 0;
             AuthorListBox.ValueMember = "Id";
             AuthorListBox.SelectedIndexChanged += AuthorListBox_SelectedIndexChanged;
@@ -158,7 +159,7 @@
             // GetAuthor
             // 
             GetAuthor.DataBindings.Add(new Binding("Command", libraryAuthorViewModelBindingSource, "getAuthorCommand", true));
-            GetAuthor.Location = new Point(12, 386);
+            GetAuthor.Location = new Point(93, 386);
             GetAuthor.Name = "GetAuthor";
             GetAuthor.Size = new Size(75, 23);
             GetAuthor.TabIndex = 9;
@@ -178,7 +179,7 @@
             // RemoveAuthor
             // 
             RemoveAuthor.DataBindings.Add(new Binding("Command", libraryAuthorViewModelBindingSource, "removeAuthorCommand", true));
-            RemoveAuthor.Location = new Point(129, 386);
+            RemoveAuthor.Location = new Point(174, 386);
             RemoveAuthor.Name = "RemoveAuthor";
             RemoveAuthor.Size = new Size(75, 23);
             RemoveAuthor.TabIndex = 11;
@@ -199,11 +200,22 @@
             AuthorStatus.Name = "AuthorStatus";
             AuthorStatus.Size = new Size(0, 17);
             // 
+            // NewAuthor
+            // 
+            NewAuthor.Location = new Point(12, 386);
+            NewAuthor.Name = "NewAuthor";
+            NewAuthor.Size = new Size(75, 23);
+            NewAuthor.TabIndex = 13;
+            NewAuthor.Text = "New";
+            NewAuthor.UseVisualStyleBackColor = true;
+            NewAuthor.Click += NewAuthor_Click;
+            // 
             // LibraryAuthor
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
+            Controls.Add(NewAuthor);
             Controls.Add(statusStrip1);
             Controls.Add(RemoveAuthor);
             Controls.Add(UpdateAuthor);
@@ -247,5 +259,6 @@
         private Button RemoveAuthor;
         private StatusStrip statusStrip1;
         private ToolStripStatusLabel AuthorStatus;
+        private Button NewAuthor;
     }
 }

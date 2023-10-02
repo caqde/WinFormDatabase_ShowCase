@@ -64,5 +64,10 @@ namespace WinForm_Database.LibraryDatabase
                 model.SelectedPatronID = (int)PatronList.SelectedValue;
             }
         }
+
+        private void NewPatron_Click(object sender, EventArgs e)
+        {
+            model.SelectedPatronID = -1;
+        }
     }
 }

@@ -39,20 +39,9 @@ namespace ShowCaseViewModel.Library
         [ObservableProperty]
         private int selectedBookID;
 
-        [ObservableProperty]
-        private int selectedAuthorID;
-
-        [ObservableProperty]
-        private int selectedPublisherID;
-
         private bool authorSelected = false;
         private bool bookSelected = false;
         private bool publisherSelected = false;
-
-        partial void OnSelectedAuthorIDChanged(int value)
-        {
-            authorSelected = true;
-        }
 
         partial void OnSelectedBookIDChanged(int value)
         {
@@ -69,11 +58,6 @@ namespace ShowCaseViewModel.Library
                 return;
             }
             bookSelected = true;
-        }
-
-        partial void OnSelectedPublisherIDChanged(int value)
-        {
-            publisherSelected = true;
         }
 
         private int currentBookID;
@@ -108,11 +92,13 @@ namespace ShowCaseViewModel.Library
         partial void OnAuthorIDChanged(int value)
         {
             bookValueChanged();
+            authorSelected = true;
         }
 
         partial void OnPublisherIDChanged(int value)
         {
             bookValueChanged();
+            publisherSelected = true;
         }
 
         partial void OnISBNChanged(int value)

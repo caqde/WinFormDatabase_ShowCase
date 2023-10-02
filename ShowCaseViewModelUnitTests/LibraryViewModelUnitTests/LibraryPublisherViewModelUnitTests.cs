@@ -210,8 +210,8 @@ namespace ShowCaseViewModelUnitTests.LibraryViewModelUnitTests
             Assert.False(testValue);
             Assert.NotNull(exception);
             exception = null;
-            libraryBookViewModel.SelectedPublisherID = 4;
-            libraryBookViewModel.SelectedAuthorID = 3;
+            libraryBookViewModel.PublisherID = 4;
+            libraryBookViewModel.AuthorID = 3;
             libraryBookViewModel.addBookCommand.Execute(null);
             Assert.False(testValue);
             Assert.NotNull(exception);

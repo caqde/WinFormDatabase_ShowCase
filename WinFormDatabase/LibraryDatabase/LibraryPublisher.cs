@@ -65,6 +65,9 @@ namespace WinForm_Database.LibraryDatabase
             }
         }
 
-
+        private void NewPublisher_Click(object sender, EventArgs e)
+        {
+            viewModel.SelectedPublisherID = -1;
+        }
     }
 }

@@ -31,7 +31,7 @@ namespace WinForm_Database.LibraryDatabase
         {
             if (AuthorSelection.SelectedValue is int)
             {
-                libraryBookViewModel.SelectedAuthorID = (int)AuthorSelection.SelectedValue;
+                libraryBookViewModel.AuthorID = (int)AuthorSelection.SelectedValue;
             }
         }
 
@@ -39,7 +39,7 @@ namespace WinForm_Database.LibraryDatabase
         {
             if (PublisherSelection.SelectedValue is int)
             {
-                libraryBookViewModel.SelectedPublisherID = (int)PublisherSelection.SelectedValue;
+                libraryBookViewModel.PublisherID = (int)PublisherSelection.SelectedValue;
             }
         }
 
@@ -79,6 +79,11 @@ namespace WinForm_Database.LibraryDatabase
                 return;
             }
             MessageBox.Show(message.Value.Message, "Critical Error", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+        }
+
+        private void NewBook_Click(object sender, EventArgs e)
+        {
+            libraryBookViewModel.SelectedBookID = -1;
         }
     }
 }

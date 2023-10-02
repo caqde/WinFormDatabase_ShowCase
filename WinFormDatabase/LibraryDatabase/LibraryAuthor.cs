@@ -24,7 +24,6 @@ namespace WinForm_Database.LibraryDatabase
             _viewModel = new LibraryAuthorViewModel();
             libraryAuthorViewModelBindingSource.DataSource = _viewModel;
             WeakReferenceMessenger.Default.RegisterAll(this);
-            _viewModel.SelectedAuthorID = -1;
         }
 
         public void Receive(LibraryAddItem message)
@@ -63,6 +62,11 @@ namespace WinForm_Database.LibraryDatabase
             {
                 _viewModel.SelectedAuthorID = (int)AuthorListBox.SelectedValue;
             }
+        }
+
+        private void NewAuthor_Click(object sender, EventArgs e)
+        {
+            _viewModel.SelectedAuthorID = -1;
         }
     }
 }
