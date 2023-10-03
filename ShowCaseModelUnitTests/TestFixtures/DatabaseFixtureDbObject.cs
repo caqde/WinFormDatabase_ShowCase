@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using EFCore_DBLibrary;
+﻿using EFCore_DBLibrary;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;

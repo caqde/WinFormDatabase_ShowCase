@@ -17,12 +17,18 @@
     <Grid>
 
         <DockPanel>
+            <StatusBar DockPanel.Dock="Bottom" Height="20" BorderBrush="LightBlue" BorderThickness="0,1,0,0">
+                <StatusBarItem>
+                    <TextBlock x:Name="StatusBarText"/>
+                </StatusBarItem>
+            </StatusBar>
             <StackPanel DockPanel.Dock="Left" Width="200" Background="LightGray">
-                <Button>Single Attribute Database</Button>
-                <Button>Library Database</Button>
+                <Button Click="SingleAttribute_Click">Single Attribute Database</Button>
+                <Button Click="LibraryButton_Click">Library Database</Button>
             </StackPanel>
-            <Canvas DockPanel.Dock="Right">
-            </Canvas>
+            <Frame DockPanel.Dock="Right" Name="PageFrame" NavigationUIVisibility="Hidden">
+            </Frame>
+
         </DockPanel>
     </Grid>
 </Window>
