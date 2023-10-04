@@ -1,8 +1,9 @@
 using CommunityToolkit.Mvvm.Messaging;
-using IPrompt;
+using Ookii.Dialogs.WinForms;
 using ShowCaseViewModel;
 using ShowCaseViewModel.Messages;
 using System.ComponentModel;
+using System.Runtime.Versioning;
 
 namespace WinForm_Database
 {
@@ -91,9 +92,12 @@ namespace WinForm_Database
 
         public void Receive(AddMultiMessage message)
         {
-            string input = IInputBox.Show("How many items do you want to add", "Add Multiple?", System.Windows.MessageBoxImage.Question, "0");
+            InputDialog inputDialog = new InputDialog();
+            inputDialog.MainInstruction = "How many items do you want to add";
+            inputDialog.WindowTitle = "Add Multiple";
+            inputDialog.ShowDialog();
             int value = 0;
-            bool isNumeric = Int32.TryParse(input, out value);
+            bool isNumeric = Int32.TryParse(inputDialog.Input, out value);
             if (isNumeric && value > 0)
             {
                 SingleAttributeMultipleEntryDialog dlg = new SingleAttributeMultipleEntryDialog();
