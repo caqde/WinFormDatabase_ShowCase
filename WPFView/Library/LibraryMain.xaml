@@ -4,12 +4,50 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:WPFView.Library"
+      xmlns:View="clr-namespace:ShowCaseViewModel.Library;assembly=ShowCaseViewModel"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
       Title="LibraryMain">
-
+    <Page.DataContext>
+        <View:LibraryMainCheckoutViewModel/>
+    </Page.DataContext>
     <Grid>
-        <DockPanel>
-            <Button>Library Frame</Button></DockPanel>
-    </Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Label Grid.Row="0" Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Center">Data Management</Label>
+        <Label Grid.Row="0" Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Bottom">Books</Label>
+        <ListBox Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="3" Grid.RowSpan="5" ItemsSource="{Binding BookList/Title}" SelectedValue="{Binding SelectedBook}" SelectedValuePath="{Binding BookList/Id}"></ListBox>
+        <Label Grid.Row="0" Grid.Column="5" HorizontalAlignment="Center" VerticalAlignment="Bottom">Patrons</Label>
+        <ListBox Grid.Row="1" Grid.Column="4" Grid.ColumnSpan="3" Grid.RowSpan="5" ItemsSource="{Binding PatronList/Name}" SelectedValue="{Binding SelectedPatron}" SelectedValuePath="{Binding PatronList/Id}"></ListBox>
+        <Label Grid.Row="0" Grid.Column="8" Grid.ColumnSpan="3" HorizontalAlignment="Center" VerticalAlignment="Bottom">Borrowed Books</Label>
+        <ListBox Grid.Row="1" Grid.Column="8" Grid.ColumnSpan="3" Grid.RowSpan="5" ItemsSource="{Binding BorrowedBookList/BorrowedBook.Title}" SelectedValue="{Binding SelectedBorrowedBook}" SelectedValuePath="{Binding BorrowedBookList/Id}"></ListBox>
+        <Button Grid.Row="1" Grid.Column="0">Authors</Button>
+        <Button Grid.Row="2" Grid.Column="0">Books</Button>
+        <Button Grid.Row="3" Grid.Column="0">Patrons</Button>
+        <Button Grid.Row="4" Grid.Column="0">Publishers</Button>
+        <Button Grid.Row="6" Grid.Column="6" Command="{Binding borrowBookCommand}">Borrow</Button>
+        <Button Grid.Row="6" Grid.Column="8" Command="{Binding returnBookCommand}">Return</Button>
+        <Button Grid.Row="6" Grid.Column="9" Command="{Binding reBorrowBookCommand}">Re-Borrow</Button>
+        </Grid>
 </Page>

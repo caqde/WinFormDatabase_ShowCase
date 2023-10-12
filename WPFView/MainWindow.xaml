@@ -14,21 +14,23 @@
         xmlns:local="clr-namespace:WPFView"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
-    <Grid>
+    <materialDesign:DialogHost>
+        <Grid>
 
-        <DockPanel>
-            <StatusBar DockPanel.Dock="Bottom" Height="20" BorderBrush="LightBlue" BorderThickness="0,1,0,0">
-                <StatusBarItem>
-                    <TextBlock x:Name="StatusBarText"/>
-                </StatusBarItem>
-            </StatusBar>
-            <StackPanel DockPanel.Dock="Left" Width="200" Background="LightGray">
-                <Button Click="SingleAttribute_Click">Single Attribute Database</Button>
-                <Button Click="LibraryButton_Click">Library Database</Button>
-            </StackPanel>
-            <Frame DockPanel.Dock="Right" Name="PageFrame" NavigationUIVisibility="Hidden">
-            </Frame>
+            <DockPanel>
+                <StatusBar DockPanel.Dock="Bottom" Height="20" BorderBrush="LightBlue" BorderThickness="0,1,0,0">
+                    <StatusBarItem>
+                        <TextBlock x:Name="StatusBarText"/>
+                    </StatusBarItem>
+                </StatusBar>
+                <StackPanel DockPanel.Dock="Left" Width="200" Background="LightGray">
+                    <Button Click="SingleAttribute_Click">Single Attribute Database</Button>
+                    <Button Click="LibraryButton_Click">Library Database</Button>
+                </StackPanel>
+                <Frame DockPanel.Dock="Right" Name="PageFrame" NavigationUIVisibility="Hidden">
+                </Frame>
 
-        </DockPanel>
-    </Grid>
+            </DockPanel>
+        </Grid>
+    </materialDesign:DialogHost>
 </Window>
