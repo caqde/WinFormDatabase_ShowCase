@@ -12,17 +12,28 @@
         <View:LibraryMainCheckoutViewModel/>
     </Page.DataContext>
     <Grid>
+        <Grid.Resources>
+            <DataTemplate x:Key="BorrowedBook">
+                <TextBlock Text="{Binding Path=BorrowedBook.Title}"/>
+            </DataTemplate>
+            <DataTemplate x:Key="Patron">
+                <TextBlock Text="{Binding Path=Name}"/>
+            </DataTemplate>
+            <DataTemplate x:Key="Books">
+                <TextBlock Text="{Binding Path=Title}"/>
+            </DataTemplate>
+        </Grid.Resources>
         <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="100"/>
             <ColumnDefinition/>
             <ColumnDefinition/>
             <ColumnDefinition/>
             <ColumnDefinition/>
             <ColumnDefinition/>
-            <ColumnDefinition/>
-            <ColumnDefinition/>
-            <ColumnDefinition/>
-            <ColumnDefinition/>
-            <ColumnDefinition/>
+            <ColumnDefinition Width="80"/>
+            <ColumnDefinition Width="40"/>
+            <ColumnDefinition Width="75"/>
+            <ColumnDefinition Width="100"/>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
@@ -35,13 +46,13 @@
             <RowDefinition/>
             <RowDefinition/>
         </Grid.RowDefinitions>
-        <Label Grid.Row="0" Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Center">Data Management</Label>
+        <Label Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Left" VerticalAlignment="Center">Data Management</Label>
         <Label Grid.Row="0" Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Bottom">Books</Label>
-        <ListBox Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="3" Grid.RowSpan="5" ItemsSource="{Binding BookList/Title}" SelectedValue="{Binding SelectedBook}" SelectedValuePath="{Binding BookList/Id}"></ListBox>
+        <ListBox Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="3" Grid.RowSpan="5" ItemsSource="{Binding BookList}" ItemTemplate="{StaticResource ResourceKey=Books}" SelectedValue="{Binding SelectedBook}" SelectedValuePath="Id"></ListBox>
         <Label Grid.Row="0" Grid.Column="5" HorizontalAlignment="Center" VerticalAlignment="Bottom">Patrons</Label>
-        <ListBox Grid.Row="1" Grid.Column="4" Grid.ColumnSpan="3" Grid.RowSpan="5" ItemsSource="{Binding PatronList/Name}" SelectedValue="{Binding SelectedPatron}" SelectedValuePath="{Binding PatronList/Id}"></ListBox>
+        <ListBox Grid.Row="1" Grid.Column="4" Grid.ColumnSpan="3" Grid.RowSpan="5" ItemsSource="{Binding PatronList}" ItemTemplate="{StaticResource ResourceKey=Patron}" SelectedValue="{Binding SelectedPatron}" SelectedValuePath="Id"></ListBox>
         <Label Grid.Row="0" Grid.Column="8" Grid.ColumnSpan="3" HorizontalAlignment="Center" VerticalAlignment="Bottom">Borrowed Books</Label>
-        <ListBox Grid.Row="1" Grid.Column="8" Grid.ColumnSpan="3" Grid.RowSpan="5" ItemsSource="{Binding BorrowedBookList/BorrowedBook.Title}" SelectedValue="{Binding SelectedBorrowedBook}" SelectedValuePath="{Binding BorrowedBookList/Id}"></ListBox>
+        <ListBox Grid.Row="1" Grid.Column="8" Grid.ColumnSpan="3" Grid.RowSpan="5" ItemsSource="{Binding BorrowedBookList}" ItemTemplate="{StaticResource ResourceKey=BorrowedBook}" SelectedValue="{Binding SelectedBorrowedBook}" SelectedValuePath="Id"></ListBox>
         <Button Grid.Row="1" Grid.Column="0">Authors</Button>
         <Button Grid.Row="2" Grid.Column="0">Books</Button>
         <Button Grid.Row="3" Grid.Column="0">Patrons</Button>
