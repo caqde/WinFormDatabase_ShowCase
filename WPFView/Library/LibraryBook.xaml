@@ -11,6 +11,14 @@
         <ViewModel:LibraryBookViewModel/>
     </Window.DataContext>
     <Grid>
+        <Grid.Resources>
+            <DataTemplate x:Key="Book">
+                <TextBlock Text="{Binding Path=Title}"/>
+            </DataTemplate>
+            <DataTemplate x:Key="Combo">
+                <TextBlock Text="{Binding Path=Name}"/>
+            </DataTemplate>
+        </Grid.Resources>
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
             <ColumnDefinition/>
@@ -31,19 +39,19 @@
             <RowDefinition Height="30"/>
         </Grid.RowDefinitions>
         <Label Grid.Row="0" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Bottom">BookList</Label>
-        <ListBox Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" Grid.RowSpan="6" ItemsSource="{Binding Books/Title}" SelectedValue="{Binding SelectedBookID}" SelectedValuePath="{Binding Books/Id}" ></ListBox>
+        <ListBox Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" Grid.RowSpan="6" ItemsSource="{Binding Books, Mode=TwoWay}" ItemTemplate="{StaticResource ResourceKey=Book}" SelectedValue="{Binding SelectedBookID, Mode=TwoWay}" SelectedValuePath="Id" ></ListBox>
         <Label Grid.Row="1" Grid.Column="3" HorizontalAlignment="Right" VerticalAlignment="Center">Title:</Label>
         <Label Grid.Row="2" Grid.Column="3" HorizontalAlignment="Right" VerticalAlignment="Center">ISBN:</Label>
         <Label Grid.Row="3" Grid.Column="3" HorizontalAlignment="Right" VerticalAlignment="Center">Author:</Label>
         <Label Grid.Row="4" Grid.Column="3" HorizontalAlignment="Right" VerticalAlignment="Center">Publisher:</Label>
         <Label Grid.Row="5" Grid.Column="3" HorizontalAlignment="Center" VerticalAlignment="Bottom">Description</Label>
         <CheckBox FlowDirection="RightToLeft" Grid.Row="5" Grid.Column="5" HorizontalAlignment="Right" VerticalAlignment="Center" IsEnabled="False">Is Borrowed</CheckBox>
-        <TextBox Grid.Row="1" Grid.Column="4" Grid.ColumnSpan="2" Text="{Binding Title}"></TextBox>
-        <TextBox Grid.Row="2" Grid.Column="4" Grid.ColumnSpan="2" Text="{Binding ISBN}"></TextBox>
-        <ComboBox Grid.Row="3" Grid.Column="4" Grid.ColumnSpan="2" ItemsSource="{Binding Authors/Name}" SelectedValue="{Binding AuthorID}" SelectedValuePath="{Binding Authors/Id}"></ComboBox>
-        <ComboBox Grid.Row="4" Grid.Column="4" Grid.ColumnSpan="2" ItemsSource="{Binding Publishers/Name}" SelectedValue="{Binding PublisherID}" SelectedValuePath="{Binding Publishers/Id}"></ComboBox>
-        <TextBox Grid.Row="6" Grid.Column="3" Grid.ColumnSpan="3" Text="{Binding Description}"></TextBox>
-        <Button Grid.Row="7" Grid.Column="0">New</Button>
+        <TextBox Grid.Row="1" Grid.Column="4" Grid.ColumnSpan="2" Text="{Binding Title, Mode=TwoWay}"></TextBox>
+        <TextBox Grid.Row="2" Grid.Column="4" Grid.ColumnSpan="2" Text="{Binding ISBN, Mode=TwoWay}"></TextBox>
+        <ComboBox Grid.Row="3" Grid.Column="4" Grid.ColumnSpan="2" ItemsSource="{Binding Authors, Mode=TwoWay}" ItemTemplate="{StaticResource ResourceKey=Combo}" SelectedValue="{Binding AuthorID, Mode=TwoWay}" SelectedValuePath="Id"></ComboBox>
+        <ComboBox Grid.Row="4" Grid.Column="4" Grid.ColumnSpan="2" ItemsSource="{Binding Publishers, Mode=TwoWay}" ItemTemplate="{StaticResource ResourceKey=Combo}" SelectedValue="{Binding PublisherID, Mode=TwoWay}" SelectedValuePath="Id"></ComboBox>
+        <TextBox Grid.Row="6" Grid.Column="3" Grid.ColumnSpan="3" Text="{Binding Description, Mode=TwoWay}"></TextBox>
+        <Button Grid.Row="7" Grid.Column="0" Click="New_Click">New</Button>
         <Button Grid.Row="7" Grid.Column="1">Get</Button>
         <Button Grid.Row="7" Grid.Column="2">Remove</Button>
         <Button Grid.Row="7" Grid.Column="3">Add</Button>

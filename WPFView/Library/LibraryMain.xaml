@@ -48,15 +48,15 @@
         </Grid.RowDefinitions>
         <Label Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Left" VerticalAlignment="Center">Data Management</Label>
         <Label Grid.Row="0" Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Bottom">Books</Label>
-        <ListBox Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="3" Grid.RowSpan="5" ItemsSource="{Binding BookList}" ItemTemplate="{StaticResource ResourceKey=Books}" SelectedValue="{Binding SelectedBook}" SelectedValuePath="Id"></ListBox>
+        <ListBox Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="3" Grid.RowSpan="5" ItemsSource="{Binding BookList, Mode=TwoWay}" ItemTemplate="{StaticResource ResourceKey=Books}" SelectedValue="{Binding SelectedBook, Mode=TwoWay}" SelectedValuePath="Id"></ListBox>
         <Label Grid.Row="0" Grid.Column="5" HorizontalAlignment="Center" VerticalAlignment="Bottom">Patrons</Label>
-        <ListBox Grid.Row="1" Grid.Column="4" Grid.ColumnSpan="3" Grid.RowSpan="5" ItemsSource="{Binding PatronList}" ItemTemplate="{StaticResource ResourceKey=Patron}" SelectedValue="{Binding SelectedPatron}" SelectedValuePath="Id"></ListBox>
+        <ListBox Grid.Row="1" Grid.Column="4" Grid.ColumnSpan="3" Grid.RowSpan="5" ItemsSource="{Binding PatronList}" ItemTemplate="{StaticResource ResourceKey=Patron}" SelectedValue="{Binding SelectedPatron, Mode=TwoWay}" SelectedValuePath="Id"></ListBox>
         <Label Grid.Row="0" Grid.Column="8" Grid.ColumnSpan="3" HorizontalAlignment="Center" VerticalAlignment="Bottom">Borrowed Books</Label>
-        <ListBox Grid.Row="1" Grid.Column="8" Grid.ColumnSpan="3" Grid.RowSpan="5" ItemsSource="{Binding BorrowedBookList}" ItemTemplate="{StaticResource ResourceKey=BorrowedBook}" SelectedValue="{Binding SelectedBorrowedBook}" SelectedValuePath="Id"></ListBox>
-        <Button Grid.Row="1" Grid.Column="0">Authors</Button>
-        <Button Grid.Row="2" Grid.Column="0">Books</Button>
-        <Button Grid.Row="3" Grid.Column="0">Patrons</Button>
-        <Button Grid.Row="4" Grid.Column="0">Publishers</Button>
+        <ListBox Grid.Row="1" Grid.Column="8" Grid.ColumnSpan="3" Grid.RowSpan="5" ItemsSource="{Binding BorrowedBookList, Mode=TwoWay}" ItemTemplate="{StaticResource ResourceKey=BorrowedBook}" SelectedValue="{Binding SelectedBorrowedBook, Mode=TwoWay}" SelectedValuePath="Id"></ListBox>
+        <Button Grid.Row="1" Grid.Column="0" Click="Authors_Click">Authors</Button>
+        <Button Grid.Row="2" Grid.Column="0" Click="Books_Click">Books</Button>
+        <Button Grid.Row="3" Grid.Column="0" Click="Patron_Click">Patrons</Button>
+        <Button Grid.Row="4" Grid.Column="0" Click="Publisher_Click">Publishers</Button>
         <Button Grid.Row="6" Grid.Column="6" Command="{Binding borrowBookCommand}">Borrow</Button>
         <Button Grid.Row="6" Grid.Column="8" Command="{Binding returnBookCommand}">Return</Button>
         <Button Grid.Row="6" Grid.Column="9" Command="{Binding reBorrowBookCommand}">Re-Borrow</Button>

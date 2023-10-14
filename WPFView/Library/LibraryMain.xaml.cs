@@ -24,5 +24,29 @@ namespace WPFView.Library
         {
             InitializeComponent();
         }
+
+        private void Authors_Click(object sender, RoutedEventArgs e)
+        {
+            LibraryAuthor authorWindow = new LibraryAuthor();
+            authorWindow.Show();
+        }
+
+        private void Books_Click(object sender, RoutedEventArgs e)
+        {
+            LibraryBook bookWindow = new LibraryBook();
+            bookWindow.Show();
+        }
+
+        private void Patron_Click(object sender, RoutedEventArgs e)
+        {
+            LibraryPatron patronWindow = new LibraryPatron();
+            patronWindow.Show();
+        }
+
+        private void Publisher_Click(object sender, RoutedEventArgs e)
+        {
+            LibraryPublisher publisherWindow = new LibraryPublisher();
+            publisherWindow.Show();
+        }
     }
 }

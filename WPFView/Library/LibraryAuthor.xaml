@@ -11,6 +11,14 @@
         <ViewModel:LibraryAuthorViewModel/>
     </Window.DataContext>
     <Grid>
+        <Grid.Resources>
+            <DataTemplate x:Key="Authors">
+                <TextBlock Text="{Binding Path=Name}"/>
+            </DataTemplate>
+            <DataTemplate x:Key="BookList">
+                <TextBlock Text="{Binding Path=Title}"/>
+            </DataTemplate>
+        </Grid.Resources>
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
             <ColumnDefinition/>
@@ -35,14 +43,14 @@
             <RowDefinition Height="30"/>
         </Grid.RowDefinitions>
         <Label Grid.Row="0" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Bottom">Authors</Label>
-        <ListBox Grid.Row="1" Grid.RowSpan="6" Grid.Column="0" Grid.ColumnSpan="3" BorderBrush="Black" BorderThickness="1,1,1,1" ItemsSource="{Binding AuthorList/Name}" SelectedValue="{Binding SelectedAuthorID}" SelectedValuePath="{Binding AuthorList/Id}"></ListBox>
+        <ListBox Grid.Row="1" Grid.RowSpan="6" Grid.Column="0" Grid.ColumnSpan="3" BorderBrush="Black" BorderThickness="1,1,1,1" ItemsSource="{Binding AuthorList, Mode=TwoWay}" ItemTemplate="{StaticResource ResourceKey=Authors}" SelectedValue="{Binding SelectedAuthorID, Mode=TwoWay}" SelectedValuePath="Id"></ListBox>
         <Label Grid.Row="1" Grid.Column="3" HorizontalAlignment="Right" VerticalAlignment="Center" >Name:</Label>
-        <TextBox Grid.Row="1" Grid.Column="4" Grid.ColumnSpan="3" Text="{Binding AuthorName}"></TextBox>
+        <TextBox Grid.Row="1" Grid.Column="4" Grid.ColumnSpan="3" Text="{Binding AuthorName, Mode=TwoWay}"></TextBox>
         <Label Grid.Row="2" Grid.Column="4" HorizontalAlignment="Center" VerticalAlignment="Bottom">Biography</Label>
-        <TextBox Grid.Column="4" Grid.Row="3" Grid.ColumnSpan="3" Grid.RowSpan="3" Text="{Binding AuthorBiography}" ></TextBox>
+        <TextBox Grid.Column="4" Grid.Row="3" Grid.ColumnSpan="3" Grid.RowSpan="3" Text="{Binding AuthorBiography, Mode=TwoWay}" ></TextBox>
         <Label Grid.Row="0" Grid.Column="9" HorizontalAlignment="Center" VerticalAlignment="Bottom">Book List</Label>
-        <ListBox Grid.Row="1" Grid.Column="8" Grid.ColumnSpan="3" Grid.RowSpan="6" BorderThickness="1,1,1,1" BorderBrush="Black" ItemsSource="{Binding AuthorBookList/Title}"></ListBox>
-        <Button Grid.Column="0" Grid.Row="7" >New</Button>
+        <ListBox Grid.Row="1" Grid.Column="8" Grid.ColumnSpan="3" Grid.RowSpan="6" BorderThickness="1,1,1,1" BorderBrush="Black" ItemsSource="{Binding AuthorBookList, Mode=TwoWay}" ItemTemplate="{StaticResource ResourceKey=BookList}"></ListBox>
+        <Button Grid.Column="0" Grid.Row="7" Click="New_Click" >New</Button>
         <Button Grid.Column="1" Grid.Row="7" Command="{Binding getAuthorCommand}" >Get</Button>
         <Button Grid.Column="2" Grid.Row="7" Command="{Binding removeAuthorCommand}">Remove</Button>
         <Button Grid.Column="4" Grid.Row="6" Command="{Binding addAuthorCommand}">Add</Button>

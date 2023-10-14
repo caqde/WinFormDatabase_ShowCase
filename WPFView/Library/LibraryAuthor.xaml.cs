@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ShowCaseViewModel.Library;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -22,6 +23,12 @@ namespace WPFView.Library
         public LibraryAuthor()
         {
             InitializeComponent();
+        }
+
+        private void New_Click(object sender, RoutedEventArgs e)
+        {
+            var context = DataContext as LibraryAuthorViewModel;
+            context.SelectedAuthorID = -1;
         }
     }
 }

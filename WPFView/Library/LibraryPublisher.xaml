@@ -11,6 +11,14 @@
         <View:LibraryPublisherViewModel/>
     </Window.DataContext>
     <Grid>
+        <Grid.Resources>
+            <DataTemplate x:Key="Publisher">
+                <TextBlock Text="{Binding Path=Name}"/>
+            </DataTemplate>
+            <DataTemplate x:Key="Books">
+                <TextBlock Text="{Binding Path=Title}"/>
+            </DataTemplate>
+        </Grid.Resources>
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
             <ColumnDefinition/>
@@ -33,14 +41,14 @@
             <RowDefinition Height="30"/>
         </Grid.RowDefinitions>
         <Label Grid.Row="0" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Bottom">Publisher List</Label>
-        <ListBox Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" Grid.RowSpan="5" ItemsSource="{Binding PublisherList/Name}" SelectedValuePath="{Binding PublisherList/Id}" SelectedValue="{Binding SelectedPublisherID}"></ListBox>
+        <ListBox Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" Grid.RowSpan="5" ItemsSource="{Binding PublisherList, Mode=TwoWay}" ItemTemplate="{StaticResource ResourceKey=Publisher}" SelectedValuePath="Id" SelectedValue="{Binding SelectedPublisherID, Mode=TwoWay}"></ListBox>
         <Label Grid.Row="1" Grid.Column="3" HorizontalAlignment="Right" VerticalAlignment="Center">Name:</Label>
-        <TextBox Grid.Row="1" Grid.Column="4" Grid.ColumnSpan="3" Text="{Binding PublisherName}"></TextBox>
+        <TextBox Grid.Row="1" Grid.Column="4" Grid.ColumnSpan="3" Text="{Binding PublisherName, Mode=TwoWay}"></TextBox>
         <Label Grid.Row="2" Grid.Column="5" HorizontalAlignment="Center" VerticalAlignment="Bottom">Description</Label>
-        <TextBox Grid.Row="3" Grid.Column="4" Grid.ColumnSpan="3" Grid.RowSpan="2" Text="{Binding PublisherDescription}"></TextBox>
+        <TextBox Grid.Row="3" Grid.Column="4" Grid.ColumnSpan="3" Grid.RowSpan="2" Text="{Binding PublisherDescription, Mode=TwoWay}"></TextBox>
         <Label Grid.Row="0" Grid.Column="7" Grid.ColumnSpan="3" VerticalAlignment="Bottom" HorizontalAlignment="Center">Publisher Books</Label>
-        <ListBox Grid.Row="1" Grid.Column="7" Grid.ColumnSpan="3" Grid.RowSpan="5" ItemsSource="{Binding PublisherBooks/Title}"></ListBox>
-        <Button Grid.Column="0" Grid.Row="6">New</Button>
+        <ListBox Grid.Row="1" Grid.Column="7" Grid.ColumnSpan="3" Grid.RowSpan="5" ItemsSource="{Binding PublisherBooks, Mode=TwoWay}" ItemTemplate="{StaticResource ResourceKey=Books}"></ListBox>
+        <Button Grid.Column="0" Grid.Row="6" Click="New_Click">New</Button>
         <Button Grid.Column="1" Grid.Row="6" Command="{Binding getPublisherCommand}">Get</Button>
         <Button Grid.Column="2" Grid.Row="6" Command="{Binding removePublisherCommand}">Remove</Button>
         <Button Grid.Column="4" Grid.Row="5" Command="{Binding addPublisherCommand}">Add</Button>

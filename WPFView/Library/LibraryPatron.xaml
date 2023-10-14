@@ -11,6 +11,14 @@
         <View:LibraryPatronViewModel/>
     </Window.DataContext>
     <Grid>
+        <Grid.Resources>
+            <DataTemplate x:Key="Patron">
+                <TextBlock Text="{Binding Path=Name}"/>
+            </DataTemplate>
+            <DataTemplate x:Key="Book">
+                <TextBlock Text="{Binding Path=BorrowedBook.Title}"/>
+            </DataTemplate>
+        </Grid.Resources>
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
             <ColumnDefinition/>
@@ -35,20 +43,20 @@
             <RowDefinition/>
         </Grid.RowDefinitions>
         <Label Grid.Row="0" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Bottom">Patron List</Label>
-        <ListBox Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" Grid.RowSpan="7" ItemsSource="{Binding PatronList/Name}" SelectedValue="{Binding SelectedPatronID}" SelectedValuePath="{Binding PatronList/Id}" ></ListBox>
+        <ListBox Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" Grid.RowSpan="7" ItemsSource="{Binding PatronList, Mode=TwoWay}" ItemTemplate="{StaticResource ResourceKey=Patron}" SelectedValue="{Binding SelectedPatronID, Mode=TwoWay}" SelectedValuePath="Id" ></ListBox>
         <Label Grid.Row="1" Grid.Column="3" HorizontalAlignment="Right" VerticalAlignment="Center" >Name:</Label>
         <Label Grid.Row="2" Grid.Column="3" HorizontalAlignment="Right" VerticalAlignment="Center">Address:</Label>
         <Label Grid.Row="3" Grid.Column="3" HorizontalAlignment="Right" VerticalAlignment="Center">City:</Label>
         <Label Grid.Row="4" Grid.Column="3" HorizontalAlignment="Right" VerticalAlignment="Center">Postal Code:</Label>
         <Label Grid.Row="5" Grid.Column="3" HorizontalAlignment="Right" VerticalAlignment="Center">Phone Number:</Label>
-        <TextBox Grid.Row="1" Grid.Column="4" Grid.ColumnSpan="2" Text="{Binding PatronName}"></TextBox>
-        <TextBox Grid.Row="2" Grid.Column="4" Grid.ColumnSpan="2" Text="{Binding PatronAddress}"></TextBox>
-        <TextBox Grid.Row="3" Grid.Column="4" Grid.ColumnSpan="2" Text="{Binding PatronCity}"></TextBox>
-        <TextBox Grid.Row="4" Grid.Column="4" Grid.ColumnSpan="2" Text="{Binding PatronPostalCode}"></TextBox>
-        <TextBox Grid.Row="5" Grid.Column="4" Grid.ColumnSpan="2" Text="{Binding PatronPhoneNumber}"></TextBox>
+        <TextBox Grid.Row="1" Grid.Column="4" Grid.ColumnSpan="2" Text="{Binding PatronName, Mode=TwoWay}"></TextBox>
+        <TextBox Grid.Row="2" Grid.Column="4" Grid.ColumnSpan="2" Text="{Binding PatronAddress, Mode=TwoWay}"></TextBox>
+        <TextBox Grid.Row="3" Grid.Column="4" Grid.ColumnSpan="2" Text="{Binding PatronCity, Mode=TwoWay}"></TextBox>
+        <TextBox Grid.Row="4" Grid.Column="4" Grid.ColumnSpan="2" Text="{Binding PatronPostalCode, Mode=TwoWay}"></TextBox>
+        <TextBox Grid.Row="5" Grid.Column="4" Grid.ColumnSpan="2" Text="{Binding PatronPhoneNumber, Mode=TwoWay}"></TextBox>
         <Label Grid.Row="0" Grid.Column="8" HorizontalAlignment="Center" VerticalAlignment="Bottom">Books Borrowed</Label>
-        <ListBox Grid.Row="1" Grid.Column="7" Grid.ColumnSpan="3" Grid.RowSpan="7" ItemsSource="{Binding PatronBorrowedBooks/BorrowedBook.Title}"></ListBox>
-        <Button Grid.Row="8" Grid.Column="0">New</Button>
+        <ListBox Grid.Row="1" Grid.Column="7" Grid.ColumnSpan="3" Grid.RowSpan="7" ItemsSource="{Binding PatronBorrowedBooks, Mode=TwoWay}" ItemTemplate="{StaticResource ResourceKey=Book}"></ListBox>
+        <Button Grid.Row="8" Grid.Column="0" Click="New_Click">New</Button>
         <Button Grid.Row="8" Grid.Column="1" Command="{Binding getPatronCommand}">Get</Button>
         <Button Grid.Row="8" Grid.Column="2" Command="{Binding removePatronCommand}">Remove</Button>
         <Button Grid.Row="7" Grid.Column="4" Command="{Binding addPatronCommand}">Add</Button>
